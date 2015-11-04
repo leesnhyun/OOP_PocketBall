@@ -4,6 +4,7 @@ OOP 포켓볼 만들기
 ## 반드시 전부 읽어야 하는 것.
 - Visual Studio 2013에서 실행 확인함.
 - DirectX SDK June 2010을 프로젝트 안에 설치하고, 프로젝트 폴더에서 .sin으로 VS 2013을 실행하면 됨.
+- DirectX SDK: https://www.microsoft.com/en-us/download/details.aspx?id=6812
 - Visual Studio의 기본 .gitignore가 적용됨
 - 현재 DirectX 라이브러리의 용량이 너무 커서, 이 또한 .gitignore에서 제외함.
   - 따라서 실행하기 전에 프로젝트 폴더에서 DirectX/라는 폴더를 생성한 후, DirectX SDK를 설치하면 빌드 가능함.
