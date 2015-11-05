@@ -67,6 +67,10 @@ bool CWall::hasIntersected(CSphere& ball)
 // 벽에 공이 충돌할 경우 공의 방향과 속도를 바꿈
 void CWall::hitBy(CSphere& ball)
 {
+	if (this->hasIntersected(ball))
+	{
+
+	}
 	// Insert your code here.
 }
 

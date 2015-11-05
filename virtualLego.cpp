@@ -191,6 +191,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		Device->Present(0, 0, 0, 0);
 		Device->SetTexture( 0, NULL );
 	}
+
 	return true;
 }
 
@@ -301,8 +302,7 @@ int WINAPI WinMain(HINSTANCE hinstance,
 {
 	srand(static_cast<unsigned int>(time(NULL)));
 	
-	if(!d3d::InitD3D(hinstance,
-		Width, Height, true, D3DDEVTYPE_HAL, &Device))
+	if(!d3d::InitD3D(hinstance, Width, Height, true, D3DDEVTYPE_HAL, &Device))
 	{
 		::MessageBox(0, "InitD3D() - FAILED", 0, 0);
 		return 0;

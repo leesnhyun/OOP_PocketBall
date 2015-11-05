@@ -69,6 +69,10 @@ bool CSphere::hasIntersected(CSphere& ball)
 // 공이 충돌한 경우, 두 공의 방향과 속도를 바꿈.
 void CSphere::hitBy(CSphere& ball)
 {
+	if (this->hasIntersected(ball))
+	{
+
+	}
 	/* 반드시 충돌을 확인하는 코드를 여기에 넣어야 함 */
 	// Insert your code here.
 }
