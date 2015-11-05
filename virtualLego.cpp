@@ -112,9 +112,9 @@ bool Setup()
 		return false;
 	
 	// 카메라의 위치와 시야를 설정함
-	D3DXVECTOR3 pos(0.0f, 5.0f, -8.0f);
+	D3DXVECTOR3 pos(0.0f, 10.0f, 0.0f);
 	D3DXVECTOR3 target(0.0f, 0.0f, 0.0f);
-	D3DXVECTOR3 up(0.0f, 2.0f, 0.0f);
+	D3DXVECTOR3 up(0.0f, 0.0f, 2.0f);
 	D3DXMatrixLookAtLH(&g_mView, &pos, &target, &up);
 	Device->SetTransform(D3DTS_VIEW, &g_mView);
 	
@@ -185,7 +185,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 			g_sphere[i].draw(Device, g_mWorld);
 		}
 		g_target_blueball.draw(Device, g_mWorld);
-		g_light.draw(Device);
+		//g_light.draw(Device);
 		
 		Device->EndScene();
 		Device->Present(0, 0, 0, 0);
