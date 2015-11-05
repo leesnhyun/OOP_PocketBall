@@ -85,7 +85,7 @@ void CWall::setPosition(float x, float y, float z)
 	setLocalTransform(m);
 }
 
-// 벽의 높이를 바꿈
+// 벽의 높이를 반환
 float CWall::getHeight(void) const
 {
 	return M_HEIGHT;
