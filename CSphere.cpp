@@ -1,5 +1,6 @@
 #include "d3dUtility.h"
 #include "CSphere.h"
+#include <cmath>
 // °øÀÇ »ý¼ºÀÚ¸¦ Á¤ÀÇ
 CSphere::CSphere()
 {
@@ -62,7 +63,16 @@ void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// °øÀ» È
 // µÎ °øÀÌ Ãæµ¹ Çß´ÂÁö È®ÀÎ
 bool CSphere::hasIntersected(CSphere& ball)
 {
-	// Insert your code here.
+	double xDistance = pow((this->center_x - ball.center_x), 2);
+	double yDistance = pow((this->center_y - ball.center_y), 2);
+	double zDistance = pow((this->center_z - ball.center_z), 2);
+	double totalDistance = sqrt(xDistance + yDistance + zDistance);
+
+	if (totalDistance < (this->m_radius + ball.m_radius))
+	{
+		return true;
+	}
+
 	return false;
 }
 
