@@ -200,6 +200,7 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	static bool wire = false;
 	//static bool isReset = true;
+	static bool cameraTopView = true;
 	static int old_x = 0;
 	static int old_y = 0;
 	static enum { WORLD_MOVE, LIGHT_MOVE, BLOCK_MOVE } move = WORLD_MOVE;
@@ -217,6 +218,27 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				Device->SetRenderState(D3DRS_FILLMODE,
 					(wire ? D3DFILL_WIREFRAME : D3DFILL_SOLID));
 			}
+		}
+		else if (wParam == VK_TAB)//카메라 시점 변경
+		{
+			if (cameraTopView)
+			{
+				D3DXVECTOR3 pos(0.0f, 5.0f, -8.0f);
+				D3DXVECTOR3 target(0.0f, 0.0f, 0.0f);
+				D3DXVECTOR3 up(0.0f, 2.0f, 0.0f);
+				D3DXMatrixLookAtLH(&g_mView, &pos, &target, &up);
+				Device->SetTransform(D3DTS_VIEW, &g_mView);
+			}
+			else
+			{
+				D3DXVECTOR3 pos(0.0f, 10.0f, 0.0f);
+				D3DXVECTOR3 target(0.0f, 0.0f, 0.0f);
+				D3DXVECTOR3 up(0.0f, 0.0f, 2.0f);
+				D3DXMatrixLookAtLH(&g_mView, &pos, &target, &up);
+				Device->SetTransform(D3DTS_VIEW, &g_mView);
+			}
+
+			cameraTopView = !cameraTopView;
 		}
 		else if (wParam == VK_LEFT){
 			D3DXMATRIX mX;
