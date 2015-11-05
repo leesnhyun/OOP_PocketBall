@@ -140,6 +140,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CHole.cpp" />
     <ClCompile Include="CLight.cpp" />
     <ClCompile Include="CSphere.cpp" />
     <ClCompile Include="CWall.cpp" />
@@ -148,6 +149,7 @@
     <ClCompile Include="virtualLego.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CHole.h" />
     <ClInclude Include="CLight.h" />
     <ClInclude Include="CSphere.h" />
     <ClInclude Include="CWall.h" />

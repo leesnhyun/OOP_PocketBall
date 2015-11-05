@@ -14,6 +14,7 @@
 #include "CSphere.h"
 #include "CLight.h"
 #include "CWall.h"
+#include "CHole.h"
 #include <vector>
 #include <ctime>
 #include <cstdlib>
@@ -28,6 +29,8 @@ const int Height = 768;
 
 // 4개의 공의 위치를 초기화 함.
 const float spherePos[4][2] = { {-2.7f,0} , {+2.4f,0} , {3.3f,0} , {-2.7f,-0.9f}}; 
+// 6개의 구멍의 위치를 초기화 함.
+const float holePos[6][2] = { {-4.3f,-2.8f}, {0,-2.8f}, {4.3f,-2.8f}, {-4.3f,2.8f}, {0,2.8f}, {4.3f,2.8f}};
 // 4개의 공의 색상을 초기화 함.
 const D3DXCOLOR sphereColor[4] = {d3d::RED, d3d::RED, d3d::YELLOW, d3d::WHITE};
 
@@ -48,6 +51,7 @@ CWall	g_legowall[4];
 CSphere	g_sphere[4];
 CSphere	g_target_blueball;
 CLight	g_light;
+CHole	g_hole[6];
 
 double g_camera_pos[3] = {0.0, 5.0, -8.0};
 
@@ -91,7 +95,13 @@ bool Setup()
 		g_sphere[i].setCenter(spherePos[i][0], (float)M_RADIUS , spherePos[i][1]);
 		g_sphere[i].setPower(0,0);
 	}
-	
+
+	// 6개의 구멍을 생성함
+	for (i = 0; i<6; i++) {
+		if (false == g_hole[i].create(Device, d3d::BLACK)) return false;
+		g_hole[i].setCenter(holePos[i][0], 0, holePos[i][1]);
+	}
+
 	// 파란색 공을 생성함
 	if (false == g_target_blueball.create(Device, d3d::BLUE)) return false;
 	g_target_blueball.setCenter(.0f, (float)M_RADIUS , .0f);
@@ -184,6 +194,8 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 			g_legowall[i].draw(Device, g_mWorld);
 			g_sphere[i].draw(Device, g_mWorld);
 		}
+		for (i = 0; i < 6; i++)
+			g_hole[i].draw(Device, g_mWorld);
 		g_target_blueball.draw(Device, g_mWorld);
 		//g_light.draw(Device);
 		
