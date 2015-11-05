@@ -199,96 +199,78 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	static bool wire = false;
-	static bool isReset = true;
+	//static bool isReset = true;
 	static int old_x = 0;
 	static int old_y = 0;
 	static enum { WORLD_MOVE, LIGHT_MOVE, BLOCK_MOVE } move = WORLD_MOVE;
-	
-	switch( msg ) {
-	case WM_DESTROY:
-		{
-			::PostQuitMessage(0);
-			break;
-		}
-	case WM_KEYDOWN://키를 누르고 있는 동안
-		{
-			switch (wParam) {
-			case VK_ESCAPE: // ESC 키의 경우 화면을 종료한다
-				::DestroyWindow(hwnd);
-				break;
-			case VK_RETURN: //
-				if (NULL != Device) {
-					wire = !wire;
-					Device->SetRenderState(D3DRS_FILLMODE,
-						(wire ? D3DFILL_WIREFRAME : D3DFILL_SOLID));
-				}
-				break;
-			case VK_SPACE:	// 스페이스 바의 경우 파란 공과 하얀 공의 위치를 받아서
-							// 그 거리와 방향만큼 하얀 공의 속도를 조정한다.
-					D3DXVECTOR3 targetpos = g_target_blueball.getCenter();
-					D3DXVECTOR3	whitepos = g_sphere[3].getCenter();
-					double theta = acos(sqrt(pow(targetpos.x - whitepos.x, 2)) / sqrt(pow(targetpos.x - whitepos.x, 2) +
-						pow(targetpos.z - whitepos.z, 2)));		// 기본 1 사분면
-					if(targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x >= 0) { theta = -theta; }	//4 사분면
-					if(targetpos.z - whitepos.z >= 0 && targetpos.x - whitepos.x <= 0) { theta = PI - theta; } //2 사분면
-					if(targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x <= 0){ theta = PI + theta; } // 3 사분면
-					double distance = sqrt(pow(targetpos.x - whitepos.x, 2) + pow(targetpos.z - whitepos.z, 2));
-					g_sphere[3].setPower(distance * cos(theta) , distance * sin(theta));
-				break;
-			}
-			break;
-		}
-		
-	case WM_MOUSEMOVE:// 마우스가 움직일 때,
-		{
-			int new_x = LOWORD(lParam);
-			int new_y = HIWORD(lParam);
-			float dx;
-			float dy;
-			
-			if (LOWORD(wParam) & MK_LBUTTON) {// 마우스 왼쪽 버튼을 누를 때는, 당구판을 회전시킨다.
-				
-				if (isReset) {
-					isReset = false;
-				} else {
-					D3DXVECTOR3 vDist;
-					D3DXVECTOR3 vTrans;
-					D3DXMATRIX mTrans;
-					D3DXMATRIX mX;
-					D3DXMATRIX mY;
-					
-					switch (move) {
-					case WORLD_MOVE:
-						dx = (old_x - new_x) * 0.01f;
-						dy = (old_y - new_y) * 0.01f;
-						D3DXMatrixRotationY(&mX, dx);
-						D3DXMatrixRotationX(&mY, dy);
-						g_mWorld = g_mWorld * mX * mY;
-						
-						break;
-					}
-				}
-				
-				old_x = new_x;
-				old_y = new_y;
 
-			} else {
-				isReset = true;
-				
-				if (LOWORD(wParam) & MK_RBUTTON) {// 마우스 오른쪽 버튼을 누를 때는, 파란 공의 위치를 옮긴다.
-					dx = (old_x - new_x);// * 0.01f;
-					dy = (old_y - new_y);// * 0.01f;
-		
-					D3DXVECTOR3 coord3d=g_target_blueball.getCenter();
-					g_target_blueball.setCenter(coord3d.x+dx*(-0.007f),coord3d.y,coord3d.z+dy*0.007f );
-				}
-				old_x = new_x;
-				old_y = new_y;
-				
-				move = WORLD_MOVE;
-			}
-			break;
+	if (msg == WM_DESTROY){
+		::PostQuitMessage(0);
+	}
+	else if (msg == WM_KEYDOWN){//키를 누르고 있는 동안
+		if (wParam == VK_ESCAPE){// ESC 키의 경우 화면을 종료한다
+			::DestroyWindow(hwnd);
 		}
+		else if (wParam == VK_RETURN){ //
+			if (NULL != Device) {
+				wire = !wire;
+				Device->SetRenderState(D3DRS_FILLMODE,
+					(wire ? D3DFILL_WIREFRAME : D3DFILL_SOLID));
+			}
+		}
+		else if (wParam == VK_LEFT){
+			D3DXMATRIX mX;
+
+			switch (move) {
+			case WORLD_MOVE:
+				float dx = 3 * 0.01f;
+				D3DXMatrixRotationY(&mX, dx);
+				g_mWorld = g_mWorld * mX;
+
+				break;
+			}
+		}
+		else if (wParam == VK_RIGHT){
+			D3DXMATRIX mX;
+
+			switch (move) {
+			case WORLD_MOVE:
+				float dx = -3 * 0.01f;
+				D3DXMatrixRotationY(&mX, dx);
+				g_mWorld = g_mWorld * mX;
+
+				break;
+			}
+		}
+		else if (wParam == VK_SPACE){	// 스페이스 바의 경우 파란 공과 하얀 공의 위치를 받아서
+			// 그 거리와 방향만큼 하얀 공의 속도를 조정한다.
+			D3DXVECTOR3 targetpos = g_target_blueball.getCenter();
+			D3DXVECTOR3	whitepos = g_sphere[3].getCenter();
+			double theta = acos(sqrt(pow(targetpos.x - whitepos.x, 2)) / sqrt(pow(targetpos.x - whitepos.x, 2) +
+				pow(targetpos.z - whitepos.z, 2)));		// 기본 1 사분면
+			if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x >= 0) { theta = -theta; }	//4 사분면
+			if (targetpos.z - whitepos.z >= 0 && targetpos.x - whitepos.x <= 0) { theta = PI - theta; } //2 사분면
+			if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x <= 0){ theta = PI + theta; } // 3 사분면
+			double distance = sqrt(pow(targetpos.x - whitepos.x, 2) + pow(targetpos.z - whitepos.z, 2));
+			g_sphere[3].setPower(distance * cos(theta), distance * sin(theta));
+		}
+	}else if(msg == WM_MOUSEMOVE){// 마우스가 움직일 때,
+		int new_x = LOWORD(lParam);
+		int new_y = HIWORD(lParam);
+		float dx;
+		float dy;
+			
+		if (LOWORD(wParam) & MK_RBUTTON) {// 마우스 오른쪽 버튼을 누를 때는, 파란 공의 위치를 옮긴다.
+			dx = (old_x - new_x);// * 0.01f;
+			dy = (old_y - new_y);// * 0.01f;
+		
+			D3DXVECTOR3 coord3d=g_target_blueball.getCenter();
+			g_target_blueball.setCenter(coord3d.x+dx*(-0.007f),coord3d.y,coord3d.z+dy*0.007f );
+		}
+		old_x = new_x;
+		old_y = new_y;
+				
+		move = WORLD_MOVE;
 	}
 	
 	return ::DefWindowProc(hwnd, msg, wParam, lParam);
