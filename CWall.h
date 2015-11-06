@@ -19,6 +19,7 @@ private:
 	D3DXMATRIX m_mLocal;
 	D3DMATERIAL9 m_mtrl;
 	ID3DXMesh* m_pBoundMesh;
+
 public:
 	CWall();							// 벽의 생성자
 	~CWall();							// 벽의 소멸자

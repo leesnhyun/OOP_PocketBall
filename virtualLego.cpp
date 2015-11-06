@@ -15,6 +15,8 @@
 #include "CLight.h"
 #include "CWall.h"
 #include "CHole.h"
+#include "CBorder.h"
+
 #include <vector>
 #include <ctime>
 #include <cstdlib>
@@ -53,6 +55,8 @@ CSphere	g_target_blueball;
 CLight	g_light;
 CHole	g_hole[6];
 
+CBorder g_frame;
+
 double g_camera_pos[3] = {0.0, 5.0, -8.0};
 
 // -----------------------------------------------------------------------------
@@ -74,19 +78,23 @@ bool Setup()
 	D3DXMatrixIdentity(&g_mWorld);
 	D3DXMatrixIdentity(&g_mView);
 	D3DXMatrixIdentity(&g_mProj);
-		
+	
+	// 프레임생성
+	if (false == g_frame.create(Device, -1, -1, 9, d3d::TABLE_BORDER)) return false;
+	g_frame.setPosition(0.115f, -0.44f, 0.05f);
+
 	// 초록색 바닥을 생성
-	if (false == g_legoPlane.create(Device, -1, -1, 9, 0.03f, 6, d3d::GREEN)) return false;
+	if (false == g_legoPlane.create(Device, -1, -1, 9, 0.03f, 6, d3d::TABLE_PANE)) return false;
 	g_legoPlane.setPosition(0.0f, -0.0006f / 5, 0.0f);
 	
 	// 벽을 생성
-	if (false == g_legowall[0].create(Device, -1, -1, 9, 0.3f, 0.12f, d3d::DARKRED)) return false;
+	if (false == g_legowall[0].create(Device, -1, -1, 9, 0.3f, 0.15f, d3d::TABLE_WALL)) return false;
 	g_legowall[0].setPosition(0.0f, 0.12f, 3.06f);
-	if (false == g_legowall[1].create(Device, -1, -1, 9, 0.3f, 0.12f, d3d::DARKRED)) return false;
+	if (false == g_legowall[1].create(Device, -1, -1, 9, 0.3f, 0.15f, d3d::TABLE_WALL)) return false;
 	g_legowall[1].setPosition(0.0f, 0.12f, -3.06f);
-	if (false == g_legowall[2].create(Device, -1, -1, 0.12f, 0.3f, 6.24f, d3d::DARKRED)) return false;
+	if (false == g_legowall[2].create(Device, -1, -1, 0.15f, 0.3f, 6.24f, d3d::TABLE_WALL)) return false;
 	g_legowall[2].setPosition(4.56f, 0.12f, 0.0f);
-	if (false == g_legowall[3].create(Device, -1, -1, 0.12f, 0.3f, 6.24f, d3d::DARKRED)) return false;
+	if (false == g_legowall[3].create(Device, -1, -1, 0.15f, 0.3f, 6.24f, d3d::TABLE_WALL)) return false;
 	g_legowall[3].setPosition(-4.56f, 0.12f, 0.0f);
 
 	// 4개의 공을 생성함
@@ -113,8 +121,8 @@ bool Setup()
 	lit.Diffuse      = d3d::WHITE; 
 	lit.Specular     = d3d::WHITE * 0.9f;
 	lit.Ambient      = d3d::WHITE * 0.9f;
-	lit.Position     = D3DXVECTOR3(0.0f, 3.0f, 0.0f);
-	lit.Range        = 100.0f;
+	lit.Position     = D3DXVECTOR3(0.0f, 3.0f, -2.0f);
+	lit.Range        = 150.0f;
 	lit.Attenuation0 = 0.0f;
 	lit.Attenuation1 = 0.9f;
 	lit.Attenuation2 = 0.0f;
@@ -198,6 +206,9 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 			g_hole[i].draw(Device, g_mWorld);
 		g_target_blueball.draw(Device, g_mWorld);
 		//g_light.draw(Device);
+
+		// 프레임을 그린다
+		g_frame.draw(Device, g_mWorld);
 		
 		Device->EndScene();
 		Device->Present(0, 0, 0, 0);

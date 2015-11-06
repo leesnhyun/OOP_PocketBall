@@ -19,6 +19,8 @@ private:
 	unsigned int playerID;						// 이 플레이어의 ID
 	unsigned int numTakenBall;					// 획득한 공의 개수
 	TargetBall playerTargetBallType;			//
+	bool isAppropriatePlayer();
+
 public:
 	/* Static func or member. */
 
