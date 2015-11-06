@@ -42,7 +42,7 @@ bool TurnManager::isTurnFinished(initializer_list<CSphere> fieldBalls)
 	{
 		CSphere targetBall = ballVector.at(i);
 
-		if (targetBall.getVelocity_X != 0 || targetBall.getVelocity_Z != 0)
+		if (targetBall.getVelocity_X() != 0 || targetBall.getVelocity_Z() != 0)
 		{
 			return false;
 		}
