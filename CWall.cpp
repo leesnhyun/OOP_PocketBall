@@ -105,7 +105,8 @@ bool CWall::hasIntersected(CSphere& ball)
 // 벽에 공이 충돌할 경우 공의 방향과 속도를 바꿈
 void CWall::hitBy(CSphere& ball)
 {
-	static const float LOSS_RATIO = 0.025;
+	const float LOSS_RATIO = 0.006;
+	
 	if (this->hasIntersected(ball))
 	{
 		//부딪히면 LOSS_RATIO만큼 에너지 손실 발생
