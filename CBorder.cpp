@@ -105,7 +105,7 @@ bool CBorder::create(IDirect3DDevice9* pDevice, float ix, float iz, float idepth
 		return false;
 	}
 
-	::MessageBox(0, "积己肯丰", 0, 0);
+	//::MessageBox(0, "积己肯丰", 0, 0);
 
 	return true;
 }

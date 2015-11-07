@@ -84,7 +84,7 @@ bool Setup()
 	g_frame.setPosition(0.115f, -0.44f, 0.05f);
 
 	// 초록색 바닥을 생성
-	if (false == g_legoPlane.create(Device, -1, -1, 9, 0.03f, 6, d3d::TABLE_PANE)) return false;
+	if (false == g_legoPlane.create(Device, -1, -1, 9, 0.03f, 6, false, d3d::TABLE_PANE)) return false;
 	g_legoPlane.setPosition(0.0f, -0.0006f / 5, 0.0f);
 	
 	// 벽을 생성
