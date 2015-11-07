@@ -67,10 +67,17 @@ bool CWall::hasIntersected(CSphere& ball)
 		if (this->m_z + (this->m_depth / 2) >= ball.getCenter().z && this->m_z - (this->m_depth / 2) <= ball.getCenter().z) 
 		{
 			if ((this->m_x - (this->m_width / 2) <= ball.getCenter().x + ball.getRadius() &&
-				this->m_x + (this->m_width / 2) >= ball.getCenter().x + ball.getRadius()) ||
-				(this->m_x - (this->m_width / 2) <= ball.getCenter().x - ball.getRadius() &&
-				this->m_x + (this->m_width / 2) >= ball.getCenter().x - ball.getRadius()))
+				this->m_x + (this->m_width / 2) >= ball.getCenter().x + ball.getRadius()))
+			{
+				ball.setCenter(this->m_x - (this->m_width / 2) - ball.getRadius(), ball.getCenter().y, ball.getCenter().z);
 				return true;
+			}
+			if (this->m_x - (this->m_width / 2) <= ball.getCenter().x - ball.getRadius() &&
+				this->m_x + (this->m_width / 2) >= ball.getCenter().x - ball.getRadius())
+			{
+				ball.setCenter(this->m_x + (this->m_width / 2) + ball.getRadius(), ball.getCenter().y, ball.getCenter().z);
+				return true;
+			}
 		}
 	}
 	//가로벽에 충돌
@@ -79,10 +86,17 @@ bool CWall::hasIntersected(CSphere& ball)
 		if (this->m_x + (this->m_width / 2) >= ball.getCenter().x && this->m_x - (this->m_width / 2) <= ball.getCenter().x) 
 		{
 			if ((this->m_z - (this->m_depth / 2) <= ball.getCenter().z + ball.getRadius() &&
-				this->m_z + (this->m_depth / 2) >= ball.getCenter().z + ball.getRadius()) ||
-				(this->m_z - (this->m_depth / 2) <= ball.getCenter().z - ball.getRadius() &&
-				this->m_z + (this->m_depth / 2) >= ball.getCenter().z - ball.getRadius()))
+				this->m_z + (this->m_depth / 2) >= ball.getCenter().z + ball.getRadius()))
+			{
+				ball.setCenter(ball.getCenter().x, ball.getCenter().y, this->m_z - (this->m_depth / 2) - ball.getRadius());
 				return true;
+			}
+			if (this->m_z - (this->m_depth / 2) <= ball.getCenter().z - ball.getRadius() &&
+				this->m_z + (this->m_depth / 2) >= ball.getCenter().z - ball.getRadius())
+			{
+				ball.setCenter(ball.getCenter().x, ball.getCenter().y, this->m_z + (this->m_depth / 2) + ball.getRadius());
+				return true;
+			}
 		}
 	}
 	return false;
@@ -91,7 +105,7 @@ bool CWall::hasIntersected(CSphere& ball)
 // 벽에 공이 충돌할 경우 공의 방향과 속도를 바꿈
 void CWall::hitBy(CSphere& ball)
 {
-	static const float LOSS_RATIO = 0.031;
+	static const float LOSS_RATIO = 0.025;
 	if (this->hasIntersected(ball))
 	{
 		//부딪히면 3%의 에너지 손실 발생
