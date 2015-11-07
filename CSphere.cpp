@@ -68,7 +68,7 @@ bool CSphere::hasIntersected(CSphere& ball)
 	double zDistance = pow((this->center_z - ball.center_z), 2);
 	double totalDistance = sqrt(xDistance + yDistance + zDistance);
 
-	if (totalDistance < (this->m_radius + ball.m_radius))
+	if (totalDistance <= (this->getRadius() + ball.getRadius()))
 	{
 		return true;
 	}
@@ -79,12 +79,48 @@ bool CSphere::hasIntersected(CSphere& ball)
 // 공이 충돌한 경우, 두 공의 방향과 속도를 바꿈.
 void CSphere::hitBy(CSphere& ball)
 {
+	static const float LOSS_RATIO = 0.015;
+
 	if (this->hasIntersected(ball))
 	{
+		//공 에너지 손실 발생
+		this->setPower(ball.getVelocity_X() * (1 - LOSS_RATIO), ball.getVelocity_Z() * (1 - LOSS_RATIO));
+		ball.setPower(ball.getVelocity_X() * (1 - LOSS_RATIO), ball.getVelocity_Z() * (1 - LOSS_RATIO));
 
+		//temp에 ball 값 복사
+		CSphere temp_this, temp_ball;
+		temp_this = *this;
+		temp_ball = ball;
+
+		float vector_size;
+		//ball이 *this를 침
+		//*this의 방향 : *this의 좌표 - ball의 좌표 --> 크기를 1로 만들어서 방향 벡터로 사용
+		this->setPower(this->center_x - ball.center_x, this->center_z - ball.center_z);
+		vector_size = sqrt(pow(this->m_velocity_x, 2) + pow(this->m_velocity_z, 2));
+		this->setPower(this->m_velocity_x / vector_size, this->m_velocity_z / vector_size);
+		//*this의 크기 : ball의 속도를 *this의 방향 벡터에 정사영 시킨 값
+		vector_size = (this->m_velocity_x * ball.m_velocity_x + this->m_velocity_x * ball.m_velocity_x) / 
+			(sqrt(pow(this->m_velocity_x, 2) + pow(this->m_velocity_z, 2)));
+		this->setPower(this->m_velocity_x / vector_size, this->m_velocity_z / vector_size);
+		//이후 ball의 속도 : ball의 기존 속도 - *this의 이후 속도
+		ball.setPower(ball.m_velocity_x - this->m_velocity_x, ball.m_velocity_z - this->m_velocity_z);
+
+		//*this가 ball을 침
+		//ball의 방향 : ball의 좌표 - *this의 좌표 --> 크기를 1로 만들어서 방향 벡터로 사용
+		temp_ball.setPower(temp_ball.center_x - temp_this.center_x, temp_ball.center_z - temp_this.center_z);
+		vector_size = sqrt(pow(temp_ball.m_velocity_x, 2) + pow(temp_ball.m_velocity_z, 2));
+		temp_ball.setPower(temp_ball.m_velocity_x / vector_size, temp_ball.m_velocity_z / vector_size);
+		//ball의 크기 : *this의 속도를 ball의 방향 벡터에 정사영 시킨 값
+		vector_size = (temp_ball.m_velocity_x * temp_this.m_velocity_x + temp_ball.m_velocity_x * temp_this.m_velocity_x) /
+			(sqrt(pow(temp_ball.m_velocity_x, 2) + pow(temp_ball.m_velocity_z, 2)));
+		temp_ball.setPower(temp_ball.m_velocity_x / vector_size, temp_ball.m_velocity_z / vector_size);
+		//이후 *this의 속도 : *this의 기존 속도 - ball의 이후 속도
+		temp_this.setPower(temp_this.m_velocity_x - temp_ball.m_velocity_x, temp_this.m_velocity_z - temp_ball.m_velocity_z);
+		//합력 계산 (*this -> ball 가격 이후 각각의 공의 속도 + ball -> *this 가격 이후 각각의 공의 속도)
+		this->setPower(this->m_velocity_x + temp_this.m_velocity_x, this->m_velocity_z + temp_this.m_velocity_z);
+		ball.setPower(ball.m_velocity_x + temp_ball.m_velocity_x, ball.m_velocity_z + temp_ball.m_velocity_z);
 	}
 	/* 반드시 충돌을 확인하는 코드를 여기에 넣어야 함 */
-	// Insert your code here.
 }
 
 void CSphere::ballUpdate(float timeDiff) // 공의 중심 좌표를 속도에 맞춰서 매 시간 간격마다 갱신함
