@@ -51,7 +51,7 @@ D3DXMATRIX g_mProj;
 // 전역 변수
 // -----------------------------------------------------------------------------
 CWall	g_legoPlane;
-CWall	g_legowall[4];
+CWall	g_legowall[6];
 CSphere	g_sphere[4];
 CSphere	g_target_blueball;
 CLight	g_light;
@@ -89,15 +89,19 @@ bool Setup()
 	if (false == g_legoPlane.create(Device, -1, -1, 9, 0.03f, 6, false, d3d::TABLE_PANE)) return false;
 	g_legoPlane.setPosition(0.0f, -0.0006f / 5, 0.0f);
 	
-	// 벽을 생성
+	//// 벽을 생성
+	// 가로벽 (9*0.3f*0.15) , (0, 0.12, 3.06)
 	if (false == g_legowall[0].create(Device, -1, -1, 9, 0.3f, 0.15f, false, d3d::TABLE_WALL)) return false;
 	g_legowall[0].setPosition(0.0f, 0.12f, 3.06f);
 	if (false == g_legowall[1].create(Device, -1, -1, 9, 0.3f, 0.15f, false, d3d::TABLE_WALL)) return false;
 	g_legowall[1].setPosition(0.0f, 0.12f, -3.06f);
-	if (false == g_legowall[2].create(Device, -1, -1, 0.15f, 0.3f, 6.24f, true, d3d::TABLE_WALL)) return false;
+
+	// 세로벽 (0.15f*0.3f*6.24f) , (4.56, 0.12, 0)
+	if (false == g_legowall[2].create(Device, -1, -1, 0.15f, 0.3f, 5.8f, true, d3d::TABLE_WALL)) return false;
 	g_legowall[2].setPosition(4.56f, 0.12f, 0.0f);
-	if (false == g_legowall[3].create(Device, -1, -1, 0.15f, 0.3f, 6.24f, true, d3d::TABLE_WALL)) return false;
+	if (false == g_legowall[3].create(Device, -1, -1, 0.15f, 0.3f, 5.8f, true, d3d::TABLE_WALL)) return false;
 	g_legowall[3].setPosition(-4.56f, 0.12f, 0.0f);
+	////
 
 	// 4개의 공을 생성함
 	for (i=0;i<4;i++) {
@@ -207,8 +211,11 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 			g_legowall[i].draw(Device, g_mWorld);
 			g_sphere[i].draw(Device, g_mWorld);
 		}
-		for (i = 0; i < 6; i++)
-			g_hole[i].draw(Device, g_mWorld);
+
+		// 구멍을 그린다.
+		//for (i = 0; i < 6; i++)
+		//	g_hole[i].draw(Device, g_mWorld);
+		
 		g_target_blueball.draw(Device, g_mWorld);
 		//g_light.draw(Device);
 
@@ -292,6 +299,30 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			case WORLD_MOVE:
 				float dx = -3 * 0.01f;
 				D3DXMatrixRotationY(&mX, dx);
+				g_mWorld = g_mWorld * mX;
+
+				break;
+			}
+		}
+		else if (wParam == VK_UP){
+			D3DXMATRIX mX;
+
+			switch (move) {
+			case WORLD_MOVE:
+				float dy = 3 * 0.01f;
+				D3DXMatrixRotationZ(&mX, dy);
+				g_mWorld = g_mWorld * mX;
+
+				break;
+			}
+		}
+		else if (wParam == VK_DOWN){
+			D3DXMATRIX mX;
+
+			switch (move) {
+			case WORLD_MOVE:
+				float dy = -3 * 0.01f;
+				D3DXMatrixRotationZ(&mX, dy);
 				g_mWorld = g_mWorld * mX;
 
 				break;
