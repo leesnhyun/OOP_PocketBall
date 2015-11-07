@@ -90,7 +90,14 @@ void CSphere::hitBy(CSphere& ball)
 		//보간법으로 근사하여 충돌 시점의 좌표로 이동함.
 		this->setCenter((cord.x + this->pre_center_x) / 2, cord.y, (cord.z + this->pre_center_z) / 2);
 		ball.setCenter((ball_cord.x + ball.pre_center_x) / 2, ball_cord.y, (ball_cord.z + ball.pre_center_z) / 2);
+		if (this->hasIntersected(ball))
+		{
+			this->setCenter(this->pre_center_x, cord.y, this->pre_center_z);
+			ball.setCenter(ball.pre_center_x, ball_cord.y, ball.pre_center_z);
+		}
 
+		cord = this->getCenter();
+		ball_cord = ball.getCenter();
 		//두 공 사이의 방향 벡터
 		double d_x = cord.x - ball_cord.x;
 		double d_z = cord.z - ball_cord.z;

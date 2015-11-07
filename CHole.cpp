@@ -27,6 +27,7 @@ bool CHole::create(IDirect3DDevice9* pDevice, D3DXCOLOR color)
 	m_mtrl.Specular = color;
 	m_mtrl.Emissive = d3d::BLACK;
 	m_mtrl.Power = 5.0f;
+	m_radius = 0.28f;
 
 	// 입체를 그리고 회전시킵니다.
 	HRESULT hr = D3DXCreateCylinder(pDevice, 0.28f, 0.28f, 5.0f, 50, 50, &m_pSphereMesh, NULL);
@@ -78,7 +79,7 @@ bool CHole::hasIntersected(CSphere& ball)
 	double zDistance = pow((this->center_z - ball.getCenter().z), 2);
 	double totalDistance = sqrt(xDistance + yDistance + zDistance);
 
-	if (totalDistance < (this->m_radius))
+	if (totalDistance < (this->getRadius()))
 	{
 		return true;
 	}
@@ -91,7 +92,8 @@ void CHole::hitBy(CSphere& ball)
 {
 	if (this->hasIntersected(ball))
 	{
-
+		ball.setCenter(ball.getVelocity_X() * 100000, 10.0f, ball.getVelocity_Z() * 100000);
+		ball.setPower(0.0f, 0.0f);
 	}
 	//ball의 setPower를 0으로 설정해 줘야함. + 위치를 날려줘야 함(setCenter)
 	/* 반드시 충돌을 확인하는 코드를 여기에 넣어야 함 */
@@ -110,7 +112,7 @@ void CHole::setCenter(float x, float y, float z) // 구멍의 중심 좌표를 변경함
 
 float CHole::getRadius(void) const
 {
-	return (float)(M_RADIUS);
+	return m_radius;
 }// 구멍의 반지름을 받아옴
 
 const D3DXMATRIX& CHole::getLocalTransform(void) const

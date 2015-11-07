@@ -201,7 +201,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		// 공의 위치를 갱신한다. 갱신하는 중에는 각각의 공이 벽과 충돌 했는지 확인한다.
 		for( i = 0; i < 16; i++) {
 			g_sphere[i].ballUpdate(timeDelta);
-			for(j = 0; j < 16; j++){ g_legowall[i].hitBy(g_sphere[j]); }
+			for(j = 0; j < 4; j++){ g_legowall[j].hitBy(g_sphere[i]); }
 		}
 
 		// check whether any two balls hit together and update the direction of balls
@@ -210,6 +210,13 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 			for(j = 0 ; j < 16; j++) {
 				if(i >= j) {continue;}
 				g_sphere[i].hitBy(g_sphere[j]);
+			}
+		}
+
+		// 각각의 구멍에 대해, 공과 서로 충돌 했는지 확인하고, 공을 넣는다.
+		for (i = 0; i < 6; i++){
+			for (j = 0; j < 16; j++) {
+				g_hole[i].hitBy(g_sphere[j]);
 			}
 		}
 
@@ -250,7 +257,7 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	//static bool isReset = true;
 	static bool cameraTopView = true;
 	static int old_x = 0;
-	static int old_y = 0;
+	static int old_z = 0;
 	static enum { WORLD_MOVE, LIGHT_MOVE, BLOCK_MOVE } move = WORLD_MOVE;
 
 	if (msg == WM_DESTROY){
@@ -351,20 +358,41 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 	}else if(msg == WM_MOUSEMOVE){// 마우스가 움직일 때,
 		int new_x = LOWORD(lParam);
-		int new_y = HIWORD(lParam);
+		int new_z = HIWORD(lParam);
 		double dx;
-		double dy;
+		double dz;
 			
 		if (LOWORD(wParam) & MK_RBUTTON) {// 마우스 오른쪽 버튼을 누를 때는, 파란 공의 위치를 옮긴다.
 			dx = (old_x - new_x);// * 0.01f;
-			dy = (old_y - new_y);// * 0.01f;
+			dz = (old_z - new_z);// * 0.01f;
 		
 			D3DXVECTOR3 coord3d=g_target_blueball.getCenter();
-			g_target_blueball.setCenter(coord3d.x+dx*(-0.007f),coord3d.y,coord3d.z+dy*0.007f );
+			g_target_blueball.setCenter(coord3d.x+dx*(-0.007f),coord3d.y,coord3d.z+dz*0.007f );
 		}
 		old_x = new_x;
-		old_y = new_y;
-				
+		old_z = new_z;
+		
+		if (g_target_blueball.getCenter().x > 4.56f) 
+		{
+			g_target_blueball.setCenter(4.56f, g_target_blueball.getCenter().y, g_target_blueball.getCenter().z);
+			old_x = 4.56f;
+		}
+		if (g_target_blueball.getCenter().x < -4.56f)
+		{
+			g_target_blueball.setCenter(-4.56f, g_target_blueball.getCenter().y, g_target_blueball.getCenter().z);
+			old_x = -4.56f;
+		}
+		if (g_target_blueball.getCenter().z > 3.06f)
+		{
+			g_target_blueball.setCenter(g_target_blueball.getCenter().x, g_target_blueball.getCenter().y, 3.06f);
+			old_z = 3.06f;
+		}
+		if (g_target_blueball.getCenter().z < -3.06f)
+		{
+			g_target_blueball.setCenter(g_target_blueball.getCenter().x, g_target_blueball.getCenter().y, -3.06f);
+			old_z = -3.06f;
+		}
+
 		move = WORLD_MOVE;
 	}
 	
