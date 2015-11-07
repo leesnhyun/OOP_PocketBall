@@ -3,11 +3,12 @@
 #include <vector>
 using std::vector;
 
-TurnManager::TurnManager(initializer_list<int> playerIdList)
+TurnManager::TurnManager(const initializer_list<unsigned int>& playerIdList)
 {
 	vector<int> idListVector(playerIdList.begin(), playerIdList.end());
-	this->playerIdList = (int *) calloc(playerIdList.size(), sizeof(int));
+	this->playerIdList = (unsigned int *) (playerIdList.size(), sizeof(unsigned int));
 	this->playerNumber = playerIdList.size();
+	this->nowTurnPlayerIndex = 0;
 
 	for (int i = 0; i < this->playerNumber; i++)
 	{
@@ -17,7 +18,7 @@ TurnManager::TurnManager(initializer_list<int> playerIdList)
 
 TurnManager::TurnManager(const TurnManager& toCopy)
 {
-	this->playerIdList = (int *) calloc(toCopy.playerNumber, sizeof(int));
+	this->playerIdList = (unsigned int *) calloc(toCopy.playerNumber, sizeof(unsigned int));
 	for (int i = 0; i < toCopy.playerNumber; i++)
 	{
 		(this->playerIdList)[i] = (toCopy.playerIdList)[i];
@@ -29,7 +30,7 @@ TurnManager::~TurnManager()
 	delete[] (this->playerIdList);
 }
 
-bool TurnManager::isTurnFinished(initializer_list<CSphere> fieldBalls)
+bool TurnManager::isTurnFinished(const initializer_list<CSphere>& fieldBalls)
 {
 	vector<CSphere> ballVector(fieldBalls.begin(), fieldBalls.end());
 
@@ -54,6 +55,7 @@ bool TurnManager::isTurnFinished(initializer_list<CSphere> fieldBalls)
 void TurnManager::finishTurn()
 {
 	this->turnChangeSignal = true;
+	this->nowTurnPlayerIndex = (this->nowTurnPlayerIndex + 1) % this->playerNumber;
 	this->processTriggerOff();
 }
 
@@ -67,10 +69,26 @@ void TurnManager::processTriggerOff()
 	this->turnProcessSignal = false;
 }
 
-void TurnManager::processTurn()
+unsigned int TurnManager::getNowTurnID() const
 {
-	// if not finished, just end func.
+	return (this->playerIdList)[this->nowTurnPlayerIndex];
+}
+
+void TurnManager::resetTurn()
+{
+	this->turnChangeSignal = false;
+	this->processTriggerOff();
+}
+
+bool TurnManager::processTurn(const initializer_list<CSphere>& fieldBalls)
+{
+	if (this->isTurnFinished(fieldBalls))
+	{
+		return false;
+	}
+
 	// TODO : Process
 
 	this->finishTurn();
+	return true;
 }
