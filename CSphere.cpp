@@ -84,13 +84,13 @@ void CSphere::hitBy(CSphere& ball)
 
 	if (this->hasIntersected(ball))
 	{
-		
+		//도움을 준 자료: http://blog.hansune.com/106
 		//this - ball로 양의 벡터를 정함
 		D3DXVECTOR3 cord = this->getCenter();
 		D3DXVECTOR3 ball_cord = ball.getCenter();
 		//보간법으로 근사하여 충돌 시점의 좌표로 이동함.
-		this->setCenter((cord.x + this->pre_center_x) / 2, cord.y, (cord.z + this->pre_center_z)/2);
-		ball.setCenter((ball_cord.x + ball.pre_center_x) / 2, ball_cord.y, (ball_cord.z + ball.pre_center_z)/2);
+		this->setCenter((cord.x + this->pre_center_x) / 2, cord.y, (cord.z + this->pre_center_z) / 2);
+		ball.setCenter((ball_cord.x + ball.pre_center_x) / 2, ball_cord.y, (ball_cord.z + ball.pre_center_z) / 2);
 
 		//두 공 사이의 방향 벡터
 		double d_x = cord.x - ball_cord.x;
@@ -111,45 +111,10 @@ void CSphere::hitBy(CSphere& ball)
 		double vbxp = vax*cos_t + vaz*sin_t;
 		double vazp = vaz*cos_t - vax*sin_t;
 		double vbzp = vbz*cos_t - vbx*sin_t;
-		
+
 		this->setPower(vaxp*cos_t - vazp*sin_t, vaxp*sin_t + vazp*cos_t);
 		ball.setPower(vbxp*cos_t - vbzp*sin_t, vbxp*sin_t + vbzp*cos_t);
-
-		/*
-		//두 공 사이의 방향 벡터
-  		float d_x = this->center_x - ball.center_x;
-		float d_z = this->center_z - ball.center_z;
-		float size_d = sqrt((d_x*d_x) + (d_z*d_z));
-		//방향 벡터의 법선 벡터
-		float nd_x = -d_z;
-		float nd_z = d_x;
-		float size_nd = sqrt((nd_x*nd_x) + (nd_z*nd_z));
-		//충돌 후 방향 벡터에 대한 벡터 구하기
-		// x
-		float this_x2_d = ((ball.m_velocity_x * d_x) + (ball.m_velocity_z * d_z)) / size_d; 
-		float ball_x2_d = ((this->m_velocity_x * d_x) + (this->m_velocity_z * d_z)) / size_d;
-		// z
-		float this_z2_d = ((this->m_velocity_x * nd_x) + (this->m_velocity_z * nd_z)) / size_nd;
-		float ball_z2_d = ((ball.m_velocity_x * nd_x) + (ball.m_velocity_z * nd_z)) / size_nd;
-
-		//충돌 이전의 속도 벡터의 크기
-		float ball_size_v1 = sqrt((ball.m_velocity_x*ball.m_velocity_x) + (ball.m_velocity_z*ball.m_velocity_z));
-
-		//cos 구하기
-		float cos_theta = this_x2_d / ball_size_v1;
-
-		//충돌 후 벡터 구하기
-		float this_x2 = this_x2_d * cos_theta;
-		float ball_x2 = ball_x2_d * cos_theta;
-		float this_z2 = this_z2_d * cos_theta;
-		float ball_z2 = ball_z2_d * cos_theta;
-
-		this->setPower(this_x2, this_z2);
-		ball.setPower(ball_x2, ball_z2);
-		*/
-
 	}
-	/* 반드시 충돌을 확인하는 코드를 여기에 넣어야 함 */
 }
 
 void CSphere::ballUpdate(float timeDiff) // 공의 중심 좌표를 속도에 맞춰서 매 시간 간격마다 갱신함
