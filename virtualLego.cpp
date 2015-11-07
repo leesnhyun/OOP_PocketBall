@@ -82,7 +82,7 @@ bool Setup()
 	D3DXMatrixIdentity(&g_mProj);
 	
 	// 프레임생성
-	if (false == g_frame.create(Device, -1, -1, 9, d3d::TABLE_BORDER)) return false;
+	if (false == g_frame.create(Device, -1, -1, 9, d3d::YELLOW)) return false;
 	g_frame.setPosition(0.115f, -0.44f, 0.05f);
 
 	// 초록색 바닥을 생성
@@ -91,15 +91,15 @@ bool Setup()
 	
 	//// 벽을 생성
 	// 가로벽 (9*0.3f*0.15) , (0, 0.12, 3.06)
-	if (false == g_legowall[0].create(Device, -1, -1, 9, 0.3f, 0.15f, false, d3d::TABLE_WALL)) return false;
+	if (false == g_legowall[0].create(Device, -1, -1, 4.5, 0.3f, 0.15f, false, d3d::TABLE_WALL)) return false;
 	g_legowall[0].setPosition(0.0f, 0.12f, 3.06f);
 	if (false == g_legowall[1].create(Device, -1, -1, 9, 0.3f, 0.15f, false, d3d::TABLE_WALL)) return false;
 	g_legowall[1].setPosition(0.0f, 0.12f, -3.06f);
 
 	// 세로벽 (0.15f*0.3f*6.24f) , (4.56, 0.12, 0)
-	if (false == g_legowall[2].create(Device, -1, -1, 0.15f, 0.3f, 5.8f, true, d3d::TABLE_WALL)) return false;
+	if (false == g_legowall[2].create(Device, -1, -1, 0.15f, 0.3f, 5.55f, true, d3d::TABLE_WALL)) return false;
 	g_legowall[2].setPosition(4.56f, 0.12f, 0.0f);
-	if (false == g_legowall[3].create(Device, -1, -1, 0.15f, 0.3f, 5.8f, true, d3d::TABLE_WALL)) return false;
+	if (false == g_legowall[3].create(Device, -1, -1, 0.15f, 0.3f, 5.55f, true, d3d::TABLE_WALL)) return false;
 	g_legowall[3].setPosition(-4.56f, 0.12f, 0.0f);
 	////
 

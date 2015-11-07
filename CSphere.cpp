@@ -1,6 +1,7 @@
 #include "d3dUtility.h"
 #include "CSphere.h"
 #include <cmath>
+
 // 공의 생성자를 정의
 CSphere::CSphere()
 {
