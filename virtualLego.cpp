@@ -54,13 +54,9 @@ D3DXMATRIX g_mProj;
 // 전역 변수
 // -----------------------------------------------------------------------------
 CWall	g_legoPlane;
-<<<<<<< HEAD
 CWall	g_legowall[6];
-CSphere	g_sphere[4];
-=======
 CWall	g_legowall[4];
 CSphere	g_sphere[16];
->>>>>>> 9983b6e63b617da1954c0cbcef117c5e41604dbf
 CSphere	g_target_blueball;
 CLight	g_light;
 CHole	g_hole[6];
