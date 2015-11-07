@@ -127,7 +127,7 @@ void CSphere::ballUpdate(float timeDiff) // 공의 중심 좌표를 속도에 맞춰서 매 시
 	this->pre_center_x = cord.x;
 	this->pre_center_z = cord.z;
 
-	if (vx > 0.1 || vz > 0.1)
+	if (vx > 0.01 || vz > 0.01)
 	{
 		float tX = cord.x + TIME_SCALE*timeDiff*m_velocity_x;
 		float tZ = cord.z + TIME_SCALE*timeDiff*m_velocity_z;
