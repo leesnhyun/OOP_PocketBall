@@ -31,12 +31,15 @@ IDirect3DDevice9* Device = NULL;
 const int Width  = 1024;
 const int Height = 768;
 
-// 4개의 공의 위치를 초기화 함.
-const float spherePos[4][2] = { {-2.7f,0} , {+2.4f,0} , {3.3f,0} , {-2.7f,-0.9f}}; 
+// 16개의 공의 위치를 초기화 함.
+const float spherePos[16][2] = { { -2.7f, 0 }, { +1.5, 0 }, { 1.88f, 0.211f }, { 1.88f, -0.211f }, { 3.02f, -0.844f }, 
+{ 2.26f, -0.422f }, { 2.26f, 0.422f }, { 2.64f, -0.211f }, { 2.64f, 0.211f }, { 2.64f, -0.633 }, { 2.64f, 0.633f }, 
+{ 3.02f, -0.422f }, { 3.02f, 0.422f }, { 3.02f, 0 }, { 3.02f, 0.844f }, { 2.26, 0} };
 // 6개의 구멍의 위치를 초기화 함.
-const float holePos[6][2] = { {-4.3f,-2.8f}, {0,-2.8f}, {4.3f,-2.8f}, {-4.3f,2.8f}, {0,2.8f}, {4.3f,2.8f}};
+const float holePos[6][2] = { {-4.23f,-2.73f}, {0,-2.73f}, {4.23f,-2.73f}, {-4.23f,2.73f}, {0,2.73f}, {4.23f,2.73f}};
 // 4개의 공의 색상을 초기화 함.
-const D3DXCOLOR sphereColor[4] = {d3d::RED, d3d::RED, d3d::YELLOW, d3d::WHITE};
+const D3DXCOLOR sphereColor[16] = { d3d::WHITE, d3d::RED, d3d::YELLOW, d3d::RED, d3d::YELLOW, d3d::YELLOW, d3d::RED, 
+d3d::YELLOW, d3d::RED, d3d::RED, d3d::YELLOW, d3d::YELLOW, d3d::YELLOW, d3d::RED, d3d::RED, d3d::BLACK };
 
 // -----------------------------------------------------------------------------
 // Transform matrices
@@ -51,8 +54,13 @@ D3DXMATRIX g_mProj;
 // 전역 변수
 // -----------------------------------------------------------------------------
 CWall	g_legoPlane;
+<<<<<<< HEAD
 CWall	g_legowall[6];
 CSphere	g_sphere[4];
+=======
+CWall	g_legowall[4];
+CSphere	g_sphere[16];
+>>>>>>> 9983b6e63b617da1954c0cbcef117c5e41604dbf
 CSphere	g_target_blueball;
 CLight	g_light;
 CHole	g_hole[6];
@@ -103,8 +111,8 @@ bool Setup()
 	g_legowall[3].setPosition(-4.56f, 0.12f, 0.0f);
 	////
 
-	// 4개의 공을 생성함
-	for (i=0;i<4;i++) {
+	// 16개의 공을 생성함
+	for (i=0;i<16;i++) {
 		if (false == g_sphere[i].create(Device, sphereColor[i])) return false;
 		g_sphere[i].setCenter(spherePos[i][0], (float)M_RADIUS , spherePos[i][1]);
 		g_sphere[i].setPower(0,0);
@@ -190,15 +198,15 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		
 		// update the position of each ball. during update, check whether each ball hit by walls.
 		// 공의 위치를 갱신한다. 갱신하는 중에는 각각의 공이 벽과 충돌 했는지 확인한다.
-		for( i = 0; i < 4; i++) {
+		for( i = 0; i < 16; i++) {
 			g_sphere[i].ballUpdate(timeDelta);
-			for(j = 0; j < 4; j++){ g_legowall[i].hitBy(g_sphere[j]); }
+			for(j = 0; j < 16; j++){ g_legowall[i].hitBy(g_sphere[j]); }
 		}
 
 		// check whether any two balls hit together and update the direction of balls
 		// 각각의 공에 대해, 다른 공과 서로 충돌 했는지 확인하고, 공의 방향을 갱신한다.
-		for(i = 0 ;i < 4; i++){
-			for(j = 0 ; j < 4; j++) {
+		for(i = 0 ;i < 16; i++){
+			for(j = 0 ; j < 16; j++) {
 				if(i >= j) {continue;}
 				g_sphere[i].hitBy(g_sphere[j]);
 			}
@@ -207,15 +215,14 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		// draw plane, walls, and spheres
 		// 초록색 판을 그리고, 벽을 그리고, 공들을 그린다.
 		g_legoPlane.draw(Device, g_mWorld);
-		for (i=0;i<4;i++) 	{
+		for (i = 0; i < 4; i++)
 			g_legowall[i].draw(Device, g_mWorld);
+		for (i = 0; i < 16; i++)
 			g_sphere[i].draw(Device, g_mWorld);
-		}
-
-		// 구멍을 그린다.
-		//for (i = 0; i < 6; i++)
-		//	g_hole[i].draw(Device, g_mWorld);
 		
+		for (i = 0; i < 6; i++)
+			g_hole[i].draw(Device, g_mWorld);
+
 		g_target_blueball.draw(Device, g_mWorld);
 		//g_light.draw(Device);
 
@@ -331,14 +338,14 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		else if (wParam == VK_SPACE && !turnManager.isProcessing()){	// 스페이스 바의 경우 파란 공과 하얀 공의 위치를 받아서
 			// 그 거리와 방향만큼 하얀 공의 속도를 조정한다.
 			D3DXVECTOR3 targetpos = g_target_blueball.getCenter();
-			D3DXVECTOR3	whitepos = g_sphere[3].getCenter();
+			D3DXVECTOR3	whitepos = g_sphere[0].getCenter();
 			double theta = acos(sqrt(pow(targetpos.x - whitepos.x, 2)) / sqrt(pow(targetpos.x - whitepos.x, 2) +
 				pow(targetpos.z - whitepos.z, 2)));		// 기본 1 사분면
 			if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x >= 0) { theta = -theta; }	//4 사분면
 			if (targetpos.z - whitepos.z >= 0 && targetpos.x - whitepos.x <= 0) { theta = PI - theta; } //2 사분면
 			if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x <= 0){ theta = PI + theta; } // 3 사분면
 			double distance = sqrt(pow(targetpos.x - whitepos.x, 2) + pow(targetpos.z - whitepos.z, 2));
-			g_sphere[3].setPower(distance * cos(theta), distance * sin(theta));
+			g_sphere[0].setPower(distance * cos(theta), distance * sin(theta));
 			turnManager.processTriggerOn();
 		}
 	}else if(msg == WM_MOUSEMOVE){// 마우스가 움직일 때,

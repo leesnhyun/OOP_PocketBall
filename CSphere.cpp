@@ -81,8 +81,6 @@ bool CSphere::hasIntersected(CSphere& ball)
 // 공이 충돌한 경우, 두 공의 방향과 속도를 바꿈.
 void CSphere::hitBy(CSphere& ball)
 {
-	//static const float LOSS_RATIO = 0.015F;
-
 	if (this->hasIntersected(ball))
 	{
 		//도움을 준 자료: http://blog.hansune.com/106
@@ -116,6 +114,7 @@ void CSphere::hitBy(CSphere& ball)
 		this->setPower(vaxp*cos_t - vazp*sin_t, vaxp*sin_t + vazp*cos_t);
 		ball.setPower(vbxp*cos_t - vbzp*sin_t, vbxp*sin_t + vbzp*cos_t);
 	}
+
 }
 
 void CSphere::ballUpdate(float timeDiff) // 공의 중심 좌표를 속도에 맞춰서 매 시간 간격마다 갱신함
