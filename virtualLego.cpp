@@ -35,8 +35,14 @@ const int Height = 768;
 const float spherePos[16][2] = { { -2.7f, 0 }, { +1.5, 0 }, { 1.88f, 0.211f }, { 1.88f, -0.211f }, { 3.02f, -0.844f }, 
 { 2.26f, -0.422f }, { 2.26f, 0.422f }, { 2.64f, -0.211f }, { 2.64f, 0.211f }, { 2.64f, -0.633 }, { 2.64f, 0.633f }, 
 { 3.02f, -0.422f }, { 3.02f, 0.422f }, { 3.02f, 0 }, { 3.02f, 0.844f }, { 2.26, 0} };
+
 // 6개의 구멍의 위치를 초기화 함.
-const float holePos[6][2] = { {-4.23f,-2.73f}, {0,-2.73f}, {4.23f,-2.73f}, {-4.23f,2.73f}, {0,2.73f}, {4.23f,2.73f}};
+// const float holePos[6][2] = { {-4.23f,-2.73f}, {0,-2.73f}, {4.23f,-2.73f}, {-4.23f,2.73f}, {0,2.73f}, {4.23f,2.73f}};
+const float holePos[6][2] = {
+								{-4.52f,-3.00f}, {0,-3.23f}, {4.73f,-3.23f}, 
+								{-4.52f,3.00f}, {0,3.23f}, {4.73f,3.23f}
+							};
+
 // 4개의 공의 색상을 초기화 함.
 const D3DXCOLOR sphereColor[16] = { d3d::WHITE, d3d::RED, d3d::YELLOW, d3d::RED, d3d::YELLOW, d3d::YELLOW, d3d::RED, 
 d3d::YELLOW, d3d::RED, d3d::RED, d3d::YELLOW, d3d::YELLOW, d3d::YELLOW, d3d::RED, d3d::RED, d3d::BLACK };
@@ -54,7 +60,6 @@ D3DXMATRIX g_mProj;
 // 전역 변수
 // -----------------------------------------------------------------------------
 CWall	g_legoPlane;
-CWall	g_legowall[6];
 CWall	g_legowall[4];
 CSphere	g_sphere[16];
 CSphere	g_target_blueball;
@@ -87,7 +92,7 @@ bool Setup()
 	
 	// 프레임생성
 	if (false == g_frame.create(Device, -1, -1, 9, d3d::YELLOW)) return false;
-	g_frame.setPosition(0.115f, -0.44f, 0.05f);
+	g_frame.setPosition(0.115f, -0.44f, 0.00f);
 
 	// 초록색 바닥을 생성
 	if (false == g_legoPlane.create(Device, -1, -1, 9, 0.03f, 6, false, d3d::TABLE_PANE)) return false;
@@ -183,7 +188,7 @@ TurnManager turnManager({ players[0].getPlayerId(), players[1].getPlayerId() });
 
 bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여줌
 {
-	int i=0;
+	int i = 0;
 	int j = 0;
 
 

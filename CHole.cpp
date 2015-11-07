@@ -28,7 +28,18 @@ bool CHole::create(IDirect3DDevice9* pDevice, D3DXCOLOR color)
 	m_mtrl.Emissive = d3d::BLACK;
 	m_mtrl.Power = 5.0f;
 
-	if (FAILED(D3DXCreateSphere(pDevice, 0.28f, 50, 50, &m_pSphereMesh, NULL)))
+	// 입체를 그리고 회전시킵니다.
+	HRESULT hr = D3DXCreateCylinder(pDevice, 0.28f, 0.28f, 5.0f, 50, 50, &m_pSphereMesh, NULL);
+	
+	D3DXMATRIX m;
+	float dx = 270.0f;
+	D3DXMatrixRotationZ(&m, dx);
+
+	//D3DXMatrixTranslation(&m, this->center_x, this->center_y, this->center_z);
+	this->setLocalTransform(m);
+
+	//if (FAILED(D3DXCreateSphere(pDevice, 0.28f, 50, 50, &m_pSphereMesh, NULL)))
+	if (FAILED(hr))
 	{
 		return false;
 	}
