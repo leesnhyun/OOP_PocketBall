@@ -6,11 +6,11 @@ using std::vector;
 TurnManager::TurnManager(const initializer_list<unsigned int>& playerIdList)
 {
 	vector<int> idListVector(playerIdList.begin(), playerIdList.end());
-	this->playerIdList = (unsigned int *) (playerIdList.size(), sizeof(unsigned int));
+	this->playerIdList = (unsigned int *) calloc(playerIdList.size(), sizeof(unsigned int));
 	this->playerNumber = playerIdList.size();
 	this->nowTurnPlayerIndex = 0;
 
-	for (int i = 0; i < this->playerNumber; i++)
+	for (unsigned int i = 0; i < this->playerNumber; i++)
 	{
 		(this->playerIdList)[i] = idListVector.at(i);
 	}
@@ -19,7 +19,7 @@ TurnManager::TurnManager(const initializer_list<unsigned int>& playerIdList)
 TurnManager::TurnManager(const TurnManager& toCopy)
 {
 	this->playerIdList = (unsigned int *) calloc(toCopy.playerNumber, sizeof(unsigned int));
-	for (int i = 0; i < toCopy.playerNumber; i++)
+	for (unsigned int i = 0; i < toCopy.playerNumber; i++)
 	{
 		(this->playerIdList)[i] = (toCopy.playerIdList)[i];
 	}
@@ -39,7 +39,7 @@ bool TurnManager::isTurnFinished(const initializer_list<CSphere>& fieldBalls)
 		return false;
 	}
 
-	for (int i = 0; i < fieldBalls.size(); i++)
+	for (unsigned int i = 0; i < fieldBalls.size(); i++)
 	{
 		CSphere targetBall = ballVector.at(i);
 
@@ -61,6 +61,7 @@ void TurnManager::finishTurn()
 
 void TurnManager::processTriggerOn()
 {
+	this->turnChangeSignal = false;
 	this->turnProcessSignal = true;
 }
 
@@ -80,9 +81,19 @@ void TurnManager::resetTurn()
 	this->processTriggerOff();
 }
 
+bool TurnManager::isProcessing() const
+{
+	return (this->turnProcessSignal);
+}
+
+bool TurnManager::isTurnChanged() const
+{
+	return (this->turnChangeSignal);
+}
+
 bool TurnManager::processTurn(const initializer_list<CSphere>& fieldBalls)
 {
-	if (this->isTurnFinished(fieldBalls))
+	if (!this->isTurnFinished(fieldBalls))
 	{
 		return false;
 	}
