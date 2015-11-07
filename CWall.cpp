@@ -17,7 +17,7 @@ CWall::~CWall()
 
 }
 
-bool CWall::create(IDirect3DDevice9* pDevice, float ix, float iz, float iwidth, float iheight, float idepth, D3DXCOLOR color)
+bool CWall::create(IDirect3DDevice9* pDevice, float ix, float iz, float iwidth, float iheight, float idepth, bool iis_vertical, D3DXCOLOR color)
 //벽을 화면에 생성함
 {
 	if (NULL == pDevice)
@@ -31,6 +31,7 @@ bool CWall::create(IDirect3DDevice9* pDevice, float ix, float iz, float iwidth, 
 
 	m_width = iwidth;
 	m_depth = idepth;
+	m_is_vertical = iis_vertical;
 
 	if (FAILED(D3DXCreateBox(pDevice, iwidth, iheight, idepth, &m_pBoundMesh, NULL)))
 		return false;
@@ -83,6 +84,10 @@ void CWall::setPosition(float x, float y, float z)
 
 	D3DXMatrixTranslation(&m, x, y, z);
 	setLocalTransform(m);
+}
+
+void CWall::setIsVertical(bool is_vertical) {
+	this->m_is_vertical = is_vertical;
 }
 
 // 벽의 높이를 반환
