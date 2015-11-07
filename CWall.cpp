@@ -108,7 +108,7 @@ void CWall::hitBy(CSphere& ball)
 	static const float LOSS_RATIO = 0.025;
 	if (this->hasIntersected(ball))
 	{
-		//부딪히면 3%의 에너지 손실 발생
+		//부딪히면 LOSS_RATIO만큼 에너지 손실 발생
 		ball.setPower(ball.getVelocity_X() * (1 - LOSS_RATIO), ball.getVelocity_Z() * (1 - LOSS_RATIO));
 		//세로벽에 충돌
 		if (m_is_vertical == true) 
