@@ -336,7 +336,20 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		old_x = new_x;
 		old_y = new_y;
-				
+		
+		if (g_target_blueball.getCenter().x > 4.6f)
+			g_target_blueball.setCenter(4.55f, g_target_blueball.getCenter().y, g_target_blueball.getCenter().z);
+
+		if (g_target_blueball.getCenter().x < -4.6f)
+			g_target_blueball.setCenter(-4.55f, g_target_blueball.getCenter().y, g_target_blueball.getCenter().z);
+
+		if (g_target_blueball.getCenter().z > 3.1f)
+			g_target_blueball.setCenter(g_target_blueball.getCenter().x, g_target_blueball.getCenter().y, 3.05);
+
+		if (g_target_blueball.getCenter().z < -3.1f)
+			g_target_blueball.setCenter(g_target_blueball.getCenter().x, g_target_blueball.getCenter().y, -3.05);
+
+
 		move = WORLD_MOVE;
 	}
 	
