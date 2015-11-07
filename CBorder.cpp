@@ -105,7 +105,7 @@ bool CBorder::create(IDirect3DDevice9* pDevice, float ix, float iz, float idepth
 		return false;
 	}
 
-	::MessageBox(0, "积己肯丰", 0, 0);
+	//::MessageBox(0, "积己肯丰", 0, 0);
 
 	return true;
 }
@@ -132,9 +132,6 @@ void CBorder::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)
 		//pDevice->SetTexture(0, Textures[i]);
 		mesh->DrawSubset(i);
 	}
-
-	//pDevice->SetMaterial(&m_mtrl);
-	mesh->DrawSubset(0);
 }
 
 
