@@ -203,6 +203,13 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 			}
 		}
 
+		// 각각의 구멍에 대해, 공과 서로 충돌 했는지 확인하고, 공을 넣는다.
+		for (i = 0; i < 6; i++){
+			for (j = 0; j < 16; j++) {
+				g_hole[i].hitBy(g_sphere[j]);
+			}
+		}
+
 		// draw plane, walls, and spheres
 		// 초록색 판을 그리고, 벽을 그리고, 공들을 그린다.
 		g_legoPlane.draw(Device, g_mWorld);
