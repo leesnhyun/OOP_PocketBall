@@ -27,6 +27,7 @@ bool CHole::create(IDirect3DDevice9* pDevice, D3DXCOLOR color)
 	m_mtrl.Specular = color;
 	m_mtrl.Emissive = d3d::BLACK;
 	m_mtrl.Power = 5.0f;
+	m_radius = 0.28f;
 
 	if (FAILED(D3DXCreateSphere(pDevice, 0.28f, 50, 50, &m_pSphereMesh, NULL)))
 	{
@@ -99,7 +100,7 @@ void CHole::setCenter(float x, float y, float z) // 구멍의 중심 좌표를 변경함
 
 float CHole::getRadius(void) const
 {
-	return (float)(M_RADIUS);
+	return m_radius;
 }// 구멍의 반지름을 받아옴
 
 const D3DXMATRIX& CHole::getLocalTransform(void) const
