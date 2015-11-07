@@ -15,6 +15,7 @@ private:
 	float m_width;						// 벽의 너비
 	float m_depth;						// 벽의 두께
 	float m_height;						// 벽의 높이
+	bool m_is_vertical;					// 벽이 가로인지 세로인지, true면 세로, false면 가로
 	void setLocalTransform(const D3DXMATRIX& mLocal);
 	D3DXMATRIX m_mLocal;
 	D3DMATERIAL9 m_mtrl;
@@ -23,12 +24,13 @@ private:
 public:
 	CWall();							// 벽의 생성자
 	~CWall();							// 벽의 소멸자
-	bool create(IDirect3DDevice9* pDevice, float ix, float iz, float iwidth, float iheight, float idepth, D3DXCOLOR color = d3d::WHITE); // 벽을 화면에 생성함
+	bool create(IDirect3DDevice9* pDevice, float ix, float iz, float iwidth, float iheight, float idepth, bool iis_vertical, D3DXCOLOR color = d3d::WHITE); // 벽을 화면에 생성함
 	void destroy();																														 // 벽을 화면에서 소멸시킴
 	void draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld);																		 // 벽을 화면에 그려냄
 	bool hasIntersected(CSphere& ball);																									 // 벽에 공이 충돌 했는지 확인
 	void hitBy(CSphere& ball);																											 // 벽에 공이 충돌할 경우 공의 방향과 속도를 바꿈
 	void setPosition(float x, float y, float z);																					     // 벽의 위치를 바꿈
+	void setIsVertical(bool is_vertical);																								 // 벽이 가로인지 세로인지를 설정
 	float getHeight(void) const;																										 // 벽의 높이를 바꿈
 };
 

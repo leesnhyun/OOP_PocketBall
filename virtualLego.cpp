@@ -88,13 +88,13 @@ bool Setup()
 	g_legoPlane.setPosition(0.0f, -0.0006f / 5, 0.0f);
 	
 	// 벽을 생성
-	if (false == g_legowall[0].create(Device, -1, -1, 9, 0.3f, 0.15f, d3d::TABLE_WALL)) return false;
+	if (false == g_legowall[0].create(Device, -1, -1, 9, 0.3f, 0.15f, false, d3d::TABLE_WALL)) return false;
 	g_legowall[0].setPosition(0.0f, 0.12f, 3.06f);
-	if (false == g_legowall[1].create(Device, -1, -1, 9, 0.3f, 0.15f, d3d::TABLE_WALL)) return false;
+	if (false == g_legowall[1].create(Device, -1, -1, 9, 0.3f, 0.15f, false, d3d::TABLE_WALL)) return false;
 	g_legowall[1].setPosition(0.0f, 0.12f, -3.06f);
-	if (false == g_legowall[2].create(Device, -1, -1, 0.15f, 0.3f, 6.24f, d3d::TABLE_WALL)) return false;
+	if (false == g_legowall[2].create(Device, -1, -1, 0.15f, 0.3f, 6.24f, true, d3d::TABLE_WALL)) return false;
 	g_legowall[2].setPosition(4.56f, 0.12f, 0.0f);
-	if (false == g_legowall[3].create(Device, -1, -1, 0.15f, 0.3f, 6.24f, d3d::TABLE_WALL)) return false;
+	if (false == g_legowall[3].create(Device, -1, -1, 0.15f, 0.3f, 6.24f, true, d3d::TABLE_WALL)) return false;
 	g_legowall[3].setPosition(-4.56f, 0.12f, 0.0f);
 
 	// 4개의 공을 생성함
