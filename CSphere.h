@@ -19,6 +19,8 @@ private:
 	// DirectX에서의 좌표는 화면에 대해서 화면을 마주 보는 사람의 입장에서 
 	// 앞으로 z축, 위로 y축, 오른쪽으로 x축이다.
 
+	float pre_center_x, pre_center_z;
+
 public:
 	CSphere();
 	~CSphere();

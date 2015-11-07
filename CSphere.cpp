@@ -63,12 +63,13 @@ void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// °øÀ» È
 // µÎ °øÀÌ Ãæµ¹ Çß´ÂÁö È®ÀÎ
 bool CSphere::hasIntersected(CSphere& ball)
 {
-	double xDistance = pow((this->center_x - ball.center_x), 2);
-	double yDistance = pow((this->center_y - ball.center_y), 2);
-	double zDistance = pow((this->center_z - ball.center_z), 2);
-	double totalDistance = sqrt(xDistance + yDistance + zDistance);
+	D3DXVECTOR3 cord = this->getCenter();
+	D3DXVECTOR3 ball_cord = ball.getCenter();
+	double xDistance = abs((cord.x - ball_cord.x) * (cord.x - ball_cord.x));
+	double zDistance = abs((cord.z - ball_cord.z) * (cord.z - ball_cord.z));
+	double totalDistance = sqrt(xDistance + zDistance);
 
-	if (totalDistance <= (this->getRadius() + ball.getRadius()))
+	if (totalDistance < (this->getRadius() + ball.getRadius()))
 	{
 		return true;
 	}
@@ -79,56 +80,51 @@ bool CSphere::hasIntersected(CSphere& ball)
 // °øÀÌ Ãæµ¹ÇÑ °æ¿ì, µÎ °øÀÇ ¹æÇâ°ú ¼Óµµ¸¦ ¹Ù²Þ.
 void CSphere::hitBy(CSphere& ball)
 {
-	static const float LOSS_RATIO = 0.015;
-
 	if (this->hasIntersected(ball))
 	{
-		//°ø ¿¡³ÊÁö ¼Õ½Ç ¹ß»ý
-		this->setPower(ball.getVelocity_X() * (1 - LOSS_RATIO), ball.getVelocity_Z() * (1 - LOSS_RATIO));
-		ball.setPower(ball.getVelocity_X() * (1 - LOSS_RATIO), ball.getVelocity_Z() * (1 - LOSS_RATIO));
+		//µµ¿òÀ» ÁØ ÀÚ·á: http://blog.hansune.com/106
+		//this - ball·Î ¾çÀÇ º¤ÅÍ¸¦ Á¤ÇÔ
+		D3DXVECTOR3 cord = this->getCenter();
+		D3DXVECTOR3 ball_cord = ball.getCenter();
+		//º¸°£¹ýÀ¸·Î ±Ù»çÇÏ¿© Ãæµ¹ ½ÃÁ¡ÀÇ ÁÂÇ¥·Î ÀÌµ¿ÇÔ.
+		this->setCenter((cord.x + this->pre_center_x) / 2, cord.y, (cord.z + this->pre_center_z) / 2);
+		ball.setCenter((ball_cord.x + ball.pre_center_x) / 2, ball_cord.y, (ball_cord.z + ball.pre_center_z) / 2);
 
-		//temp¿¡ ball °ª º¹»ç
-		CSphere temp_this, temp_ball;
-		temp_this = *this;
-		temp_ball = ball;
+		//µÎ °ø »çÀÌÀÇ ¹æÇâ º¤ÅÍ
+		double d_x = cord.x - ball_cord.x;
+		double d_z = cord.z - ball_cord.z;
+		double size_d = sqrt((d_x*d_x) + (d_z*d_z));
 
-		float vector_size;
-		//ballÀÌ *this¸¦ Ä§
-		//*thisÀÇ ¹æÇâ : *thisÀÇ ÁÂÇ¥ - ballÀÇ ÁÂÇ¥ --> Å©±â¸¦ 1·Î ¸¸µé¾î¼­ ¹æÇâ º¤ÅÍ·Î »ç¿ë
-		this->setPower(this->center_x - ball.center_x, this->center_z - ball.center_z);
-		vector_size = sqrt(pow(this->m_velocity_x, 2) + pow(this->m_velocity_z, 2));
-		this->setPower(this->m_velocity_x / vector_size, this->m_velocity_z / vector_size);
-		//*thisÀÇ Å©±â : ballÀÇ ¼Óµµ¸¦ *thisÀÇ ¹æÇâ º¤ÅÍ¿¡ Á¤»ç¿µ ½ÃÅ² °ª
-		vector_size = (this->m_velocity_x * ball.m_velocity_x + this->m_velocity_x * ball.m_velocity_x) / 
-			(sqrt(pow(this->m_velocity_x, 2) + pow(this->m_velocity_z, 2)));
-		this->setPower(this->m_velocity_x / vector_size, this->m_velocity_z / vector_size);
-		//ÀÌÈÄ ballÀÇ ¼Óµµ : ballÀÇ ±âÁ¸ ¼Óµµ - *thisÀÇ ÀÌÈÄ ¼Óµµ
-		ball.setPower(ball.m_velocity_x - this->m_velocity_x, ball.m_velocity_z - this->m_velocity_z);
+		double vax = this->m_velocity_x;
+		double vaz = this->m_velocity_z;
+		double vbx = ball.m_velocity_x;
+		double vbz = ball.m_velocity_z;
 
-		//*this°¡ ballÀ» Ä§
-		//ballÀÇ ¹æÇâ : ballÀÇ ÁÂÇ¥ - *thisÀÇ ÁÂÇ¥ --> Å©±â¸¦ 1·Î ¸¸µé¾î¼­ ¹æÇâ º¤ÅÍ·Î »ç¿ë
-		temp_ball.setPower(temp_ball.center_x - temp_this.center_x, temp_ball.center_z - temp_this.center_z);
-		vector_size = sqrt(pow(temp_ball.m_velocity_x, 2) + pow(temp_ball.m_velocity_z, 2));
-		temp_ball.setPower(temp_ball.m_velocity_x / vector_size, temp_ball.m_velocity_z / vector_size);
-		//ballÀÇ Å©±â : *thisÀÇ ¼Óµµ¸¦ ballÀÇ ¹æÇâ º¤ÅÍ¿¡ Á¤»ç¿µ ½ÃÅ² °ª
-		vector_size = (temp_ball.m_velocity_x * temp_this.m_velocity_x + temp_ball.m_velocity_x * temp_this.m_velocity_x) /
-			(sqrt(pow(temp_ball.m_velocity_x, 2) + pow(temp_ball.m_velocity_z, 2)));
-		temp_ball.setPower(temp_ball.m_velocity_x / vector_size, temp_ball.m_velocity_z / vector_size);
-		//ÀÌÈÄ *thisÀÇ ¼Óµµ : *thisÀÇ ±âÁ¸ ¼Óµµ - ballÀÇ ÀÌÈÄ ¼Óµµ
-		temp_this.setPower(temp_this.m_velocity_x - temp_ball.m_velocity_x, temp_this.m_velocity_z - temp_ball.m_velocity_z);
-		//ÇÕ·Â °è»ê (*this -> ball °¡°Ý ÀÌÈÄ °¢°¢ÀÇ °øÀÇ ¼Óµµ + ball -> *this °¡°Ý ÀÌÈÄ °¢°¢ÀÇ °øÀÇ ¼Óµµ)
-		this->setPower(this->m_velocity_x + temp_this.m_velocity_x, this->m_velocity_z + temp_this.m_velocity_z);
-		ball.setPower(ball.m_velocity_x + temp_ball.m_velocity_x, ball.m_velocity_z + temp_ball.m_velocity_z);
+		double size_this_v = sqrt((vax*vax) + (vaz*vaz));
+
+		double cos_t = d_x / size_d;
+		double sin_t = d_z / size_d;
+
+		double vaxp = vbx*cos_t + vbz*sin_t;
+		double vbxp = vax*cos_t + vaz*sin_t;
+		double vazp = vaz*cos_t - vax*sin_t;
+		double vbzp = vbz*cos_t - vbx*sin_t;
+
+		this->setPower(vaxp*cos_t - vazp*sin_t, vaxp*sin_t + vazp*cos_t);
+		ball.setPower(vbxp*cos_t - vbzp*sin_t, vbxp*sin_t + vbzp*cos_t);
 	}
-	/* ¹Ýµå½Ã Ãæµ¹À» È®ÀÎÇÏ´Â ÄÚµå¸¦ ¿©±â¿¡ ³Ö¾î¾ß ÇÔ */
+
 }
 
 void CSphere::ballUpdate(float timeDiff) // °øÀÇ Áß½É ÁÂÇ¥¸¦ ¼Óµµ¿¡ ¸ÂÃç¼­ ¸Å ½Ã°£ °£°Ý¸¶´Ù °»½ÅÇÔ
 {
-	const float TIME_SCALE = 3.3;
+	const float TIME_SCALE = 3.3F;
 	D3DXVECTOR3 cord = this->getCenter();
 	double vx = abs(this->getVelocity_X());
 	double vz = abs(this->getVelocity_Z());
+
+	this->pre_center_x = cord.x;
+	this->pre_center_z = cord.z;
 
 	if (vx > 0.01 || vz > 0.01)
 	{
@@ -178,9 +174,11 @@ void CSphere::setPower(double vx, double vz) // °øÀÇ ¼Óµµ¸¦ ¹Ù²Þ
 void CSphere::setCenter(float x, float y, float z) // °øÀÇ Áß½É ÁÂÇ¥¸¦ º¯°æÇÔ
 {
 	D3DXMATRIX m;
+
 	this->center_x = x;
 	this->center_y = y;
 	this->center_z = z;
+	
 	D3DXMatrixTranslation(&m, x, y, z);
 	this->setLocalTransform(m);
 }
