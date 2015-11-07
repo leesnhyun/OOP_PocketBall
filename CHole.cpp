@@ -67,7 +67,7 @@ bool CHole::hasIntersected(CSphere& ball)
 	double zDistance = pow((this->center_z - ball.getCenter().z), 2);
 	double totalDistance = sqrt(xDistance + yDistance + zDistance);
 
-	if (totalDistance < (this->m_radius))
+	if (totalDistance < (this->getRadius()))
 	{
 		return true;
 	}
