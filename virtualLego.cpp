@@ -16,6 +16,8 @@
 #include "CWall.h"
 #include "CHole.h"
 #include "CBorder.h"
+#include "TurnManager.h"
+#include "Player.h"
 
 #include <vector>
 #include <ctime>
@@ -168,6 +170,9 @@ void Cleanup(void)
 // timeDelta는 이전 이미지 프레임과 현재 이미지 프레임의 사이의 시간값을 나타냅니다.
 // 공이 움직이는 거리는 무조건 "속도 * timeDelta"여야 합니다.
 
+Player players[2] = { Player(1), Player(2) };
+TurnManager turnManager({ players[0].getPlayerId(), players[1].getPlayerId() });
+
 bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여줌
 {
 	int i=0;
@@ -213,6 +218,11 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		Device->EndScene();
 		Device->Present(0, 0, 0, 0);
 		Device->SetTexture( 0, NULL );
+	}
+
+	if (turnManager.processTurn({ g_sphere[0], g_sphere[1], g_sphere[2], g_sphere[3] }))
+	{
+		MessageBox(0, "플레이어 바뀜 ", 0, 0);
 	}
 
 	return true;
@@ -287,7 +297,7 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				break;
 			}
 		}
-		else if (wParam == VK_SPACE){	// 스페이스 바의 경우 파란 공과 하얀 공의 위치를 받아서
+		else if (wParam == VK_SPACE && !turnManager.isProcessing()){	// 스페이스 바의 경우 파란 공과 하얀 공의 위치를 받아서
 			// 그 거리와 방향만큼 하얀 공의 속도를 조정한다.
 			D3DXVECTOR3 targetpos = g_target_blueball.getCenter();
 			D3DXVECTOR3	whitepos = g_sphere[3].getCenter();
@@ -298,12 +308,13 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x <= 0){ theta = PI + theta; } // 3 사분면
 			double distance = sqrt(pow(targetpos.x - whitepos.x, 2) + pow(targetpos.z - whitepos.z, 2));
 			g_sphere[3].setPower(distance * cos(theta), distance * sin(theta));
+			turnManager.processTriggerOn();
 		}
 	}else if(msg == WM_MOUSEMOVE){// 마우스가 움직일 때,
 		int new_x = LOWORD(lParam);
 		int new_y = HIWORD(lParam);
-		float dx;
-		float dy;
+		double dx;
+		double dy;
 			
 		if (LOWORD(wParam) & MK_RBUTTON) {// 마우스 오른쪽 버튼을 누를 때는, 파란 공의 위치를 옮긴다.
 			dx = (old_x - new_x);// * 0.01f;
