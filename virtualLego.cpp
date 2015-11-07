@@ -191,7 +191,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		// 공의 위치를 갱신한다. 갱신하는 중에는 각각의 공이 벽과 충돌 했는지 확인한다.
 		for( i = 0; i < 16; i++) {
 			g_sphere[i].ballUpdate(timeDelta);
-			for(j = 0; j < 16; j++){ g_legowall[i].hitBy(g_sphere[j]); }
+			for(j = 0; j < 4; j++){ g_legowall[j].hitBy(g_sphere[i]); }
 		}
 
 		// check whether any two balls hit together and update the direction of balls
