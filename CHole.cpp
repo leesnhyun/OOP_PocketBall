@@ -28,7 +28,7 @@ bool CHole::create(IDirect3DDevice9* pDevice, D3DXCOLOR color)
 	m_mtrl.Emissive = d3d::BLACK;
 	m_mtrl.Power = 5.0f;
 
-	if (FAILED(D3DXCreateSphere(pDevice, getRadius(), 50, 50, &m_pSphereMesh, NULL)))
+	if (FAILED(D3DXCreateSphere(pDevice, 0.28f, 50, 50, &m_pSphereMesh, NULL)))
 	{
 		return false;
 	}
