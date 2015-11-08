@@ -41,7 +41,7 @@ bool CSphere::create(IDirect3DDevice9* pDevice, D3DXCOLOR color)
 
 	m_mtrl.Ambient = color;
 	m_mtrl.Diffuse = color;
-	m_mtrl.Specular = color;
+	m_mtrl.Specular = d3d::WHITE;
 	m_mtrl.Emissive = d3d::BLACK;
 	m_mtrl.Power = 100.0f;
 	
