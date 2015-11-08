@@ -378,7 +378,15 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		int new_z = HIWORD(lParam);
 		double dx;
 		double dz;
-			
+		
+		if ((LOWORD(wParam) & MK_LBUTTON) && !turnManager.isProcessing()) {// 마우스 오른쪽 버튼을 누를 때는, 파란 공의 위치를 옮긴다.
+			dx = (old_x - new_x);// * 0.01f;
+			dz = (old_z - new_z);// * 0.01f;
+
+			D3DXVECTOR3 coord3d = g_sphere[0].getCenter();
+			g_sphere[0].setCenter(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
+		}
+
 		if (LOWORD(wParam) & MK_RBUTTON) {// 마우스 오른쪽 버튼을 누를 때는, 파란 공의 위치를 옮긴다.
 			dx = (old_x - new_x);// * 0.01f;
 			dz = (old_z - new_z);// * 0.01f;
