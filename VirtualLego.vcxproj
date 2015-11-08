@@ -146,6 +146,7 @@
     <ClCompile Include="CSphere.cpp" />
     <ClCompile Include="CWall.cpp" />
     <ClCompile Include="d3dUtility.cpp" />
+    <ClCompile Include="FoulManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="TurnManager.cpp" />
     <ClCompile Include="virtualLego.cpp" />
@@ -157,6 +158,7 @@
     <ClInclude Include="CSphere.h" />
     <ClInclude Include="CWall.h" />
     <ClInclude Include="d3dUtility.h" />
+    <ClInclude Include="FoulManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="TurnManager.h" />
   </ItemGroup>
