@@ -82,7 +82,7 @@ unsigned int TurnManager::getNowTurnID() const
 	return (this->playerIdList)[this->nowTurnPlayerIndex];
 }
 
-unsigned int TurnManager::getTotalTurnCount() const
+unsigned int TurnManager::getCurrentTurnNumber() const
 {
 	return this->totalTurnCount;
 }
