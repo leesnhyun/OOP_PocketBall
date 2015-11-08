@@ -30,17 +30,30 @@ IDirect3DDevice9* Device = NULL;
 // 창의 크기
 const int Width  = 1024;
 const int Height = 768;
+const float BALL_SET_RATIO = 1.82f;
 
 // 16개의 공의 위치를 초기화 함.
 const float spherePos[16][2] = { 
+	//white ball
 	{ -2.7f, 0 }, 
 	
-	{ +1.5, 0 }, 
-
-	{ 1.88f, 0.211f }, { 1.88f, -0.211f }, 
-	{ 3.02f, -0.844f }, { 2.26f, -0.422f }, { 2.26f, 0.422f }, 
-	{ 2.64f, -0.211f }, { 2.64f, 0.211f }, { 2.64f, -0.633 }, { 2.64f, 0.633f }, 
-	{ 3.02f, -0.422f }, { 3.02f, 0.422f }, { 3.02f, 0 }, { 3.02f, 0.844f }, { 2.26, 0} };
+	{ +1.5f, 0 }, 
+	{ (1.5f + (M_RADIUS * BALL_SET_RATIO)), M_RADIUS + 0.01f }, 
+	{ (1.5f + (M_RADIUS * BALL_SET_RATIO)), -(M_RADIUS + 0.01f) }, 
+	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 4), -(M_RADIUS * 4 + 0.04f) }, 
+	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 2), -(M_RADIUS * 2 + 0.02f) }, 
+	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 2), (M_RADIUS * 2 + 0.02f) },
+	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 3), -(M_RADIUS + 0.01f) }, 
+	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 3), (M_RADIUS + 0.01f) },
+	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 3), -(M_RADIUS * 3 + 0.03f) }, 
+	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 3), (M_RADIUS * 3 + 0.03f) },
+	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 4), -(M_RADIUS * 2 + 0.02f) }, 
+	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 4), (M_RADIUS * 2 + 0.02f) }, 
+	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 4), 0 }, 
+	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 4), 
+	(M_RADIUS * 4 + 0.04f) },
+	//balck ball
+	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 2), 0 } };
 
 // 6개의 구멍의 위치를 초기화 함.
 // const float holePos[6][2] = { {-4.23f,-2.73f}, {0,-2.73f}, {4.23f,-2.73f}, {-4.23f,2.73f}, {0,2.73f}, {4.23f,2.73f}};
