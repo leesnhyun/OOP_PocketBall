@@ -2,11 +2,10 @@
 #include "CSphere.h"
 #include <cmath>
 #include "TurnManager.h"
-
 extern TurnManager turnManager;
 
 // 공의 생성자를 정의
-CSphere::CSphere()
+CSphere::CSphere(BallType ballType)
 {
 	D3DXMatrixIdentity(&m_mLocal);				// Transform Matrix를 단위행렬로 초기화
 	ZeroMemory(&m_mtrl, sizeof(m_mtrl));		// memset을 통해 모두 0으로 초기화
@@ -15,13 +14,13 @@ CSphere::CSphere()
 	m_velocity_z = 0;
 	m_pSphereMesh = NULL;
 	this->deadDate = -1;
-	// TODO : What is the ball type?
+	this->ballType = ballType;
 }
 
 // 공의 소멸자를 정의
 CSphere::~CSphere()
 {
-
+	
 }
 
 bool CSphere::isDead() const

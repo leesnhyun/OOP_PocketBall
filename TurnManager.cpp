@@ -110,6 +110,8 @@ bool TurnManager::processTurn(const initializer_list<CSphere>& fieldBalls)
 		return false;
 	}
 
+
+
 	if (false)
 	{
 		this->resetTurn();

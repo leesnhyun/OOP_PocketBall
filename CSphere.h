@@ -25,7 +25,7 @@ private:
 	float pre_center_x, pre_center_z;
 
 public:
-	CSphere();
+	CSphere(BallType ballType);
 	~CSphere();
 	bool isDead() const;													// 공의 죽은 시점을 가져옴.
 	void holeIn();															// 들어감

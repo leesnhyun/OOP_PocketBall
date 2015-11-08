@@ -55,8 +55,9 @@ D3DXMATRIX g_mProj;
 // -----------------------------------------------------------------------------
 CWall	g_legoPlane;
 CWall	g_legowall[4];
-CSphere	g_sphere[16];
-CSphere	g_target_blueball;
+CSphere	g_sphere[16] {BallType::HAND, BallType::STRIPE, BallType::SOLID, BallType::STRIPE, BallType::SOLID, BallType::SOLID, BallType::STRIPE,
+BallType::SOLID, BallType::STRIPE, BallType::STRIPE, BallType::SOLID, BallType::SOLID, BallType::SOLID, BallType::STRIPE, BallType::STRIPE, BallType::EIGHT};
+CSphere	g_target_blueball(BallType::NONE);
 CLight	g_light;
 CHole	g_hole[6];
 
