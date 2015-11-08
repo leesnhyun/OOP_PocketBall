@@ -6,7 +6,7 @@ CSphere::CSphere()
 {
 	D3DXMatrixIdentity(&m_mLocal);				// Transform Matrix를 단위행렬로 초기화
 	ZeroMemory(&m_mtrl, sizeof(m_mtrl));		// memset을 통해 모두 0으로 초기화
-	m_radius = 0;
+	m_radius = (float) M_RADIUS;
 	m_velocity_x = 0;
 	m_velocity_z = 0;
 	m_pSphereMesh = NULL;
@@ -192,7 +192,7 @@ void CSphere::setCenter(float x, float y, float z) // 공의 중심 좌표를 변경함
 
 float CSphere::getRadius(void) const 
 { 
-	return (float)(M_RADIUS);
+	return (this->m_radius);
 }// 공의 반지름을 받아옴
 
 const D3DXMATRIX& CSphere::getLocalTransform(void) const 
