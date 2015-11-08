@@ -5,7 +5,7 @@ Player::Player(unsigned int playerID)
 {
 	this->playerID = playerID;
 	this->numTakenBall = 0;
-	this->playerBallType = TargetBall::NONE;
+	this->playerBallType = BallType::NONE;
 }
 
 void Player::addTakenBall(unsigned int numBall)

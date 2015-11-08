@@ -191,7 +191,6 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 	int i = 0;
 	int j = 0;
 
-
 	if( Device )
 	{
 		Device->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0x00afafaf, 1.0f, 0);
@@ -242,7 +241,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		Device->SetTexture( 0, NULL );
 	}
 
-	if (turnManager.processTurn({ g_sphere[0], g_sphere[1], g_sphere[2], g_sphere[3] }))
+	if (turnManager.processTurn({ g_sphere[0], g_sphere[1], g_sphere[2], g_sphere[3], g_sphere[4], g_sphere[5], g_sphere[6], g_sphere[7], g_sphere[8], g_sphere[9], g_sphere[10], g_sphere[11], g_sphere[12], g_sphere[13], g_sphere[14] }))
 	{
 		MessageBox(0, "플레이어 바뀜 ", 0, 0);
 	}
