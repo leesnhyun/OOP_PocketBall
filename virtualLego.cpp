@@ -152,8 +152,8 @@ bool Setup()
 	lit.Diffuse      = d3d::WHITE; 
 	lit.Specular     = d3d::WHITE * 0.9f;
 	lit.Ambient      = d3d::WHITE * 0.9f;
-	lit.Position     = D3DXVECTOR3(0.0f, 3.0f, -2.0f);
-	lit.Range        = 150.0f;
+	lit.Position     = D3DXVECTOR3(0.0f, 3.0f, 0.0f);
+	lit.Range        = 80.0f;
 	lit.Attenuation0 = 0.0f;
 	lit.Attenuation1 = 0.9f;
 	lit.Attenuation2 = 0.0f;
