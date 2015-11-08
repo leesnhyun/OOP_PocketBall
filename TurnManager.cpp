@@ -1,4 +1,5 @@
 #include "TurnManager.h"
+#include "FoulManager.h"
 #include <cstdlib>
 #include <vector>
 using std::vector;
@@ -76,12 +77,12 @@ void TurnManager::processTriggerOff()
 	this->turnProcessSignal = false;
 }
 
-unsigned int TurnManager::getNowTurnID() const
+unsigned int TurnManager::getNowTurnIndex() const
 {
-	return (this->playerIdList)[this->nowTurnPlayerIndex];
+	return this->nowTurnPlayerIndex;
 }
 
-unsigned int TurnManager::getTotalTurnCount() const
+unsigned int TurnManager::getCurrentTurnNumber() const
 {
 	return this->totalTurnCount;
 }
@@ -105,17 +106,22 @@ bool TurnManager::isTurnChanged() const
 
 bool TurnManager::processTurn(const initializer_list<CSphere>& fieldBalls)
 {
+	FoulManager foulManager;
 	if (!this->isTurnFinished(fieldBalls))
 	{
 		return false;
 	}
 
-	if (false)
+	// TODO : When lose.
+	if (foulManager.isFoul())
+	{
+		this->finishTurn();
+	}
+	else
 	{
 		this->resetTurn();
 	}
 	// TODO : Process
-
-	this->finishTurn();
+	
 	return true;
 }
