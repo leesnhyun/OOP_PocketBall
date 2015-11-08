@@ -77,9 +77,9 @@ void TurnManager::processTriggerOff()
 	this->turnProcessSignal = false;
 }
 
-unsigned int TurnManager::getNowTurnID() const
+unsigned int TurnManager::getNowTurnIndex() const
 {
-	return (this->playerIdList)[this->nowTurnPlayerIndex];
+	return this->nowTurnPlayerIndex;
 }
 
 unsigned int TurnManager::getCurrentTurnNumber() const
@@ -112,8 +112,16 @@ bool TurnManager::processTurn(const initializer_list<CSphere>& fieldBalls)
 		return false;
 	}
 
+	// TODO : When lose.
+	if (foulManager.isFoul())
+	{
+		this->finishTurn();
+	}
+	else
+	{
+		this->resetTurn();
+	}
 	// TODO : Process
 	
-	this->finishTurn();
 	return true;
 }
