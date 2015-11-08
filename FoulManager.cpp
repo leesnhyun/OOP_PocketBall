@@ -1,30 +1,36 @@
 #include "FoulManager.h"
 
-bool FoulManager::isNoCrashHandBall()
+bool FoulManager::isNoHitHandBall()
 {
-
+	return false;
 }
 
 bool FoulManager::isHandBallInHole()
 {
+	return false;
 }
 
 bool FoulManager::isFirstHitNotMyBall()
 {
+	return false;
 }
 
 bool FoulManager::isEightBallBadToIn()
 {
+	return false;
 }
 
 bool FoulManager::isEightBallWithFoul()
 {
+	return false;
 }
 
-bool FoulManager::foul()
+bool FoulManager::isFoul()
 {
+	return false;
 }
 
-bool FoulManager::lose()
+bool FoulManager::isLose()
 {
+	return false;
 }
