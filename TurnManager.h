@@ -25,7 +25,7 @@ public:
 	void processTriggerOn();														// 턴 처리의 시그널을 활성화.
 	void processTriggerOff();														// 턴 처리를 더이상 하지 않도록 시그널을 비활성화.
 	unsigned int getNowTurnID() const;												// 현재 턴을 진행하는 플레이어의 ID
-	unsigned int getTotalTurnCount() const;											// 현재 총 몇 턴이 진행되었는지 가져옴.
+	unsigned int getCurrentTurnNumber() const;										// 현재 총 몇 턴이 진행되었는지 가져옴.
 	bool processTurn(const initializer_list<CSphere>& fieldBalls);					// 턴 처리를 시작.
 	bool isTurnFinished(const initializer_list<CSphere>& fieldBalls);				// 턴이 종료되었는지에 대한 여부를 가져옴.
 	bool isProcessing() const;														// 턴 처리를 하고있는지에 대한 여부를 가져옴.

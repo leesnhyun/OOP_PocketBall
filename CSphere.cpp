@@ -28,9 +28,14 @@ bool CSphere::isDead() const
 	return (this->deadDate >= 0);
 }
 
+int CSphere::getDeadDate() const
+{
+	return this->deadDate;
+}
+
 void CSphere::holeIn()
 {
-	this->deadDate = turnManager.getTotalTurnCount();
+	this->deadDate = turnManager.getCurrentTurnNumber();
 }
 
 // 공을 화면에 생성함

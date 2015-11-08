@@ -1,4 +1,5 @@
 #include "TurnManager.h"
+#include "FoulManager.h"
 #include <cstdlib>
 #include <vector>
 using std::vector;
@@ -105,19 +106,14 @@ bool TurnManager::isTurnChanged() const
 
 bool TurnManager::processTurn(const initializer_list<CSphere>& fieldBalls)
 {
+	FoulManager foulManager;
 	if (!this->isTurnFinished(fieldBalls))
 	{
 		return false;
 	}
 
-
-
-	if (false)
-	{
-		this->resetTurn();
-	}
 	// TODO : Process
-
+	
 	this->finishTurn();
 	return true;
 }
