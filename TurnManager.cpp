@@ -9,6 +9,7 @@ TurnManager::TurnManager(const initializer_list<unsigned int>& playerIdList)
 	this->playerIdList = (unsigned int *) calloc(playerIdList.size(), sizeof(unsigned int));
 	this->playerNumber = playerIdList.size();
 	this->nowTurnPlayerIndex = 0;
+	this->totalTurnCount = 0;
 
 	for (unsigned int i = 0; i < this->playerNumber; i++)
 	{
@@ -19,6 +20,10 @@ TurnManager::TurnManager(const initializer_list<unsigned int>& playerIdList)
 TurnManager::TurnManager(const TurnManager& toCopy)
 {
 	this->playerIdList = (unsigned int *) calloc(toCopy.playerNumber, sizeof(unsigned int));
+	this->nowTurnPlayerIndex = toCopy.nowTurnPlayerIndex;
+	this->playerNumber = toCopy.playerNumber;
+	this->totalTurnCount = toCopy.totalTurnCount;
+
 	for (unsigned int i = 0; i < toCopy.playerNumber; i++)
 	{
 		(this->playerIdList)[i] = (toCopy.playerIdList)[i];
@@ -54,6 +59,7 @@ bool TurnManager::isTurnFinished(const initializer_list<CSphere>& fieldBalls)
 
 void TurnManager::finishTurn()
 {
+	this->totalTurnCount++;
 	this->turnChangeSignal = true;
 	this->nowTurnPlayerIndex = (this->nowTurnPlayerIndex + 1) % this->playerNumber;
 	this->processTriggerOff();
@@ -75,8 +81,14 @@ unsigned int TurnManager::getNowTurnID() const
 	return (this->playerIdList)[this->nowTurnPlayerIndex];
 }
 
+unsigned int TurnManager::getTotalTurnCount() const
+{
+	return this->totalTurnCount;
+}
+
 void TurnManager::resetTurn()
 {
+	this->totalTurnCount++;
 	this->turnChangeSignal = false;
 	this->processTriggerOff();
 }
@@ -98,6 +110,10 @@ bool TurnManager::processTurn(const initializer_list<CSphere>& fieldBalls)
 		return false;
 	}
 
+	if (false)
+	{
+		this->resetTurn();
+	}
 	// TODO : Process
 
 	this->finishTurn();

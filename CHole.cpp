@@ -81,8 +81,10 @@ void CHole::hitBy(CSphere& ball)
 {
 	if (this->hasIntersected(ball))
 	{
+		// TODO : Destroy ball.
 		ball.setCenter(ball.getVelocity_X() * 100000, 10.0f, ball.getVelocity_Z() * 100000);
 		ball.setPower(0.0f, 0.0f);
+		ball.holeIn();
 	}
 	//ball의 setPower를 0으로 설정해 줘야함. + 위치를 날려줘야 함(setCenter)
 	/* 반드시 충돌을 확인하는 코드를 여기에 넣어야 함 */

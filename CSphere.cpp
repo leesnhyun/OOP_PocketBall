@@ -1,6 +1,10 @@
 #include "d3dUtility.h"
 #include "CSphere.h"
 #include <cmath>
+#include "TurnManager.h"
+
+extern TurnManager turnManager;
+
 // 공의 생성자를 정의
 CSphere::CSphere()
 {
@@ -10,12 +14,24 @@ CSphere::CSphere()
 	m_velocity_x = 0;
 	m_velocity_z = 0;
 	m_pSphereMesh = NULL;
+	this->deadDate = -1;
+	// TODO : What is the ball type?
 }
 
 // 공의 소멸자를 정의
 CSphere::~CSphere()
 {
 
+}
+
+bool CSphere::isDead() const
+{
+	return (this->deadDate >= 0);
+}
+
+void CSphere::holeIn()
+{
+	this->deadDate = turnManager.getTotalTurnCount();
 }
 
 // 공을 화면에 생성함

@@ -181,7 +181,6 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 	int i=0;
 	int j = 0;
 
-
 	if( Device )
 	{
 		Device->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0x00afafaf, 1.0f, 0);
