@@ -325,7 +325,7 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			switch (move) {
 			case WORLD_MOVE:
 				float dy = 3 * 0.01f;
-				D3DXMatrixRotationZ(&mX, dy);
+				D3DXMatrixRotationX(&mX, dy);
 				g_mWorld = g_mWorld * mX;
 
 				break;
@@ -337,7 +337,7 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			switch (move) {
 			case WORLD_MOVE:
 				float dy = -3 * 0.01f;
-				D3DXMatrixRotationZ(&mX, dy);
+				D3DXMatrixRotationX(&mX, dy);
 				g_mWorld = g_mWorld * mX;
 
 				break;

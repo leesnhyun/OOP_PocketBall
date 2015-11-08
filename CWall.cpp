@@ -35,6 +35,7 @@ bool CWall::create(IDirect3DDevice9* pDevice, float ix, float iz, float iwidth, 
 
 	if (FAILED(D3DXCreateBox(pDevice, iwidth, iheight, idepth, &m_pBoundMesh, NULL)))
 		return false;
+
 	return true;
 }
 
@@ -50,11 +51,12 @@ void CWall::destroy()
 // 벽을 화면에 그려냄
 void CWall::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)
 {
-	if (NULL == pDevice)
-		return;
+	if (NULL == pDevice) return;
+	
 	pDevice->SetTransform(D3DTS_WORLD, &mWorld);
 	pDevice->MultiplyTransform(D3DTS_WORLD, &m_mLocal);
 	pDevice->SetMaterial(&m_mtrl);
+	
 	m_pBoundMesh->DrawSubset(0);
 }
 

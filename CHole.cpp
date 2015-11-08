@@ -1,6 +1,7 @@
 #include "d3dUtility.h"
 #include "CHole.h"
 #include <cmath>
+
 // 구멍의 생성자를 정의
 CHole::CHole()
 {
@@ -19,8 +20,7 @@ CHole::~CHole()
 // 구멍을 화면에 생성함
 bool CHole::create(IDirect3DDevice9* pDevice, D3DXCOLOR color)
 {
-	if (NULL == pDevice)
-		return false;
+	if (NULL == pDevice) return false;
 
 	m_mtrl.Ambient = color;
 	m_mtrl.Diffuse = color;
@@ -30,21 +30,14 @@ bool CHole::create(IDirect3DDevice9* pDevice, D3DXCOLOR color)
 	m_radius = 0.28f;
 
 	// 입체를 그리고 회전시킵니다.
-	HRESULT hr = D3DXCreateCylinder(pDevice, 0.28f, 0.28f, 5.0f, 50, 50, &m_pSphereMesh, NULL);
+	HRESULT hr = D3DXCreateCylinder(pDevice, m_radius, m_radius, 0.2f, 50, 50, &m_pSphereMesh, NULL);
 	
 	D3DXMATRIX m;
-	float dx = 270.0f;
-	D3DXMatrixRotationZ(&m, dx);
-
-	//D3DXMatrixTranslation(&m, this->center_x, this->center_y, this->center_z);
+	D3DXMatrixRotationX(&m, 33);
 	this->setLocalTransform(m);
-
-	//if (FAILED(D3DXCreateSphere(pDevice, 0.28f, 50, 50, &m_pSphereMesh, NULL)))
-	if (FAILED(hr))
-	{
-		return false;
-	}
-
+	
+	if (FAILED(hr)) return false;
+	
 	return true;
 }
 
@@ -57,13 +50,9 @@ void CHole::destroy()// 구멍을 화면에서 소멸시킴
 	}
 }
 
-//@TODO : 추후에 다시 해야합니다. --> 구가 아니라 평면화 작업을 해야함
 void CHole::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// 구멍을 화면에 그려냄
 {
-	if (NULL == pDevice)
-	{
-		return;
-	}
+	if (NULL == pDevice) return;
 
 	pDevice->SetTransform(D3DTS_WORLD, &mWorld);
 	pDevice->MultiplyTransform(D3DTS_WORLD, &m_mLocal);
@@ -107,6 +96,7 @@ void CHole::setCenter(float x, float y, float z) // 구멍의 중심 좌표를 변경함
 	this->center_y = y;
 	this->center_z = z;
 	D3DXMatrixTranslation(&m, x, y, z);
+
 	this->setLocalTransform(m);
 }
 
@@ -122,7 +112,8 @@ const D3DXMATRIX& CHole::getLocalTransform(void) const
 
 void CHole::setLocalTransform(const D3DXMATRIX& mLocal)
 {
-	m_mLocal = mLocal;
+	m_mLocal *= mLocal;
+	// 회전변환을 적용하기 위해 누적.
 }
 
 D3DXVECTOR3 CHole::getCenter(void) const // 구멍의 중심 좌표를 반환함
