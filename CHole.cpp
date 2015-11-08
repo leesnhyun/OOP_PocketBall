@@ -27,10 +27,10 @@ bool CHole::create(IDirect3DDevice9* pDevice, D3DXCOLOR color)
 	m_mtrl.Specular = color;
 	m_mtrl.Emissive = d3d::BLACK;
 	m_mtrl.Power = 5.0f;
-	m_radius = 0.28f;
+	m_radius = 0.25f;
 
 	// 입체를 그리고 회전시킵니다.
-	HRESULT hr = D3DXCreateCylinder(pDevice, m_radius, m_radius, 0.2f, 50, 50, &m_pSphereMesh, NULL);
+	HRESULT hr = D3DXCreateCylinder(pDevice, m_radius, m_radius, 0.5f, 50, 50, &m_pSphereMesh, NULL);
 	
 	D3DXMATRIX m;
 	D3DXMatrixRotationX(&m, 33);

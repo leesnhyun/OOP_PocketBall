@@ -32,20 +32,26 @@ const int Width  = 1024;
 const int Height = 768;
 
 // 16개의 공의 위치를 초기화 함.
-const float spherePos[16][2] = { { -2.7f, 0 }, { +1.5, 0 }, { 1.88f, 0.211f }, { 1.88f, -0.211f }, { 3.02f, -0.844f }, 
-{ 2.26f, -0.422f }, { 2.26f, 0.422f }, { 2.64f, -0.211f }, { 2.64f, 0.211f }, { 2.64f, -0.633 }, { 2.64f, 0.633f }, 
-{ 3.02f, -0.422f }, { 3.02f, 0.422f }, { 3.02f, 0 }, { 3.02f, 0.844f }, { 2.26, 0} };
+const float spherePos[16][2] = { 
+	{ -2.7f, 0 }, 
+	
+	{ +1.5, 0 }, 
+
+	{ 1.88f, 0.211f }, { 1.88f, -0.211f }, 
+	{ 3.02f, -0.844f }, { 2.26f, -0.422f }, { 2.26f, 0.422f }, 
+	{ 2.64f, -0.211f }, { 2.64f, 0.211f }, { 2.64f, -0.633 }, { 2.64f, 0.633f }, 
+	{ 3.02f, -0.422f }, { 3.02f, 0.422f }, { 3.02f, 0 }, { 3.02f, 0.844f }, { 2.26, 0} };
 
 // 6개의 구멍의 위치를 초기화 함.
 // const float holePos[6][2] = { {-4.23f,-2.73f}, {0,-2.73f}, {4.23f,-2.73f}, {-4.23f,2.73f}, {0,2.73f}, {4.23f,2.73f}};
 const float holePos[6][2] = {
-								{-4.52f,-3.00f}, {0,-3.23f}, {4.73f,-3.23f}, 
-								{-4.52f,3.00f}, {0,3.23f}, {4.73f,3.23f}
+								{-4.45f,-2.95f}, {0.05f,-3.05f}, {4.5f,-2.95f}, 
+								{-4.45f,2.95f}, {0.05f,3.05f}, {4.5f,2.95f}
 							};
 
 // 4개의 공의 색상을 초기화 함.
 const D3DXCOLOR sphereColor[16] = { d3d::WHITE, d3d::RED, d3d::YELLOW, d3d::RED, d3d::YELLOW, d3d::YELLOW, d3d::RED, 
-d3d::YELLOW, d3d::RED, d3d::RED, d3d::YELLOW, d3d::YELLOW, d3d::YELLOW, d3d::RED, d3d::RED, d3d::BLACK };
+d3d::YELLOW, d3d::RED, d3d::RED, d3d::YELLOW, d3d::YELLOW, d3d::YELLOW, d3d::RED, d3d::RED, d3d::BLACK_BALL_COLOR };
 
 // -----------------------------------------------------------------------------
 // Transform matrices
@@ -60,7 +66,7 @@ D3DXMATRIX g_mProj;
 // 전역 변수
 // -----------------------------------------------------------------------------
 CWall	g_legoPlane;
-CWall	g_legowall[4];
+CWall	g_legowall[6];
 CSphere	g_sphere[16];
 CSphere	g_target_blueball;
 CLight	g_light;
@@ -91,26 +97,35 @@ bool Setup()
 	D3DXMatrixIdentity(&g_mProj);
 	
 	// 프레임생성
-	if (false == g_frame.create(Device, -1, -1, 9, d3d::YELLOW)) return false;
+	if (false == g_frame.create(Device, -1, -1, 9, d3d::TABLE_BORDER)) return false;
 	g_frame.setPosition(0.115f, -0.44f, 0.00f);
 
 	// 초록색 바닥을 생성
 	if (false == g_legoPlane.create(Device, -1, -1, 9, 0.03f, 6, false, d3d::TABLE_PANE)) return false;
 	g_legoPlane.setPosition(0.0f, -0.0006f / 5, 0.0f);
 	
-	//// 벽을 생성
+	//// 벽을 생성 ////
+	//     [0]     [1]
+	//  [5]            [2]
+	//     [4]     [3]
+
 	// 가로벽 (9*0.3f*0.15) , (0, 0.12, 3.06)
-	if (false == g_legowall[0].create(Device, -1, -1, 4.5, 0.3f, 0.15f, false, d3d::TABLE_WALL)) return false;
-	g_legowall[0].setPosition(0.0f, 0.12f, 3.06f);
-	if (false == g_legowall[1].create(Device, -1, -1, 9, 0.3f, 0.15f, false, d3d::TABLE_WALL)) return false;
-	g_legowall[1].setPosition(0.0f, 0.12f, -3.06f);
+	if (false == g_legowall[0].create(Device, -1, -1, 4.0f, 0.3f, 0.15f, false, d3d::TABLE_WALL)) return false;
+	g_legowall[0].setPosition(-2.2f, 0.12f, 3.06f);
+	if (false == g_legowall[1].create(Device, -1, -1, 4.0f, 0.3f, 0.15f, false, d3d::TABLE_WALL)) return false;
+	g_legowall[1].setPosition(2.3f, 0.12f, 3.06f);
+
+	if (false == g_legowall[3].create(Device, -1, -1, 4.0f, 0.3f, 0.15f, false, d3d::TABLE_WALL)) return false;
+	g_legowall[3].setPosition(-2.2f, 0.12f, -3.06f);
+	if (false == g_legowall[4].create(Device, -1, -1, 4.0f, 0.3f, 0.15f, false, d3d::TABLE_WALL)) return false;
+	g_legowall[4].setPosition(2.3f, 0.12f, -3.06f);
 
 	// 세로벽 (0.15f*0.3f*6.24f) , (4.56, 0.12, 0)
-	if (false == g_legowall[2].create(Device, -1, -1, 0.15f, 0.3f, 5.55f, true, d3d::TABLE_WALL)) return false;
-	g_legowall[2].setPosition(4.56f, 0.12f, 0.0f);
-	if (false == g_legowall[3].create(Device, -1, -1, 0.15f, 0.3f, 5.55f, true, d3d::TABLE_WALL)) return false;
-	g_legowall[3].setPosition(-4.56f, 0.12f, 0.0f);
-	////
+	if (false == g_legowall[2].create(Device, -1, -1, 0.15f, 0.3f, 5.40f, true, d3d::TABLE_WALL)) return false;
+	g_legowall[2].setPosition(-4.56f, 0.12f, 0.0f);
+	if (false == g_legowall[5].create(Device, -1, -1, 0.15f, 0.3f, 5.40f, true, d3d::TABLE_WALL)) return false;
+	g_legowall[5].setPosition(4.56f, 0.12f, 0.0f);
+	////////
 
 	// 16개의 공을 생성함
 	for (i=0;i<16;i++) {
@@ -122,7 +137,7 @@ bool Setup()
 	// 6개의 구멍을 생성함
 	for (i = 0; i<6; i++) {
 		if (false == g_hole[i].create(Device, d3d::BLACK)) return false;
-		g_hole[i].setCenter(holePos[i][0], 0, holePos[i][1]);
+		g_hole[i].setCenter(holePos[i][0], -0.23f, holePos[i][1]);
 	}
 
 	// 파란색 공을 생성함
@@ -222,7 +237,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		// draw plane, walls, and spheres
 		// 초록색 판을 그리고, 벽을 그리고, 공들을 그린다.
 		g_legoPlane.draw(Device, g_mWorld);
-		for (i = 0; i < 4; i++)
+		for (i = 0; i < 6; i++)
 			g_legowall[i].draw(Device, g_mWorld);
 		for (i = 0; i < 16; i++)
 			g_sphere[i].draw(Device, g_mWorld);
