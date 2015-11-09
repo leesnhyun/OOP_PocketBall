@@ -62,7 +62,6 @@ bool CSphere::create(IDirect3DDevice9* pDevice, D3DXCOLOR color)
 	m_mtrl.Specular = d3d::WHITE;
 	m_mtrl.Emissive = d3d::BLACK;
 	m_mtrl.Power = 100.0f;
-<<<<<<< HEAD
 	
 	// 텍스쳐를 부드럽게 만듦.
 	pDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
@@ -72,10 +71,6 @@ bool CSphere::create(IDirect3DDevice9* pDevice, D3DXCOLOR color)
 	this->m_pSphereMesh = _createMappedSphere(pDevice);
 
 	if (FAILED(D3DXCreateTextureFromFile(pDevice, "s10.bmp", &Tex)))
-=======
-
-	if (FAILED(D3DXCreateSphere(pDevice, getRadius(), 50, 50, &m_pSphereMesh, NULL)))
->>>>>>> a4e5ec5fa5012d6870bbb9f5a4d256424ea023ad
 	{
 		return false;
 	}
@@ -95,14 +90,10 @@ void CSphere::destroy()// 공을 화면에서 소멸시킴
 
 void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// 공을 화면에 그려냄
 {
-<<<<<<< HEAD
-	if (NULL == pDevice) return;
-=======
-	if (NULL == pDevice || isDead())
-	{
+
+	if (NULL == pDevice || isDead()){
 		return;
 	}
->>>>>>> a4e5ec5fa5012d6870bbb9f5a4d256424ea023ad
 
 	pDevice->SetTransform(D3DTS_WORLD, &mWorld);
 	pDevice->MultiplyTransform(D3DTS_WORLD, &m_mLocal);
@@ -224,8 +215,8 @@ void CSphere::ballUpdate(float timeDiff) // 공의 중심 좌표를 속도에 맞춰서 매 시
 	// 공 회전시켜보자
 	D3DXMATRIX matBallRoll;
 	//D3DXMatrixRotationYawPitchRoll(&matBallRoll, 0.0f, timeDiff, 0.0f);
-	D3DXMatrixRotationY(&matBallRoll, timeDiff);
-	this->m_mLocal *= matBallRoll;
+	//D3DXMatrixRotationY(&matBallRoll, timeDiff);
+	//this->m_mLocal *= matBallRoll;
 
 }
 
@@ -282,7 +273,11 @@ D3DXVECTOR3 CSphere::getCenter(void) const // 공의 중심 좌표를 반환함
 	return org;
 }
 
-<<<<<<< HEAD
+BallType CSphere::getBallType() const
+{
+	return this->ballType;
+}
+
 // private function
 LPD3DXMESH CSphere::_createMappedSphere(IDirect3DDevice9* pDev)
 {
@@ -310,7 +305,7 @@ LPD3DXMESH CSphere::_createMappedSphere(IDirect3DDevice9* pDev)
 		int numVerts = texMesh->GetNumVertices();
 
 		// loop through the vertices
-		for (int i = 0; i<numVerts; i++) {
+		for (int i = 0; i < numVerts; i++) {
 
 			// calculate texture coordinates
 			pVerts->tu = asinf(pVerts->norm.x) / D3DX_PI + 0.5f;
@@ -326,9 +321,4 @@ LPD3DXMESH CSphere::_createMappedSphere(IDirect3DDevice9* pDev)
 
 	// return pointer to caller
 	return texMesh;
-=======
-BallType CSphere::getBallType() const
-{
-	return this->ballType;
->>>>>>> a4e5ec5fa5012d6870bbb9f5a4d256424ea023ad
 }

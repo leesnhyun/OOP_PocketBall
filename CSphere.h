@@ -49,10 +49,10 @@ public:
 	const D3DXMATRIX& getLocalTransform() const;							//
 	void setLocalTransform(const D3DXMATRIX& mLocal);						//
 	D3DXVECTOR3 getCenter(void) const;										// 공의 중심 좌표를 반환함
+	BallType getBallType() const;
 
 private:
 	LPD3DXMESH _createMappedSphere(IDirect3DDevice9* pDev);
-	BallType getBallType() const;
 
 };
 
