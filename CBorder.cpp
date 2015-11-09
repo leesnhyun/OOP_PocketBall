@@ -31,7 +31,7 @@ bool CBorder::create(IDirect3DDevice9* pDevice, float ix, float iz, float idepth
 
 	// t.x 파일을 불러와 메쉬를 만듭니다.
 	hr = D3DXLoadMeshFromX(
-		"t.x", D3DXMESH_MANAGED, pDevice,
+		"./res/t.x", D3DXMESH_MANAGED, pDevice,
 		&adjBuffer, &mtrlBuffer, 0, &numMtrls, &mesh);
 
 	// 예외처리

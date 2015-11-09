@@ -62,9 +62,9 @@ const float holePos[6][2] = {
 								{-4.45f,2.95f}, {0.05f,3.05f}, {4.5f,2.95f}
 							};
 
-// 4개의 공의 색상을 초기화 함.
-const D3DXCOLOR sphereColor[16] = { d3d::WHITE, d3d::RED, d3d::YELLOW, d3d::RED, d3d::YELLOW, d3d::YELLOW, d3d::RED, 
-d3d::YELLOW, d3d::RED, d3d::RED, d3d::YELLOW, d3d::YELLOW, d3d::YELLOW, d3d::RED, d3d::RED, d3d::BLACK_BALL_COLOR };
+// 공의 색상을 초기화 함.
+const char* sphereColor[16] = { "0", "s9", "1", "s10", "2", "3", "s11", 
+"4", "s12", "s13", "5", "6", "7", "s14", "s15", "8" };
 
 // -----------------------------------------------------------------------------
 // Transform matrices
@@ -157,7 +157,7 @@ bool Setup()
 	}
 
 	// 파란색 공을 생성함
-	if (false == g_target_blueball.create(Device, d3d::BLUE)) return false;
+	if (false == g_target_blueball.create(Device, "guide")) return false;
 	g_target_blueball.setCenter(.0f, (float)M_RADIUS , .0f);
 
 	// 광원 설정
