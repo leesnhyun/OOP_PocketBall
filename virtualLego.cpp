@@ -431,7 +431,6 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			dx = (old_x - new_x);// * 0.01f;
 			dz = (old_z - new_z);// * 0.01f;
 		
-			//TODO : How to sperate into methods..?
 			CSphere preMovedBlueBall(BallType::NONE);
 			bool canMove = true;
 			D3DXVECTOR3 coord3d=g_target_blueball.getCenter();
@@ -452,6 +451,29 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		old_x = new_x;
 		old_z = new_z;
+
+		/*
+		if (g_target_blueball.getCenter().x > 4.56f) 
+		{
+			g_target_blueball.setCenter(4.56f, g_target_blueball.getCenter().y, g_target_blueball.getCenter().z);
+			old_x = 4.56f;
+		}
+		if (g_target_blueball.getCenter().x < -4.56f)
+		{
+			g_target_blueball.setCenter(-4.56f, g_target_blueball.getCenter().y, g_target_blueball.getCenter().z);
+			old_x = -4.56f;
+		}
+		if (g_target_blueball.getCenter().z > 3.06f)
+		{
+			g_target_blueball.setCenter(g_target_blueball.getCenter().x, g_target_blueball.getCenter().y, 3.06f);
+			old_z = 3.06f;
+		}
+		if (g_target_blueball.getCenter().z < -3.06f)
+		{
+			g_target_blueball.setCenter(g_target_blueball.getCenter().x, g_target_blueball.getCenter().y, -3.06f);
+			old_z = -3.06f;
+		}*/
+
 		move = WORLD_MOVE;
 	}
 	
