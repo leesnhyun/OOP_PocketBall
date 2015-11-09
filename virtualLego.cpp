@@ -18,6 +18,7 @@
 #include "CBorder.h"
 #include "TurnManager.h"
 #include "Player.h"
+#include "FoulManager.h"
 
 #include <vector>
 #include <ctime>
@@ -217,6 +218,7 @@ void Cleanup(void)
 
 Player players[2] = { Player(1), Player(2) };
 TurnManager turnManager({ players[0].getPlayerId(), players[1].getPlayerId() });
+FoulManager foulManager;
 
 bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여줌
 {
@@ -240,6 +242,8 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		for(i = 0 ;i < 16; i++){
 			for(j = 0 ; j < 16; j++) {
 				if(i >= j) {continue;}
+				if (i == 0 && g_sphere[0].hasIntersected(g_sphere[j]))
+					foulManager.setFirstHitBall(j);
 				g_sphere[i].hitBy(g_sphere[j]);
 			}
 		}
@@ -428,7 +432,6 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			dx = (old_x - new_x);// * 0.01f;
 			dz = (old_z - new_z);// * 0.01f;
 
-			//TODO : How to sperate into methods..?
 			CSphere preMovedWhiteBall(BallType::NONE);
 			bool canMove = true;
 			D3DXVECTOR3 coord3d = g_sphere[0].getCenter();
@@ -463,9 +466,7 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			dx = (old_x - new_x);// * 0.01f;
 			dz = (old_z - new_z);// * 0.01f;
 		
-			CSphere preMovedBlueBall(BallType::NONE);
 			D3DXVECTOR3 coord3d=g_target_blueball.getCenter();
-			preMovedBlueBall.setCenter(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
 		
 			g_target_blueball.setCenter(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
 			

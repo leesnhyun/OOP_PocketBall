@@ -34,8 +34,8 @@ public:
 	~CSphere();
 	bool isDead() const;													// 공의 죽은 여부를 가져옴.
 	int getDeadDate() const;												// 공이 죽은 시점을 가져옴.
-	void die();															// 들어감
-	bool create(IDirect3DDevice9* pDevice, const char* number);	// 공을 화면에 생성함
+	void die();																// 들어감
+	bool create(IDirect3DDevice9* pDevice, const char* number);				// 공을 화면에 생성함
 	void destroy();															// 공을 화면에서 소멸시킴
 	void draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld);			// 공을 화면에 그려냄
 	bool hasIntersected(CSphere& ball);										// 두 공이 충돌 했는지 확인

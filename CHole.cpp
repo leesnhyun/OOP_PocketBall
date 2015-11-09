@@ -76,19 +76,15 @@ bool CHole::hasIntersected(CSphere& ball)
 	return false;
 }
 
-// @TODO 구멍을 넣어야 하는 경우 공을 제거하고 스택에 넣는다. --> 그래서 stack을 만들어야 합니다.
+// 구멍에 넣어야 하는 경우 공을 제거한다.
 void CHole::hitBy(CSphere& ball)
 {
 	if (this->hasIntersected(ball))
 	{
-		// TODO : Destroy ball.
-		ball.setCenter(ball.getVelocity_X() * 100000, 10.0f, ball.getVelocity_Z() * 100000);
+		ball.setCenter(100000, -100.0f, 100000);
 		ball.setPower(0.0f, 0.0f);
 		ball.die();
 	}
-	//ball의 setPower를 0으로 설정해 줘야함. + 위치를 날려줘야 함(setCenter)
-	/* 반드시 충돌을 확인하는 코드를 여기에 넣어야 함 */
-	// Insert your code here.
 }
 
 void CHole::setCenter(float x, float y, float z) // 구멍의 중심 좌표를 변경함
