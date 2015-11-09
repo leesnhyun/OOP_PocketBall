@@ -49,6 +49,12 @@ bool FoulManager::isEightBallBadToIn()
 
 bool FoulManager::isEightBallWithFoul()
 {
+	if (g_sphere[15].getDeadDate() == turnManager.getCurrentTurnNumber() &&
+		foul)
+	{
+		lose = true;
+		return true;
+	}
 	return false;
 }
 
