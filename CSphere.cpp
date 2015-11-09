@@ -242,5 +242,5 @@ D3DXVECTOR3 CSphere::getCenter(void) const // 공의 중심 좌표를 반환함
 
 BallType CSphere::getBallType() const
 {
-	return this->ballType
+	return this->ballType;
 }
