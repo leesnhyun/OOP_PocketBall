@@ -61,9 +61,9 @@ void FoulManager::isEightBallWithFoul()
 
 bool FoulManager::isFoul()
 {
-	this->isNoHitHandBall();
-	this->isFirstHitNotMyBall();
-	this->isHandBallInHole();
+	void isNoHitHandBall();
+	void isFirstHitNotMyBall();
+	void isHandBallInHole();
 
 	return this->foul;
 }
