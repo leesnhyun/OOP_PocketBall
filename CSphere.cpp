@@ -50,15 +50,15 @@ void CSphere::die()
 	this->deadDate = turnManager.getCurrentTurnNumber();
 }
 
-// 공을 화면에 생성함
-bool CSphere::create(IDirect3DDevice9* pDevice, D3DXCOLOR color)
+// 공을 화면에 생성함(D3DXCOLOR color)
+bool CSphere::create(IDirect3DDevice9* pDevice, const char* number)
 {
 	if (NULL == pDevice) return false;
 
-	m_mtrl.Ambient = color;
-	m_mtrl.Diffuse = color;
-	//m_mtrl.Diffuse = d3d::WHITE;
-	//m_mtrl.Ambient = d3d::WHITE;
+	//m_mtrl.Ambient = color;
+	//m_mtrl.Diffuse = color;
+	m_mtrl.Diffuse = d3d::WHITE;
+	m_mtrl.Ambient = d3d::WHITE;
 	m_mtrl.Specular = d3d::WHITE;
 	m_mtrl.Emissive = d3d::BLACK;
 	m_mtrl.Power = 100.0f;
@@ -70,7 +70,12 @@ bool CSphere::create(IDirect3DDevice9* pDevice, D3DXCOLOR color)
 
 	this->m_pSphereMesh = _createMappedSphere(pDevice);
 
-	if (FAILED(D3DXCreateTextureFromFile(pDevice, "s10.bmp", &Tex)))
+	char* filePath = new char[10];
+	strcpy(filePath, "./res/");
+	strcat(filePath, number);
+	strcat(filePath, ".bmp");
+
+	if (FAILED(D3DXCreateTextureFromFile(pDevice, filePath, &Tex)))
 	{
 		return false;
 	}
