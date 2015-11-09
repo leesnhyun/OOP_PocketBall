@@ -282,6 +282,30 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 	return true;
 }
 
+//+-4.56은 세로벽의 좌표, +-3.06은 가로벽의 좌표, 0.15는 각각 가로벽과 세로벽의 depth와 width
+void preventBallOut(CSphere& ball, int *old_x, int *old_z) {
+	if (ball.getCenter().x + ball.getRadius() > 4.56f - (0.15f / 2))
+	{
+		ball.setCenter(4.56f - (0.15f / 2) - ball.getRadius(), ball.getCenter().y, ball.getCenter().z);
+		*old_x = 4.56f - (0.15f / 2) - ball.getRadius();
+	}
+	if (ball.getCenter().x - ball.getRadius() < -4.56f + (0.15f / 2))
+	{
+		ball.setCenter(-4.56f + (0.15f / 2) + ball.getRadius(), ball.getCenter().y, ball.getCenter().z);
+		*old_x = -4.56f + (0.15f / 2) + ball.getRadius();
+	}
+	if (ball.getCenter().z + ball.getRadius() > 3.06f - (0.15f / 2))
+	{
+		ball.setCenter(ball.getCenter().x, ball.getCenter().y, 3.06f - (0.15f / 2) - ball.getRadius());
+		*old_z = 3.06f - (0.15f / 2) - ball.getRadius();
+	}
+	if (ball.getCenter().z - ball.getRadius() < -3.06f + (0.15f / 2))
+	{
+		ball.setCenter(ball.getCenter().x, ball.getCenter().y, -3.06f + (0.15f / 2) + ball.getRadius());
+		*old_z = -3.06f + (0.15f / 2) + ball.getRadius();
+	}
+}
+
 // 마우스 또는 키보드 입력 이벤트 처리 함수
 LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -424,6 +448,9 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			if (canMove)
 			{
 				g_sphere[0].setCenter(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
+				old_x = new_x;
+				old_z = new_z;
+				preventBallOut(g_sphere[0], &old_x, &old_z);
 			}
 		}
 
@@ -432,47 +459,17 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			dz = (old_z - new_z);// * 0.01f;
 		
 			CSphere preMovedBlueBall(BallType::NONE);
-			bool canMove = true;
 			D3DXVECTOR3 coord3d=g_target_blueball.getCenter();
 			preMovedBlueBall.setCenter(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
-
-			for (int i = 0; i < 6; i++)
-			{
-				if (g_hole[i].hasIntersected(preMovedBlueBall) || g_legowall[i].hasIntersected(preMovedBlueBall))
-				{
-					canMove = false;
-				}
-			}
-
-			if (canMove)
-			{
-				g_target_blueball.setCenter(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
-			}
+		
+			g_target_blueball.setCenter(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
+			
+			old_x = new_x;
+			old_z = new_z;
+			preventBallOut(g_target_blueball, &old_x, &old_z);
 		}
 		old_x = new_x;
 		old_z = new_z;
-
-		/*
-		if (g_target_blueball.getCenter().x > 4.56f) 
-		{
-			g_target_blueball.setCenter(4.56f, g_target_blueball.getCenter().y, g_target_blueball.getCenter().z);
-			old_x = 4.56f;
-		}
-		if (g_target_blueball.getCenter().x < -4.56f)
-		{
-			g_target_blueball.setCenter(-4.56f, g_target_blueball.getCenter().y, g_target_blueball.getCenter().z);
-			old_x = -4.56f;
-		}
-		if (g_target_blueball.getCenter().z > 3.06f)
-		{
-			g_target_blueball.setCenter(g_target_blueball.getCenter().x, g_target_blueball.getCenter().y, 3.06f);
-			old_z = 3.06f;
-		}
-		if (g_target_blueball.getCenter().z < -3.06f)
-		{
-			g_target_blueball.setCenter(g_target_blueball.getCenter().x, g_target_blueball.getCenter().y, -3.06f);
-			old_z = -3.06f;
-		}*/
 
 		move = WORLD_MOVE;
 	}
