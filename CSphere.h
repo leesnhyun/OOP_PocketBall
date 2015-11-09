@@ -25,6 +25,7 @@ private:
 	float pre_center_x, pre_center_z;
 
 public:
+	static const float STOP_SPEED;
 	CSphere(BallType ballType);
 	~CSphere();
 	bool isDead() const;													// 공의 죽은 여부를 가져옴.

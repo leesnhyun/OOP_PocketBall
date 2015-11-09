@@ -244,7 +244,9 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		// 각각의 구멍에 대해, 공과 서로 충돌 했는지 확인하고, 공을 넣는다.
 		for (i = 0; i < 6; i++){
 			for (j = 0; j < 16; j++) {
-				g_hole[i].hitBy(g_sphere[j]);
+				if (!turnManager.isFreeBall()) {
+					g_hole[i].hitBy(g_sphere[j]);
+				}
 			}
 		}
 
@@ -392,45 +394,64 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		double dx;
 		double dz;
 		
-		if ((LOWORD(wParam) & MK_LBUTTON) && !turnManager.isProcessing()) {// 마우스 오른쪽 버튼을 누를 때는, 파란 공의 위치를 옮긴다.
+		if ((LOWORD(wParam) & MK_LBUTTON) && !turnManager.isProcessing() && turnManager.isFreeBall()) {
+			// 마우스 왼쪽 버튼을 누를 때는, 흰 공의 위치를 옮긴다.
 			dx = (old_x - new_x);// * 0.01f;
 			dz = (old_z - new_z);// * 0.01f;
 
+			//TODO : How to sperate into methods..?
+			CSphere preMovedWhiteBall(BallType::NONE);
+			bool canMove = true;
 			D3DXVECTOR3 coord3d = g_sphere[0].getCenter();
-			g_sphere[0].setCenter(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
+			preMovedWhiteBall.setCenter(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
+
+			for (int i = 0; i < 6; i++)
+			{
+				if (g_hole[i].hasIntersected(preMovedWhiteBall))
+				{
+					canMove = false;
+				}
+			}
+
+			for (int i = 1; i < 16; i++)
+			{
+				if (g_sphere[i].hasIntersected(preMovedWhiteBall))
+				{
+					canMove = false;
+				}
+			}
+
+			if (canMove)
+			{
+				g_sphere[0].setCenter(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
+			}
 		}
 
 		if (LOWORD(wParam) & MK_RBUTTON) {// 마우스 오른쪽 버튼을 누를 때는, 파란 공의 위치를 옮긴다.
 			dx = (old_x - new_x);// * 0.01f;
 			dz = (old_z - new_z);// * 0.01f;
 		
+			//TODO : How to sperate into methods..?
+			CSphere preMovedBlueBall(BallType::NONE);
+			bool canMove = true;
 			D3DXVECTOR3 coord3d=g_target_blueball.getCenter();
-			g_target_blueball.setCenter(coord3d.x+dx*(-0.007f),coord3d.y,coord3d.z+dz*0.007f );
+			preMovedBlueBall.setCenter(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
+
+			for (int i = 0; i < 6; i++)
+			{
+				if (g_hole[i].hasIntersected(preMovedBlueBall) || g_legowall[i].hasIntersected(preMovedBlueBall))
+				{
+					canMove = false;
+				}
+			}
+
+			if (canMove)
+			{
+				g_target_blueball.setCenter(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
+			}
 		}
 		old_x = new_x;
 		old_z = new_z;
-		
-		if (g_target_blueball.getCenter().x > 4.56f) 
-		{
-			g_target_blueball.setCenter(4.56f, g_target_blueball.getCenter().y, g_target_blueball.getCenter().z);
-			old_x = 4.56f;
-		}
-		if (g_target_blueball.getCenter().x < -4.56f)
-		{
-			g_target_blueball.setCenter(-4.56f, g_target_blueball.getCenter().y, g_target_blueball.getCenter().z);
-			old_x = -4.56f;
-		}
-		if (g_target_blueball.getCenter().z > 3.06f)
-		{
-			g_target_blueball.setCenter(g_target_blueball.getCenter().x, g_target_blueball.getCenter().y, 3.06f);
-			old_z = 3.06f;
-		}
-		if (g_target_blueball.getCenter().z < -3.06f)
-		{
-			g_target_blueball.setCenter(g_target_blueball.getCenter().x, g_target_blueball.getCenter().y, -3.06f);
-			old_z = -3.06f;
-		}
-
 		move = WORLD_MOVE;
 	}
 	
