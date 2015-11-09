@@ -1,5 +1,6 @@
 #ifndef _CSPHERE_
 #define _CSPHERE_
+
 #include "d3dUtility.h"
 #include "Player.h"
 
@@ -14,6 +15,9 @@ private:
 	float m_velocity_x;					// x축 속도
 	float m_velocity_y;					// y축 속도
 	float m_velocity_z;					// z축 속도
+
+	IDirect3DTexture9* Tex = 0;			// 텍스쳐
+
 	D3DXMATRIX m_mLocal;
 	D3DMATERIAL9 m_mtrl;
 	ID3DXMesh* m_pSphereMesh;
@@ -45,6 +49,10 @@ public:
 	const D3DXMATRIX& getLocalTransform() const;							//
 	void setLocalTransform(const D3DXMATRIX& mLocal);						//
 	D3DXVECTOR3 getCenter(void) const;										// 공의 중심 좌표를 반환함
+
+private:
+	LPD3DXMESH _createMappedSphere(IDirect3DDevice9* pDev);
+
 };
 
 #endif

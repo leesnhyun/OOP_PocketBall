@@ -90,6 +90,8 @@ CBorder g_frame;
 
 double g_camera_pos[3] = {0.0, 5.0, -8.0};
 
+
+
 // -----------------------------------------------------------------------------
 // Functions
 // 전역 함수
@@ -157,13 +159,14 @@ bool Setup()
 	// 파란색 공을 생성함
 	if (false == g_target_blueball.create(Device, d3d::BLUE)) return false;
 	g_target_blueball.setCenter(.0f, (float)M_RADIUS , .0f);
-	
+
 	// 광원 설정
 	D3DLIGHT9 lit;
 	::ZeroMemory(&lit, sizeof(lit));
 	lit.Type         = D3DLIGHT_POINT;
 	lit.Diffuse      = d3d::WHITE; 
-	lit.Specular     = d3d::WHITE * 0.9f;
+	//lit.Diffuse      = d3d::BLACK; 
+	lit.Specular     = d3d::BLACK * 0.9f;
 	lit.Ambient      = d3d::WHITE * 0.9f;
 	lit.Position     = D3DXVECTOR3(0.0f, 3.0f, 0.0f);
 	lit.Range        = 80.0f;
@@ -253,8 +256,10 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		// draw plane, walls, and spheres
 		// 초록색 판을 그리고, 벽을 그리고, 공들을 그린다.
 		g_legoPlane.draw(Device, g_mWorld);
+		
 		for (i = 0; i < 6; i++)
 			g_legowall[i].draw(Device, g_mWorld);
+
 		for (i = 0; i < 16; i++)
 			g_sphere[i].draw(Device, g_mWorld);
 		
@@ -269,7 +274,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		
 		Device->EndScene();
 		Device->Present(0, 0, 0, 0);
-		Device->SetTexture( 0, NULL );
+		//Device->SetTexture( 0, NULL );
 	}
 
 	if (turnManager.processTurn({ g_sphere[0], g_sphere[1], g_sphere[2], g_sphere[3], g_sphere[4], g_sphere[5], 

@@ -2,9 +2,20 @@
 #include "CSphere.h"
 #include <cmath>
 #include "TurnManager.h"
-extern TurnManager turnManager;
 
+struct _VERTEX
+{
+	D3DXVECTOR3 pos;     // vertex position
+	D3DXVECTOR3 norm;    // vertex normal
+	float tu;            // texture coordinates
+	float tv;
+};
+
+#define FVF_VERTEX    D3DFVF_XYZ|D3DFVF_NORMAL|D3DFVF_TEX1
+
+extern TurnManager turnManager;
 const float CSphere::STOP_SPEED = 0.01f;
+
 
 // 공의 생성자를 정의
 CSphere::CSphere(BallType ballType)
@@ -47,11 +58,20 @@ bool CSphere::create(IDirect3DDevice9* pDevice, D3DXCOLOR color)
 
 	m_mtrl.Ambient = color;
 	m_mtrl.Diffuse = color;
+	//m_mtrl.Diffuse = d3d::WHITE;
+	//m_mtrl.Ambient = d3d::WHITE;
 	m_mtrl.Specular = d3d::WHITE;
 	m_mtrl.Emissive = d3d::BLACK;
 	m_mtrl.Power = 100.0f;
 	
-	if (FAILED(D3DXCreateSphere(pDevice, getRadius(), 50, 50, &m_pSphereMesh, NULL)))
+	// 텍스쳐를 부드럽게 만듦.
+	pDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	pDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	pDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+	this->m_pSphereMesh = _createMappedSphere(pDevice);
+
+	if (FAILED(D3DXCreateTextureFromFile(pDevice, "s10.bmp", &Tex)))
 	{
 		return false;
 	}
@@ -64,20 +84,25 @@ void CSphere::destroy()// 공을 화면에서 소멸시킴
 	if (m_pSphereMesh != NULL) 
 	{
 		m_pSphereMesh->Release();
+		d3d::Release<IDirect3DTexture9*>(Tex);
 		m_pSphereMesh = NULL;
 	}
 }
 
 void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// 공을 화면에 그려냄
 {
-	if (NULL == pDevice)
-	{
-		return;
-	}
+	if (NULL == pDevice) return;
 
 	pDevice->SetTransform(D3DTS_WORLD, &mWorld);
 	pDevice->MultiplyTransform(D3DTS_WORLD, &m_mLocal);
+	pDevice->SetTexture(0, Tex);
 	pDevice->SetMaterial(&m_mtrl);
+	//pDevice->SetMaterial(&d3d::WHITE_MTRL);
+	
+
+	//D3DXMATRIX m;
+	//D3DXMatrixRotationY(&m, 30);
+
 	m_pSphereMesh->DrawSubset(0);
 }
 
@@ -174,11 +199,18 @@ void CSphere::ballUpdate(float timeDiff) // 공의 중심 좌표를 속도에 맞춰서 매 시
 		this->setCenter(tX, cord.y, tZ);
 	}
 	else { this->setPower(0, 0); }
+
 	//this->setPower(this->getVelocity_X() * DECREASE_RATE, this->getVelocity_Z() * DECREASE_RATE);
 	double rate = 1 - (1 - DECREASE_RATE)*timeDiff * 400;
-	if (rate < 0)
-		rate = 0;
+	if (rate < 0) rate = 0;
 	this->setPower(getVelocity_X() * rate, getVelocity_Z() * rate);// 공이 움직일 때마다, 속도를 낮춤
+	
+	// 공 회전시켜보자
+	D3DXMATRIX matBallRoll;
+	//D3DXMatrixRotationYawPitchRoll(&matBallRoll, 0.0f, timeDiff, 0.0f);
+	D3DXMatrixRotationY(&matBallRoll, timeDiff);
+	this->m_mLocal *= matBallRoll;
+
 }
 
 double CSphere::getVelocity_X() 
@@ -230,4 +262,49 @@ D3DXVECTOR3 CSphere::getCenter(void) const // 공의 중심 좌표를 반환함
 {
 	D3DXVECTOR3 org(center_x, center_y, center_z);
 	return org;
+}
+
+// private function
+LPD3DXMESH CSphere::_createMappedSphere(IDirect3DDevice9* pDev)
+{
+	// create the sphere
+	LPD3DXMESH mesh;
+	if (FAILED(D3DXCreateSphere(pDev, this->getRadius(), 50, 50, &mesh, NULL)))
+		return NULL;
+
+	// create a copy of the mesh with texture coordinates,
+	// since the D3DX function doesn't include them
+	LPD3DXMESH texMesh;
+	if (FAILED(mesh->CloneMeshFVF(D3DXMESH_SYSTEMMEM, FVF_VERTEX, pDev, &texMesh)))
+		// failed, return un-textured mesh
+		return mesh;
+
+	// finished with the original mesh, release it
+	mesh->Release();
+
+	// lock the vertex buffer
+	//LPVERTEX pVerts;
+	struct _VERTEX* pVerts;
+	if (SUCCEEDED(texMesh->LockVertexBuffer(0, (void **)&pVerts))) {
+
+		// get vertex count
+		int numVerts = texMesh->GetNumVertices();
+
+		// loop through the vertices
+		for (int i = 0; i<numVerts; i++) {
+
+			// calculate texture coordinates
+			pVerts->tu = asinf(pVerts->norm.x) / D3DX_PI + 0.5f;
+			pVerts->tv = asinf(pVerts->norm.y) / D3DX_PI + 0.5f;
+
+			// go to next vertex
+			pVerts++;
+		}
+
+		// unlock the vertex buffer
+		texMesh->UnlockVertexBuffer();
+	}
+
+	// return pointer to caller
+	return texMesh;
 }

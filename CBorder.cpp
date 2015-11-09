@@ -50,18 +50,18 @@ bool CBorder::create(IDirect3DDevice9* pDevice, float ix, float iz, float idepth
 			// DX가 .X파일로부터 메쉬 정보를 가져올때 ambient value를 가지고 있지 않으므로, 
 			// 여기서 적용을 해준다.
 			// 하지만 OOP팀플에서는 텍스쳐 적용까지는 필요가 없어서 인자로 넘어온 color값으로 고정.
-			mtrls[i].MatD3D.Ambient = color;
-			mtrls[i].MatD3D.Diffuse = color;
-			mtrls[i].MatD3D.Specular = color;
+			mtrls[i].MatD3D.Ambient = d3d::BLACK;
+			mtrls[i].MatD3D.Diffuse = d3d::BLACK;
+			mtrls[i].MatD3D.Specular = d3d::BLACK;
 			mtrls[i].MatD3D.Emissive = d3d::BLACK;
 
-			mtrls[i].MatD3D.Ambient = mtrls[i].MatD3D.Diffuse;
+			//mtrls[i].MatD3D.Ambient = mtrls[i].MatD3D.Diffuse;
 
 			// i번째 material을 저장합니다.
 			Mtrls.push_back(mtrls[i].MatD3D);
 
 			// .x파일로부터 텍스쳐정보를 가져옵니다.
-			/*if (mtrls[i].pTextureFilename != 0)
+			if (mtrls[i].pTextureFilename != 0)
 			{
 				// i번째 subset으로 저장
 				IDirect3DTexture9* tex = 0;
@@ -74,7 +74,7 @@ bool CBorder::create(IDirect3DDevice9* pDevice, float ix, float iz, float idepth
 			{
 				// no texture for the ith subset
 				Textures.push_back(0);
-			}*/
+			}
 
 		}
 	}
@@ -119,8 +119,8 @@ void CBorder::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)
 
 	for (int i = 0; i < Mtrls.size(); i++)
 	{
-		pDevice->SetMaterial(&Mtrls[i]);
-		//pDevice->SetTexture(0, Textures[i]);		// 팀플에서는 텍스쳐까지 그리지 않습니다.
+		pDevice->SetMaterial(&d3d::WOOD_MTRL);
+		pDevice->SetTexture(0, Textures[i]);		// 팀플에서는 텍스쳐까지 그리지 않습니다.
 		mesh->DrawSubset(i);
 	}
 }
