@@ -14,11 +14,17 @@ void FoulManager::reset()
 {
 	foul = false;
 	lose = false;
+	firstHitBall = -1;
+}
+
+void FoulManager::setFirstHitBall(int ball_idx)
+{
+	if (firstHitBall == -1) firstHitBall = ball_idx;
 }
 
 void FoulManager::isNoHitHandBall()
 {
-
+	if (firstHitBall == -1) foul = true;
 }
 
 void FoulManager::isHandBallInHole()
@@ -31,6 +37,8 @@ void FoulManager::isHandBallInHole()
 
 void FoulManager::isFirstHitNotMyBall()
 {
+	//TODO : add balltype
+	if (players[turnManager.getNowTurnIndex()].playerBallType != g_sphere[firstHitBall].getBallType()) foul = true;
 }
 
 void FoulManager::isEightBallBadToIn()
@@ -54,8 +62,8 @@ void FoulManager::isEightBallWithFoul()
 bool FoulManager::isFoul()
 {
 	void isNoHitHandBall();
-	void isHandBallInHole();
 	void isFirstHitNotMyBall();
+	void isHandBallInHole();
 
 	return this->foul;
 }

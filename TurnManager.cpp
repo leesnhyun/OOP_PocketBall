@@ -124,6 +124,7 @@ bool TurnManager::processTurn(const initializer_list<CSphere>& fieldBalls)
 	// TODO : When lose.
 	if (foulManager.isFoul())
 	{
+		this->freeballSignal = true;
 		this->finishTurn();
 	}
 	else

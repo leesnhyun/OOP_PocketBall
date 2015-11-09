@@ -63,6 +63,8 @@ void CWall::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)
 // 벽에 공이 충돌 했는지 확인
 bool CWall::hasIntersected(CSphere& ball)
 {
+	if (ball.isDead()) return false;
+
 	//세로벽에 충돌
 	if (m_is_vertical == true) 
 	{

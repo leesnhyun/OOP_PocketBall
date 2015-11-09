@@ -9,9 +9,9 @@ const float CSphere::STOP_SPEED = 0.01f;
 // °øÀÇ »ý¼ºÀÚ¸¦ Á¤ÀÇ
 CSphere::CSphere(BallType ballType)
 {
-	D3DXMatrixIdentity(&m_mLocal);				// Transform Matrix¸¦ ´ÜÀ§Çà·Ä·Î ÃÊ±âÈ­
-	ZeroMemory(&m_mtrl, sizeof(m_mtrl));		// memsetÀ» ÅëÇØ ¸ðµÎ 0À¸·Î ÃÊ±âÈ­
-	m_radius = (float) M_RADIUS;
+	D3DXMatrixIdentity(&m_mLocal); // Transform Matrix¸¦ ´ÜÀ§Çà·Ä·Î ÃÊ±âÈ­
+	ZeroMemory(&m_mtrl, sizeof(m_mtrl)); // memsetÀ» ÅëÇØ ¸ðµÎ 0À¸·Î ÃÊ±âÈ­
+	m_radius = (float) M_RADIUS ;
 	m_velocity_x = 0;
 	m_velocity_z = 0;
 	m_pSphereMesh = NULL;
@@ -22,7 +22,6 @@ CSphere::CSphere(BallType ballType)
 // °øÀÇ ¼Ò¸êÀÚ¸¦ Á¤ÀÇ
 CSphere::~CSphere()
 {
-	
 }
 
 bool CSphere::isDead() const
@@ -35,7 +34,7 @@ int CSphere::getDeadDate() const
 	return this->deadDate;
 }
 
-void CSphere::holeIn()
+void CSphere::die()
 {
 	this->deadDate = turnManager.getCurrentTurnNumber();
 }
@@ -50,7 +49,7 @@ bool CSphere::create(IDirect3DDevice9* pDevice, D3DXCOLOR color)
 	m_mtrl.Specular = d3d::WHITE;
 	m_mtrl.Emissive = d3d::BLACK;
 	m_mtrl.Power = 100.0f;
-	
+
 	if (FAILED(D3DXCreateSphere(pDevice, getRadius(), 50, 50, &m_pSphereMesh, NULL)))
 	{
 		return false;
@@ -61,7 +60,7 @@ bool CSphere::create(IDirect3DDevice9* pDevice, D3DXCOLOR color)
 
 void CSphere::destroy()// °øÀ» È­¸é¿¡¼­ ¼Ò¸ê½ÃÅ´ 
 {
-	if (m_pSphereMesh != NULL) 
+	if (m_pSphereMesh != NULL)
 	{
 		m_pSphereMesh->Release();
 		m_pSphereMesh = NULL;
@@ -70,7 +69,7 @@ void CSphere::destroy()// °øÀ» È­¸é¿¡¼­ ¼Ò¸ê½ÃÅ´
 
 void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// °øÀ» È­¸é¿¡ ±×·Á³¿
 {
-	if (NULL == pDevice)
+	if (NULL == pDevice || isDead())
 	{
 		return;
 	}
@@ -84,6 +83,11 @@ void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// °øÀ» È
 // µÎ °øÀÌ Ãæµ¹ Çß´ÂÁö È®ÀÎ
 bool CSphere::hasIntersected(CSphere& ball)
 {
+	if (this->isDead() || ball.isDead())
+	{
+		return false;
+	}
+
 	D3DXVECTOR3 cord = this->getCenter();
 	D3DXVECTOR3 ball_cord = ball.getCenter();
 	double xDistance = abs((cord.x - ball_cord.x) * (cord.x - ball_cord.x));
@@ -121,27 +125,26 @@ void CSphere::hitBy(CSphere& ball)
 		//µÎ °ø »çÀÌÀÇ ¹æÇâ º¤ÅÍ
 		double d_x = cord.x - ball_cord.x;
 		double d_z = cord.z - ball_cord.z;
-		double size_d = sqrt((d_x*d_x) + (d_z*d_z));
+		double size_d = sqrt((d_x * d_x) + (d_z * d_z));
 
 		double vax = this->m_velocity_x;
 		double vaz = this->m_velocity_z;
 		double vbx = ball.m_velocity_x;
 		double vbz = ball.m_velocity_z;
 
-		double size_this_v = sqrt((vax*vax) + (vaz*vaz));
+		double size_this_v = sqrt((vax * vax) + (vaz * vaz));
 
 		double cos_t = d_x / size_d;
 		double sin_t = d_z / size_d;
 
-		double vaxp = vbx*cos_t + vbz*sin_t;
-		double vbxp = vax*cos_t + vaz*sin_t;
-		double vazp = vaz*cos_t - vax*sin_t;
-		double vbzp = vbz*cos_t - vbx*sin_t;
+		double vaxp = vbx * cos_t + vbz * sin_t;
+		double vbxp = vax * cos_t + vaz * sin_t;
+		double vazp = vaz * cos_t - vax * sin_t;
+		double vbzp = vbz * cos_t - vbx * sin_t;
 
-		this->setPower(vaxp*cos_t - vazp*sin_t, vaxp*sin_t + vazp*cos_t);
-		ball.setPower(vbxp*cos_t - vbzp*sin_t, vbxp*sin_t + vbzp*cos_t);
+		this->setPower(vaxp * cos_t - vazp * sin_t, vaxp * sin_t + vazp * cos_t);
+		ball.setPower(vbxp * cos_t - vbzp * sin_t, vbxp * sin_t + vbzp * cos_t);
 	}
-
 }
 
 void CSphere::ballUpdate(float timeDiff) // °øÀÇ Áß½É ÁÂÇ¥¸¦ ¼Óµµ¿¡ ¸ÂÃç¼­ ¸Å ½Ã°£ °£°Ý¸¶´Ù °»½ÅÇÔ
@@ -156,8 +159,8 @@ void CSphere::ballUpdate(float timeDiff) // °øÀÇ Áß½É ÁÂÇ¥¸¦ ¼Óµµ¿¡ ¸ÂÃç¼­ ¸Å ½Ã
 
 	if (vx > 0.01 || vz > 0.01)
 	{
-		float tX = cord.x + TIME_SCALE*timeDiff*m_velocity_x;
-		float tZ = cord.z + TIME_SCALE*timeDiff*m_velocity_z;
+		float tX = cord.x + TIME_SCALE * timeDiff * m_velocity_x;
+		float tZ = cord.z + TIME_SCALE * timeDiff * m_velocity_z;
 
 		//correction of position of ball
 		/* Please uncomment this part because this correction of ball position is necessary when a ball collides with a wall
@@ -173,24 +176,29 @@ void CSphere::ballUpdate(float timeDiff) // °øÀÇ Áß½É ÁÂÇ¥¸¦ ¼Óµµ¿¡ ¸ÂÃç¼­ ¸Å ½Ã
 
 		this->setCenter(tX, cord.y, tZ);
 	}
-	else { this->setPower(0, 0); }
+	else
+	{
+		this->setPower(0, 0);
+	}
 	//this->setPower(this->getVelocity_X() * DECREASE_RATE, this->getVelocity_Z() * DECREASE_RATE);
-	double rate = 1 - (1 - DECREASE_RATE)*timeDiff * 400;
+	double rate = 1 - (1 - DECREASE_RATE) * timeDiff * 400;
 	if (rate < 0)
 		rate = 0;
 	this->setPower(getVelocity_X() * rate, getVelocity_Z() * rate);// °øÀÌ ¿òÁ÷ÀÏ ¶§¸¶´Ù, ¼Óµµ¸¦ ³·Ãã
 }
 
-double CSphere::getVelocity_X() 
-{ 
+double CSphere::getVelocity_X()
+{
 	return this->m_velocity_x;
-} 
+}
+
 // °øÀÇ xÃà ¼Óµµ¸¦ ¹ÝÈ¯ÇÔ
 
-double CSphere::getVelocity_Z() 
+double CSphere::getVelocity_Z()
 {
 	return this->m_velocity_z;
-} 
+}
+
 // °øÀÇ zÃà ¼Óµµ¸¦ ¹ÝÈ¯ÇÔ
 
 void CSphere::setPower(double vx, double vz) // °øÀÇ ¼Óµµ¸¦ ¹Ù²Þ
@@ -206,28 +214,33 @@ void CSphere::setCenter(float x, float y, float z) // °øÀÇ Áß½É ÁÂÇ¥¸¦ º¯°æÇÔ
 	this->center_x = x;
 	this->center_y = y;
 	this->center_z = z;
-	
+
 	D3DXMatrixTranslation(&m, x, y, z);
 	this->setLocalTransform(m);
 }
 
-float CSphere::getRadius(void) const 
-{ 
+float CSphere::getRadius(void) const
+{
 	return (this->m_radius);
 }// °øÀÇ ¹ÝÁö¸§À» ¹Þ¾Æ¿È
 
-const D3DXMATRIX& CSphere::getLocalTransform(void) const 
-{ 
-	return m_mLocal; 
+const D3DXMATRIX& CSphere::getLocalTransform(void) const
+{
+	return m_mLocal;
 }
 
 void CSphere::setLocalTransform(const D3DXMATRIX& mLocal)
-{ 
-	m_mLocal = mLocal; 
+{
+	m_mLocal = mLocal;
 }
 
 D3DXVECTOR3 CSphere::getCenter(void) const // °øÀÇ Áß½É ÁÂÇ¥¸¦ ¹ÝÈ¯ÇÔ
 {
 	D3DXVECTOR3 org(center_x, center_y, center_z);
 	return org;
+}
+
+BallType CSphere::getBallType() const
+{
+	return this->ballType
 }
