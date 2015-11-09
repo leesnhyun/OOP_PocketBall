@@ -16,54 +16,53 @@ void FoulManager::reset()
 	lose = false;
 }
 
-bool FoulManager::isNoHitHandBall()
+void FoulManager::isNoHitHandBall()
 {
-	return false;
+
 }
 
-bool FoulManager::isHandBallInHole()
+void FoulManager::isHandBallInHole()
 {
 	if (g_sphere[0].getDeadDate() == turnManager.getCurrentTurnNumber())
 	{
 		foul = true;
-		return true;
 	}
-	return false;
 }
 
-bool FoulManager::isFirstHitNotMyBall()
+void FoulManager::isFirstHitNotMyBall()
 {
-	return false;
 }
 
-bool FoulManager::isEightBallBadToIn()
+void FoulManager::isEightBallBadToIn()
 {
 	if (g_sphere[15].getDeadDate() == turnManager.getCurrentTurnNumber()&&
 		players[turnManager.getNowTurnIndex()].getNumTakenBall() != 7)
 	{
 		lose = true;
-		return true;
 	}
-	return false;
 }
 
-bool FoulManager::isEightBallWithFoul()
+void FoulManager::isEightBallWithFoul()
 {
 	if (g_sphere[15].getDeadDate() == turnManager.getCurrentTurnNumber() &&
 		foul)
 	{
 		lose = true;
-		return true;
 	}
-	return false;
 }
 
-bool FoulManager::isFoul() const
+bool FoulManager::isFoul()
 {
+	void isNoHitHandBall();
+	void isHandBallInHole();
+	void isFirstHitNotMyBall();
+
 	return this->foul;
 }
 
-bool FoulManager::isLose() const
+bool FoulManager::isLose()
 {
+	void isEightBallBadToIn();
+	void isEightBallWithFoul();
 	return this->lose;
 }
