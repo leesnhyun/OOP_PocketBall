@@ -8,6 +8,7 @@ class FoulManager
 
 	bool foul;
 	bool lose;
+	int firstHitBall;
 
 	void isNoHitHandBall();	// 아무 공도 맞추지 못한 때,
 	void isHandBallInHole();	// 흰 공을 구멍에 넣었을 때,
@@ -21,8 +22,9 @@ public:
 
 	void reset();
 
-	bool isFoul();// 파울이면 프리볼을 선언
+	void setFirstHitBall(int ball_idx);
 
+	bool isFoul();// 파울이면 프리볼을 선언
 	bool isLose();//패배이면 패배라고 선언
 };
 
