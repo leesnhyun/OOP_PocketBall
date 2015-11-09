@@ -11,7 +11,7 @@ TurnManager::TurnManager(const initializer_list<unsigned int>& playerIdList)
 	this->playerNumber = playerIdList.size();
 	this->nowTurnPlayerIndex = 0;
 	this->totalTurnCount = 0;
-	this->freeballSignal = true;
+	this->freeballSignal = false;
 
 	for (unsigned int i = 0; i < this->playerNumber; i++)
 	{
@@ -77,7 +77,6 @@ void TurnManager::processTriggerOn()
 
 void TurnManager::processTriggerOff()
 {
-	this->freeballSignal = false;
 	this->turnProcessSignal = false;
 }
 
@@ -129,9 +128,12 @@ bool TurnManager::processTurn(const initializer_list<CSphere>& fieldBalls)
 	}
 	else
 	{
-		this->resetTurn();
+		if (!foulManager.isLose())
+		{
+			this->finishTurn();
+		}
 	}
 	// TODO : Process
-	
+	// TODO : How to reset turn?
 	return true;
 }
