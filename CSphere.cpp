@@ -4,6 +4,7 @@
 #include "TurnManager.h"
 extern TurnManager turnManager;
 
+const float CSphere::STOP_SPEED = 0.01f;
 
 // 공의 생성자를 정의
 CSphere::CSphere(BallType ballType)

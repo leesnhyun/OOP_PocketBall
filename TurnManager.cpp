@@ -11,6 +11,7 @@ TurnManager::TurnManager(const initializer_list<unsigned int>& playerIdList)
 	this->playerNumber = playerIdList.size();
 	this->nowTurnPlayerIndex = 0;
 	this->totalTurnCount = 0;
+	this->freeballSignal = true;
 
 	for (unsigned int i = 0; i < this->playerNumber; i++)
 	{
@@ -24,6 +25,7 @@ TurnManager::TurnManager(const TurnManager& toCopy)
 	this->nowTurnPlayerIndex = toCopy.nowTurnPlayerIndex;
 	this->playerNumber = toCopy.playerNumber;
 	this->totalTurnCount = toCopy.totalTurnCount;
+	this->freeballSignal = toCopy.freeballSignal;
 
 	for (unsigned int i = 0; i < toCopy.playerNumber; i++)
 	{
@@ -49,7 +51,7 @@ bool TurnManager::isTurnFinished(const initializer_list<CSphere>& fieldBalls)
 	{
 		CSphere targetBall = ballVector.at(i);
 
-		if (targetBall.getVelocity_X() != 0 || targetBall.getVelocity_Z() != 0)
+		if (abs(targetBall.getVelocity_X()) > CSphere::STOP_SPEED || abs(targetBall.getVelocity_Z()) > CSphere::STOP_SPEED)
 		{
 			return false;
 		}
@@ -68,12 +70,14 @@ void TurnManager::finishTurn()
 
 void TurnManager::processTriggerOn()
 {
+	this->freeballSignal = false;
 	this->turnChangeSignal = false;
 	this->turnProcessSignal = true;
 }
 
 void TurnManager::processTriggerOff()
 {
+	this->freeballSignal = false;
 	this->turnProcessSignal = false;
 }
 
@@ -102,6 +106,11 @@ bool TurnManager::isProcessing() const
 bool TurnManager::isTurnChanged() const
 {
 	return (this->turnChangeSignal);
+}
+
+bool TurnManager::isFreeBall() const
+{
+	return this->freeballSignal;
 }
 
 bool TurnManager::processTurn(const initializer_list<CSphere>& fieldBalls)

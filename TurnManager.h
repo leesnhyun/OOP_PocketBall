@@ -3,6 +3,7 @@
 #include <initializer_list>
 #include "CSphere.h"
 
+
 using std::initializer_list;
 
 class TurnManager
@@ -12,6 +13,7 @@ private:
 	unsigned int playerNumber;														// 매니저가 관리할 플레이어 수
 	int nowTurnPlayerIndex;															// 현재 턴을 진행하는 플레이어의 위치
 	int totalTurnCount;																// 진행된 턴의 수
+	bool freeballSignal;															// 프리볼인지에 대한 여부
 	bool turnProcessSignal;															// 턴 처리를 시작해도 괜찮은 것인지의 여부
 	bool turnChangeSignal;															// 턴이 바뀌었는지에 대한 여부
 	void resetTurn();																// 현재 턴의 상황을 초기화시킨다.
@@ -29,6 +31,7 @@ public:
 	bool processTurn(const initializer_list<CSphere>& fieldBalls);					// 턴 처리를 시작.
 	bool isTurnFinished(const initializer_list<CSphere>& fieldBalls);				// 턴이 종료되었는지에 대한 여부를 가져옴.
 	bool isProcessing() const;														// 턴 처리를 하고있는지에 대한 여부를 가져옴.
+	bool isFreeBall() const;														// 프리볼인지에 대한 여부를 가져옴.
 	bool isTurnChanged() const;														// 턴이 바뀌었는 지에 대한 여부를 가져옴.
 };
 #endif
