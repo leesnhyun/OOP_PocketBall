@@ -18,6 +18,7 @@
 #include "CBorder.h"
 #include "TurnManager.h"
 #include "Player.h"
+#include "FoulManager.h"
 
 #include <vector>
 #include <ctime>
@@ -217,6 +218,7 @@ void Cleanup(void)
 
 Player players[2] = { Player(1), Player(2) };
 TurnManager turnManager({ players[0].getPlayerId(), players[1].getPlayerId() });
+FoulManager foulManager;
 
 bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여줌
 {
@@ -240,6 +242,8 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		for(i = 0 ;i < 16; i++){
 			for(j = 0 ; j < 16; j++) {
 				if(i >= j) {continue;}
+				if (i == 0 && g_sphere[0].hasIntersected(g_sphere[j]))
+					foulManager.setFirstHitBall(j);
 				g_sphere[i].hitBy(g_sphere[j]);
 			}
 		}
