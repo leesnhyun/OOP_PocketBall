@@ -28,7 +28,7 @@ protected:
 
 public:
 	CSphere(BallType ballType, const char* number);
-	~CSphere();
+	virtual ~CSphere();
 	bool create(IDirect3DDevice9* pDevice);				// 공을 화면에 생성함
 	void destroy();															// 공을 화면에서 소멸시킴
 	void draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld);			// 공을 화면에 그려냄

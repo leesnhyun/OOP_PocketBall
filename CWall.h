@@ -21,7 +21,7 @@ public:
 	static const float LOSS_RATIO;
 
 	CWall(float ix, float iz, float iwidth, float iheight, float idepth, D3DXCOLOR color);							// 벽의 생성자
-	~CWall();							// 벽의 소멸자
+	virtual ~CWall();							// 벽의 소멸자
 	bool create(IDirect3DDevice9* pDevice); // 벽을 화면에 생성함
 	void destroy();							// 벽을 화면에서 소멸시킴
 	void draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld);// 벽을 화면에 그려냄
