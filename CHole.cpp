@@ -8,7 +8,7 @@ CHole::CHole(float radius, D3DXCOLOR color)
 	D3DXMatrixIdentity(&mLocal);				// Transform Matrix를 단위행렬로 초기화
 	ZeroMemory(&m_mtrl, sizeof(m_mtrl));		// memset을 통해 모두 0으로 초기화
 	m_radius = 0;
-	m_pSphereMesh = NULL;
+	m_pSphereMesh = nullptr;
 
 	m_mtrl.Ambient = color;
 	m_mtrl.Diffuse = color;
@@ -27,13 +27,13 @@ CHole::~CHole()
 // 구멍을 화면에 생성함
 bool CHole::create(IDirect3DDevice9* pDevice)
 {
-	if (NULL == pDevice)
+	if (pDevice == nullptr)
 	{
 		return false;
 	}
 
 	// 입체를 그리고 회전시킵니다.
-	HRESULT hr = D3DXCreateCylinder(pDevice, m_radius, m_radius, 0.5f, 50, 50, &m_pSphereMesh, NULL);
+	HRESULT hr = D3DXCreateCylinder(pDevice, m_radius, m_radius, 0.5f, 50, 50, &m_pSphereMesh, nullptr);
 	
 	D3DXMATRIX m;
 	D3DXMatrixRotationX(&m, 33);
@@ -49,10 +49,10 @@ bool CHole::create(IDirect3DDevice9* pDevice)
 
 void CHole::destroy()// 구멍을 화면에서 소멸시킴 
 {
-	if (m_pSphereMesh != NULL)
+	if (m_pSphereMesh != nullptr)
 	{
 		m_pSphereMesh->Release();
-		m_pSphereMesh = NULL;
+		m_pSphereMesh = nullptr;
 	}
 }
 
@@ -98,9 +98,3 @@ float CHole::getRadius(void) const
 {
 	return m_radius;
 }// 구멍의 반지름을 받아옴
-
-void CHole::setLocalTransform(const D3DXMATRIX& mLocal)
-{
-	this->mLocal *= mLocal;
-	// 회전변환을 적용하기 위해 누적.
-}

@@ -26,7 +26,7 @@
 #include <cstdio>
 #include <cassert>
 
-IDirect3DDevice9* Device = NULL;
+IDirect3DDevice9* Device = nullptr;
 
 // 창의 크기
 const int Width  = 1024;
@@ -147,7 +147,7 @@ bool Setup()
 	// 16개의 공을 생성함
 	for (i=0;i<16;i++) {
 		if (false == g_sphere[i].create(Device, sphereColor[i])) return false;
-		g_sphere[i].setPosition(spherePos[i][0], (float)M_RADIUS , spherePos[i][1]);
+		g_sphere[i].setPosition(spherePos[i][0], static_cast<float>(M_RADIUS) , spherePos[i][1]);
 		g_sphere[i].setPower(0,0);
 	}
 
@@ -159,7 +159,7 @@ bool Setup()
 
 	// 파란색 공을 생성함
 	if (false == g_target_blueball.create(Device, "guide")) return false;
-	g_target_blueball.setPosition(.0f, (float)M_RADIUS , .0f);
+	g_target_blueball.setPosition(.0f, static_cast<float>(M_RADIUS) , .0f);
 
 	// 광원 설정
 	D3DLIGHT9 lit;
@@ -186,7 +186,7 @@ bool Setup()
 	
 	// Set the projection matrix.
 	D3DXMatrixPerspectiveFovLH(&g_mProj, D3DX_PI / 4,
-		(float)Width / (float)Height, 1.0f, 100.0f);
+		static_cast<float>(Width) / static_cast<float>(Height), 1.0f, 100.0f);
 	Device->SetTransform(D3DTS_PROJECTION, &g_mProj);
 	
 	// Set render states.
@@ -227,7 +227,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 
 	if( Device )
 	{
-		Device->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0x00afafaf, 1.0f, 0);
+		Device->Clear(0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0x00afafaf, 1.0f, 0);
 		Device->BeginScene();
 		
 		// update the position of each ball. during update, check whether each ball hit by walls.
@@ -277,7 +277,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		g_frame.draw(Device, g_mWorld);
 		
 		Device->EndScene();
-		Device->Present(0, 0, 0, 0);
+		Device->Present(nullptr, nullptr, nullptr, nullptr);
 		//Device->SetTexture( 0, NULL );
 	}
 
@@ -285,7 +285,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		g_sphere[6], g_sphere[7], g_sphere[8], g_sphere[9], g_sphere[10], g_sphere[11], g_sphere[12], 
 		g_sphere[13], g_sphere[14], g_sphere[15] }))
 	{
-		MessageBox(0, "플레이어 바뀜 ", 0, 0);
+		MessageBox(nullptr, "플레이어 바뀜 ", nullptr, 0);
 	}
 
 	return true;
@@ -489,17 +489,17 @@ int WINAPI WinMain(HINSTANCE hinstance,
 				   PSTR cmdLine,
 				   int showCmd)
 {
-	srand(static_cast<unsigned int>(time(NULL)));
+	srand(static_cast<unsigned int>(time(nullptr)));
 	
 	if(!d3d::InitD3D(hinstance, Width, Height, true, D3DDEVTYPE_HAL, &Device))
 	{
-		::MessageBox(0, "InitD3D() - FAILED", 0, 0);
+		::MessageBox(nullptr, "InitD3D() - FAILED", nullptr, 0);
 		return 0;
 	}
 	
 	if(!Setup())
 	{
-		::MessageBox(0, "Setup() - FAILED", 0, 0);
+		::MessageBox(nullptr, "Setup() - FAILED", nullptr, 0);
 		return 0;
 	}
 	

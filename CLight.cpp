@@ -8,7 +8,7 @@ CLight::CLight(const D3DLIGHT9& lit, float radius)
 	m_index = i++;
 	D3DXMatrixIdentity(&mLocal);
 	::ZeroMemory(&m_lit, sizeof(m_lit));
-	m_pMesh = NULL;
+	m_pMesh = nullptr;
 	m_bound._center = lit.Position;
 	m_bound._radius = radius;
 
@@ -36,7 +36,7 @@ CLight::~CLight()
 // 광원을 화면에 그려냄
 bool CLight::create(IDirect3DDevice9* pDevice)
 {
-	if (NULL == pDevice)
+	if (pDevice == nullptr)
 	{
 		return false;
 	}
@@ -52,17 +52,17 @@ bool CLight::create(IDirect3DDevice9* pDevice)
 // 광원을 화면에서 소멸시킴
 void CLight::destroy()
 {
-	if (m_pMesh != NULL)
+	if (m_pMesh != nullptr)
 	{
 		m_pMesh->Release();
-		m_pMesh = NULL;
+		m_pMesh = nullptr;
 	}
 }
 
 // 광원의 속성값을 변경함
 void CLight::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)
 {
-	if (NULL == pDevice)
+	if (pDevice == nullptr)
 	{
 		return;
 	}

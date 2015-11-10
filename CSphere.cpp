@@ -19,10 +19,7 @@ extern TurnManager turnManager;
 // 공의 생성자를 정의
 CSphere::CSphere(BallType ballType, const char* number)
 {
-
-	D3DXMATRIX mLocal = getLocalTransform();
 	D3DXMatrixIdentity(&mLocal);
-	this->setLocalTransform(mLocal);
 	ZeroMemory(&m_mtrl, sizeof(m_mtrl)); // memset을 통해 모두 0으로 초기화
 	m_radius = 0.16f;
 	m_velocity_x = 0;
@@ -39,7 +36,7 @@ CSphere::~CSphere()
 // 공을 화면에 생성함(D3DXCOLOR color)
 bool CSphere::create(IDirect3DDevice9* pDevice)
 {
-	if (NULL == pDevice) return false;
+	if (pDevice == nullptr) return false;
 
 	//m_mtrl.Ambient = color;
 	//m_mtrl.Diffuse = color;
@@ -71,18 +68,18 @@ bool CSphere::create(IDirect3DDevice9* pDevice)
 
 void CSphere::destroy()// 공을 화면에서 소멸시킴 
 {
-	if (m_pSphereMesh != NULL)
+	if (m_pSphereMesh != nullptr)
 	{
 		m_pSphereMesh->Release();
 		d3d::Release<IDirect3DTexture9*>(Tex);
-		m_pSphereMesh = NULL;
+		m_pSphereMesh = nullptr;
 	}
 }
 
 void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// 공을 화면에 그려냄
 {
 
-	if (NULL == pDevice || isDead()){
+	if (pDevice == nullptr || isDead()){
 		return;
 	}
 
@@ -245,7 +242,7 @@ LPD3DXMESH CSphere::_createMappedSphere(IDirect3DDevice9* pDev)
 	// create the sphere
 	LPD3DXMESH mesh;
 	if (FAILED(D3DXCreateSphere(pDev, this->getRadius(), 50, 50, &mesh, NULL)))
-		return NULL;
+		return nullptr;
 
 	// create a copy of the mesh with texture coordinates,
 	// since the D3DX function doesn't include them
@@ -260,7 +257,7 @@ LPD3DXMESH CSphere::_createMappedSphere(IDirect3DDevice9* pDev)
 	// lock the vertex buffer
 	//LPVERTEX pVerts;
 	struct _VERTEX* pVerts;
-	if (SUCCEEDED(texMesh->LockVertexBuffer(0, (void **)&pVerts))) {
+	if (SUCCEEDED(texMesh->LockVertexBuffer(0, reinterpret_cast<void **>(&pVerts)))) {
 
 		// get vertex count
 		int numVerts = texMesh->GetNumVertices();
