@@ -26,6 +26,7 @@ CSphere::CSphere(BallType ballType)
 	m_velocity_x = 0;
 	m_velocity_z = 0;
 	m_pSphereMesh = NULL;
+	D3DXMatrixIdentity(&this->matBallRoll);
 	this->deadDate = -1;
 	this->ballType = ballType;
 }
@@ -100,8 +101,14 @@ void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// °øÀ» È
 		return;
 	}
 
+	
+
 	pDevice->SetTransform(D3DTS_WORLD, &mWorld);
+	
 	pDevice->MultiplyTransform(D3DTS_WORLD, &m_mLocal);
+
+	pDevice->MultiplyTransform(D3DTS_WORLD, &matBallRoll);
+	
 	pDevice->SetTexture(0, Tex);
 	pDevice->SetMaterial(&m_mtrl);
 	//pDevice->SetMaterial(&d3d::WHITE_MTRL);
@@ -203,8 +210,18 @@ void CSphere::ballUpdate(float timeDiff) // °øÀÇ Áß½É ÁÂÇ¥¸¦ ¼Óµµ¿¡ ¸ÂÃç¼­ ¸Å ½Ã
 		else if(tZ >= (3 - M_RADIUS))
 		tZ = 3 - M_RADIUS;
 		*/
-
+		
 		this->setCenter(tX, cord.y, tZ);
+		D3DXMATRIX tmp;
+		//D3DXMatrixIdentity(&tmp);
+
+		D3DXVECTOR3 c((1 / this->center_x), this->center_y, -2 / this->center_z);
+
+		D3DXMatrixRotationAxis(&tmp, &(getCenter()), 0.005);
+		matBallRoll *= tmp;
+		
+		//m_mLocal *= matBallRoll;
+
 	}
 	else { this->setPower(0, 0); }
 
@@ -217,23 +234,21 @@ void CSphere::ballUpdate(float timeDiff) // °øÀÇ Áß½É ÁÂÇ¥¸¦ ¼Óµµ¿¡ ¸ÂÃç¼­ ¸Å ½Ã
 	// °ø È¸Àü½ÃÄÑº¸ÀÚ
 	//cord = this->getCenter();
 	
-	//D3DXVECTOR3 normalVector(-(this->getVelocity_Z()), 0, (this->getVelocity_X()));
 	
-
+	//this->m_mLocal *= matBallRoll;
+	//this->setCenter(back.x, back.y, back.z);
 }
 
 double CSphere::getVelocity_X()
 {
 	return this->m_velocity_x;
 }
-
 // °øÀÇ xÃà ¼Óµµ¸¦ ¹ÝÈ¯ÇÔ
 
 double CSphere::getVelocity_Z()
 {
 	return this->m_velocity_z;
 }
-
 // °øÀÇ zÃà ¼Óµµ¸¦ ¹ÝÈ¯ÇÔ
 
 void CSphere::setPower(double vx, double vz) // °øÀÇ ¼Óµµ¸¦ ¹Ù²Þ
@@ -250,13 +265,16 @@ void CSphere::setCenter(float x, float y, float z) // °øÀÇ Áß½É ÁÂÇ¥¸¦ º¯°æÇÔ
 	this->center_y = y;
 	this->center_z = z;
 
+	
 	D3DXMatrixTranslation(&m, x, y, z);
-	this->setLocalTransform(m);
+
+	this->setLocalTransform( m );
 }
 
 void CSphere::setLocalTransform(const D3DXMATRIX& mLocal)
 {
 	m_mLocal = mLocal;
+	//D3DXMatrixMultiply(&m_)
 }
 
 float CSphere::getRadius(void) const

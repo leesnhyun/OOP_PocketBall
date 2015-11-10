@@ -3,6 +3,7 @@
 
 #include "d3dUtility.h"
 #include "Player.h"
+#include <cmath>
 
 // -----------------------------------------------------------------------------
 // CSphere class definition
