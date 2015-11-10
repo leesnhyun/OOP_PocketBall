@@ -194,7 +194,7 @@ bool Setup()
 	Device->SetRenderState(D3DRS_SPECULARENABLE, TRUE);
 	Device->SetRenderState(D3DRS_SHADEMODE, D3DSHADE_GOURAUD);
 	
-	g_light.setLight(Device, g_mWorld);
+	g_light.draw(Device, g_mWorld);
 	return true;
 }
 
