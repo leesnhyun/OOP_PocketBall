@@ -196,31 +196,19 @@ void CSphere::ballUpdate(float timeDiff) // 공의 중심 좌표를 속도에 맞춰서 매 시
 
 	if (vx > 0.01 || vz > 0.01)
 	{
+		const float SPIN_RATIO = 0.01;
+
 		float tX = cord.x + TIME_SCALE * timeDiff * m_velocity_x;
 		float tZ = cord.z + TIME_SCALE * timeDiff * m_velocity_z;
 
-		//correction of position of ball
-		/* Please uncomment this part because this correction of ball position is necessary when a ball collides with a wall
-		if(tX >= (4.5 - M_RADIUS))
-		tX = 4.5 - M_RADIUS;
-		else if(tX <=(-4.5 + M_RADIUS))
-		tX = -4.5 + M_RADIUS;
-		else if(tZ <= (-3 + M_RADIUS))
-		tZ = -3 + M_RADIUS;
-		else if(tZ >= (3 - M_RADIUS))
-		tZ = 3 - M_RADIUS;
-		*/
-		
 		this->setCenter(tX, cord.y, tZ);
+
 		D3DXMATRIX tmp;
-		//D3DXMatrixIdentity(&tmp);
+		D3DXVECTOR3 c(this->m_velocity_z, 0, -this->m_velocity_x);
 
-		D3DXVECTOR3 c((1 / this->center_x), this->center_y, -2 / this->center_z);
-
-		D3DXMatrixRotationAxis(&tmp, &(getCenter()), 0.005);
+		float force = sqrt(pow(this->m_velocity_x, 2) + pow(this->m_velocity_z, 2));
+		D3DXMatrixRotationAxis(&tmp, &c, force * SPIN_RATIO);
 		matBallRoll *= tmp;
-		
-		//m_mLocal *= matBallRoll;
 
 	}
 	else { this->setPower(0, 0); }
@@ -230,13 +218,6 @@ void CSphere::ballUpdate(float timeDiff) // 공의 중심 좌표를 속도에 맞춰서 매 시
 	if (rate < 0) rate = 0;
 
 	this->setPower(getVelocity_X() * rate, getVelocity_Z() * rate);// 공이 움직일 때마다, 속도를 낮춤
-
-	// 공 회전시켜보자
-	//cord = this->getCenter();
-	
-	
-	//this->m_mLocal *= matBallRoll;
-	//this->setCenter(back.x, back.y, back.z);
 }
 
 double CSphere::getVelocity_X()
@@ -274,7 +255,6 @@ void CSphere::setCenter(float x, float y, float z) // 공의 중심 좌표를 변경함
 void CSphere::setLocalTransform(const D3DXMATRIX& mLocal)
 {
 	m_mLocal = mLocal;
-	//D3DXMatrixMultiply(&m_)
 }
 
 float CSphere::getRadius(void) const
