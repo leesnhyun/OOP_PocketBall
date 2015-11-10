@@ -14,18 +14,21 @@ struct _VERTEX
 #define FVF_VERTEX    D3DFVF_XYZ|D3DFVF_NORMAL|D3DFVF_TEX1
 
 extern TurnManager turnManager;
-const float CSphere::STOP_SPEED = 0.01f;
 
 
 // °øÀÇ »ý¼ºÀÚ¸¦ Á¤ÀÇ
-CSphere::CSphere(BallType ballType)
+CSphere::CSphere(BallType ballType, const char* number)
 {
-	D3DXMatrixIdentity(&m_mLocal); // Transform Matrix¸¦ ´ÜÀ§Çà·Ä·Î ÃÊ±âÈ­
+
+	D3DXMATRIX mLocal = getLocalTransform();
+	D3DXMatrixIdentity(&mLocal);
+	this->setLocalTransform(mLocal);
 	ZeroMemory(&m_mtrl, sizeof(m_mtrl)); // memsetÀ» ÅëÇØ ¸ðµÎ 0À¸·Î ÃÊ±âÈ­
-	m_radius = (float) M_RADIUS ;
+	m_radius = 0.16f;
 	m_velocity_x = 0;
 	m_velocity_z = 0;
-	m_pSphereMesh = NULL;
+	m_pSphereMesh = nullptr;
+	this->ballType = ballType;
 	this->deadDate = -1;
 	this->ballType = ballType;
 }
@@ -51,7 +54,7 @@ void CSphere::die()
 }
 
 // °øÀ» È­¸é¿¡ »ý¼ºÇÔ(D3DXCOLOR color)
-bool CSphere::create(IDirect3DDevice9* pDevice, const char* number)
+bool CSphere::create(IDirect3DDevice9* pDevice)
 {
 	if (NULL == pDevice) return false;
 
@@ -72,7 +75,7 @@ bool CSphere::create(IDirect3DDevice9* pDevice, const char* number)
 
 	char* filePath = new char[10];
 	strcpy(filePath, "./res/");
-	strcat(filePath, number);
+	strcat(filePath, ballNumber);
 	strcat(filePath, ".bmp");
 
 	if (FAILED(D3DXCreateTextureFromFile(pDevice, filePath, &Tex)))
@@ -100,19 +103,17 @@ void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// °øÀ» È
 		return;
 	}
 
-	pDevice->SetTransform(D3DTS_WORLD, &mWorld);
-	pDevice->MultiplyTransform(D3DTS_WORLD, &m_mLocal);
+	pDevice->SetTransform(D3DTS_WORLD, &mWorld); 
+	D3DXMATRIX mLocal = getLocalTransform();
+	pDevice->MultiplyTransform(D3DTS_WORLD, &mLocal);
+	setLocalTransform(mLocal);
 	pDevice->SetTexture(0, Tex);
 	pDevice->SetMaterial(&m_mtrl);
-	//pDevice->SetMaterial(&d3d::WHITE_MTRL);
-	
-
-	//D3DXMATRIX m;
-	//D3DXMatrixRotationY(&m, 30);
 
 	m_pSphereMesh->DrawSubset(0);
 }
 
+/*
 // µÎ °øÀÌ Ãæµ¹ Çß´ÂÁö È®ÀÎ
 bool CSphere::hasIntersected(CSphere& ball)
 {
@@ -121,8 +122,8 @@ bool CSphere::hasIntersected(CSphere& ball)
 		return false;
 	}
 
-	D3DXVECTOR3 cord = this->getCenter();
-	D3DXVECTOR3 ball_cord = ball.getCenter();
+	D3DXVECTOR3 cord = this->getPosition();
+	D3DXVECTOR3 ball_cord = ball.getPosition();
 	double xDistance = abs((cord.x - ball_cord.x) * (cord.x - ball_cord.x));
 	double zDistance = abs((cord.z - ball_cord.z) * (cord.z - ball_cord.z));
 	double totalDistance = sqrt(xDistance + zDistance);
@@ -142,19 +143,19 @@ void CSphere::hitBy(CSphere& ball)
 	{
 		//µµ¿òÀ» ÁØ ÀÚ·á: http://blog.hansune.com/106
 		//this - ball·Î ¾çÀÇ º¤ÅÍ¸¦ Á¤ÇÔ
-		D3DXVECTOR3 cord = this->getCenter();
-		D3DXVECTOR3 ball_cord = ball.getCenter();
+		D3DXVECTOR3 cord = this->getPosition();
+		D3DXVECTOR3 ball_cord = ball.getPosition();
 		//º¸°£¹ýÀ¸·Î ±Ù»çÇÏ¿© Ãæµ¹ ½ÃÁ¡ÀÇ ÁÂÇ¥·Î ÀÌµ¿ÇÔ.
-		this->setCenter((cord.x + this->pre_center_x) / 2, cord.y, (cord.z + this->pre_center_z) / 2);
-		ball.setCenter((ball_cord.x + ball.pre_center_x) / 2, ball_cord.y, (ball_cord.z + ball.pre_center_z) / 2);
+		this->setPosition((cord.x + this->pre_center_x) / 2, cord.y, (cord.z + this->pre_center_z) / 2);
+		ball.setPosition((ball_cord.x + ball.pre_center_x) / 2, ball_cord.y, (ball_cord.z + ball.pre_center_z) / 2);
 		if (this->hasIntersected(ball))
 		{
-			this->setCenter(this->pre_center_x, cord.y, this->pre_center_z);
-			ball.setCenter(ball.pre_center_x, ball_cord.y, ball.pre_center_z);
+			this->setPosition(this->pre_center_x, cord.y, this->pre_center_z);
+			ball.setPosition(ball.pre_center_x, ball_cord.y, ball.pre_center_z);
 		}
 
-		cord = this->getCenter();
-		ball_cord = ball.getCenter();
+		cord = this->getPosition();
+		ball_cord = ball.getPosition();
 		//µÎ °ø »çÀÌÀÇ ¹æÇâ º¤ÅÍ
 		double d_x = cord.x - ball_cord.x;
 		double d_z = cord.z - ball_cord.z;
@@ -179,11 +180,11 @@ void CSphere::hitBy(CSphere& ball)
 		ball.setPower(vbxp * cos_t - vbzp * sin_t, vbxp * sin_t + vbzp * cos_t);
 	}
 }
-
+*/
 void CSphere::ballUpdate(float timeDiff) // °øÀÇ Áß½É ÁÂÇ¥¸¦ ¼Óµµ¿¡ ¸ÂÃç¼­ ¸Å ½Ã°£ °£°Ý¸¶´Ù °»½ÅÇÔ
 {
 	const float TIME_SCALE = 3.3F;
-	D3DXVECTOR3 cord = this->getCenter();
+	D3DXVECTOR3 cord = this->getPosition();
 	double vx = abs(this->getVelocity_X());
 	double vz = abs(this->getVelocity_Z());
 
@@ -207,7 +208,7 @@ void CSphere::ballUpdate(float timeDiff) // °øÀÇ Áß½É ÁÂÇ¥¸¦ ¼Óµµ¿¡ ¸ÂÃç¼­ ¸Å ½Ã
 		tZ = 3 - M_RADIUS;
 		*/
 
-		this->setCenter(tX, cord.y, tZ);
+		this->setPosition(tX, cord.y, tZ);
 	}
 	else { this->setPower(0, 0); }
 
@@ -218,7 +219,7 @@ void CSphere::ballUpdate(float timeDiff) // °øÀÇ Áß½É ÁÂÇ¥¸¦ ¼Óµµ¿¡ ¸ÂÃç¼­ ¸Å ½Ã
 	this->setPower(getVelocity_X() * rate, getVelocity_Z() * rate);// °øÀÌ ¿òÁ÷ÀÏ ¶§¸¶´Ù, ¼Óµµ¸¦ ³·Ãã
 	
 	// °ø È¸Àü½ÃÄÑº¸ÀÚ
-	D3DXMATRIX matBallRoll;
+	//D3DXMATRIX matBallRoll;
 	//D3DXMatrixRotationYawPitchRoll(&matBallRoll, 0.0f, timeDiff, 0.0f);
 	//D3DXMatrixRotationY(&matBallRoll, timeDiff);
 	//this->m_mLocal *= matBallRoll;
@@ -245,38 +246,10 @@ void CSphere::setPower(double vx, double vz) // °øÀÇ ¼Óµµ¸¦ ¹Ù²Þ
 	this->m_velocity_z = vz;
 }
 
-void CSphere::setCenter(float x, float y, float z) // °øÀÇ Áß½É ÁÂÇ¥¸¦ º¯°æÇÔ
-{
-	D3DXMATRIX m;
-
-	this->center_x = x;
-	this->center_y = y;
-	this->center_z = z;
-
-	D3DXMatrixTranslation(&m, x, y, z);
-	this->setLocalTransform(m);
-}
-
 float CSphere::getRadius(void) const
 {
 	return (this->m_radius);
 }// °øÀÇ ¹ÝÁö¸§À» ¹Þ¾Æ¿È
-
-const D3DXMATRIX& CSphere::getLocalTransform(void) const
-{
-	return m_mLocal;
-}
-
-void CSphere::setLocalTransform(const D3DXMATRIX& mLocal)
-{
-	m_mLocal = mLocal;
-}
-
-D3DXVECTOR3 CSphere::getCenter(void) const // °øÀÇ Áß½É ÁÂÇ¥¸¦ ¹ÝÈ¯ÇÔ
-{
-	D3DXVECTOR3 org(center_x, center_y, center_z);
-	return org;
-}
 
 BallType CSphere::getBallType() const
 {
