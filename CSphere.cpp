@@ -14,20 +14,18 @@ struct _VERTEX
 #define FVF_VERTEX    D3DFVF_XYZ|D3DFVF_NORMAL|D3DFVF_TEX1
 
 extern TurnManager turnManager;
-const float CSphere::STOP_SPEED = 0.01f;
 
 
 // 공의 생성자를 정의
-CSphere::CSphere(BallType ballType)
+CSphere::CSphere(BallType ballType, const char* number)
 {
-	D3DXMatrixIdentity(&m_mLocal); // Transform Matrix를 단위행렬로 초기화
+	D3DXMatrixIdentity(&mLocal);
 	ZeroMemory(&m_mtrl, sizeof(m_mtrl)); // memset을 통해 모두 0으로 초기화
-	m_radius = (float) M_RADIUS ;
+	m_radius = 0.16f;
 	m_velocity_x = 0;
 	m_velocity_z = 0;
-	m_pSphereMesh = NULL;
+	m_pSphereMesh = nullptr;;
 	D3DXMatrixIdentity(&this->matBallRoll);
-	this->deadDate = -1;
 	this->ballType = ballType;
 }
 
@@ -36,25 +34,10 @@ CSphere::~CSphere()
 {
 }
 
-bool CSphere::isDead() const
-{
-	return (this->deadDate >= 0);
-}
-
-int CSphere::getDeadDate() const
-{
-	return this->deadDate;
-}
-
-void CSphere::die()
-{
-	this->deadDate = turnManager.getCurrentTurnNumber();
-}
-
 // 공을 화면에 생성함(D3DXCOLOR color)
-bool CSphere::create(IDirect3DDevice9* pDevice, const char* number)
+bool CSphere::create(IDirect3DDevice9* pDevice)
 {
-	if (NULL == pDevice) return false;
+	if (pDevice == nullptr) return false;
 
 	//m_mtrl.Ambient = color;
 	//m_mtrl.Diffuse = color;
@@ -73,7 +56,7 @@ bool CSphere::create(IDirect3DDevice9* pDevice, const char* number)
 
 	char* filePath = new char[10];
 	strcpy(filePath, "./res/");
-	strcat(filePath, number);
+	strcat(filePath, ballNumber);
 	strcat(filePath, ".bmp");
 
 	if (FAILED(D3DXCreateTextureFromFile(pDevice, filePath, &Tex)))
@@ -86,36 +69,34 @@ bool CSphere::create(IDirect3DDevice9* pDevice, const char* number)
 
 void CSphere::destroy()// 공을 화면에서 소멸시킴 
 {
-	if (m_pSphereMesh != NULL)
+	if (m_pSphereMesh != nullptr)
 	{
 		m_pSphereMesh->Release();
 		d3d::Release<IDirect3DTexture9*>(Tex);
-		m_pSphereMesh = NULL;
+		m_pSphereMesh = nullptr;
 	}
 }
 
 void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// 공을 화면에 그려냄
 {
-
-	if (NULL == pDevice || isDead()){
+	// TODO : Removerble의 disable 확인 추가
+	if (pDevice == nullptr){
 		return;
 	}
 
-	
 
 	pDevice->SetTransform(D3DTS_WORLD, &mWorld);
 	
-	pDevice->MultiplyTransform(D3DTS_WORLD, &m_mLocal);
+	pDevice->MultiplyTransform(D3DTS_WORLD, &mLocal);
 
 	pDevice->MultiplyTransform(D3DTS_WORLD, &matBallRoll);
 	
 	pDevice->SetTexture(0, Tex);
 	pDevice->SetMaterial(&m_mtrl);
-	//pDevice->SetMaterial(&d3d::WHITE_MTRL);
-
 	m_pSphereMesh->DrawSubset(0);
 }
 
+/*
 // 두 공이 충돌 했는지 확인
 bool CSphere::hasIntersected(CSphere& ball)
 {
@@ -124,8 +105,8 @@ bool CSphere::hasIntersected(CSphere& ball)
 		return false;
 	}
 
-	D3DXVECTOR3 cord = this->getCenter();
-	D3DXVECTOR3 ball_cord = ball.getCenter();
+	D3DXVECTOR3 cord = this->getPosition();
+	D3DXVECTOR3 ball_cord = ball.getPosition();
 	double xDistance = abs((cord.x - ball_cord.x) * (cord.x - ball_cord.x));
 	double zDistance = abs((cord.z - ball_cord.z) * (cord.z - ball_cord.z));
 	double totalDistance = sqrt(xDistance + zDistance);
@@ -145,20 +126,20 @@ void CSphere::hitBy(CSphere& ball)
 	{
 		//도움을 준 자료: http://blog.hansune.com/106
 		//this - ball로 양의 벡터를 정함
-		D3DXVECTOR3 cord = this->getCenter();
-		D3DXVECTOR3 ball_cord = ball.getCenter();
 
+		D3DXVECTOR3 cord = this->getPosition();
+		D3DXVECTOR3 ball_cord = ball.getPosition();
 		//보간법으로 근사하여 충돌 시점의 좌표로 이동함.
-		this->setCenter((cord.x + this->pre_center_x) / 2, cord.y, (cord.z + this->pre_center_z) / 2);
-		ball.setCenter((ball_cord.x + ball.pre_center_x) / 2, ball_cord.y, (ball_cord.z + ball.pre_center_z) / 2);
+		this->setPosition((cord.x + this->pre_center_x) / 2, cord.y, (cord.z + this->pre_center_z) / 2);
+		ball.setPosition((ball_cord.x + ball.pre_center_x) / 2, ball_cord.y, (ball_cord.z + ball.pre_center_z) / 2);
 		if (this->hasIntersected(ball))
 		{
-			this->setCenter(this->pre_center_x, cord.y, this->pre_center_z);
-			ball.setCenter(ball.pre_center_x, ball_cord.y, ball.pre_center_z);
+			this->setPosition(this->pre_center_x, cord.y, this->pre_center_z);
+			ball.setPosition(ball.pre_center_x, ball_cord.y, ball.pre_center_z);
 		}
 
-		cord = this->getCenter();
-		ball_cord = ball.getCenter();
+		cord = this->getPosition();
+		ball_cord = ball.getPosition();
 		//두 공 사이의 방향 벡터
 		double d_x = cord.x - ball_cord.x;
 		double d_z = cord.z - ball_cord.z;
@@ -183,11 +164,11 @@ void CSphere::hitBy(CSphere& ball)
 		ball.setPower(vbxp * cos_t - vbzp * sin_t, vbxp * sin_t + vbzp * cos_t);
 	}
 }
-
+*/
 void CSphere::ballUpdate(float timeDiff) // 공의 중심 좌표를 속도에 맞춰서 매 시간 간격마다 갱신함
 {
 	const float TIME_SCALE = 3.3F;
-	D3DXVECTOR3 cord = this->getCenter();
+	D3DXVECTOR3 cord = this->getPosition();
 	double vx = abs(this->getVelocity_X());
 	double vz = abs(this->getVelocity_Z());
 
@@ -201,7 +182,7 @@ void CSphere::ballUpdate(float timeDiff) // 공의 중심 좌표를 속도에 맞춰서 매 시
 		float tX = cord.x + TIME_SCALE * timeDiff * m_velocity_x;
 		float tZ = cord.z + TIME_SCALE * timeDiff * m_velocity_z;
 
-		this->setCenter(tX, cord.y, tZ);
+		this->setPosition(tX, cord.y, tZ);
 
 		D3DXMATRIX tmp;
 		D3DXVECTOR3 c(this->m_velocity_z, 0, -this->m_velocity_x);
@@ -209,7 +190,6 @@ void CSphere::ballUpdate(float timeDiff) // 공의 중심 좌표를 속도에 맞춰서 매 시
 		float force = sqrt(pow(this->m_velocity_x, 2) + pow(this->m_velocity_z, 2));
 		D3DXMatrixRotationAxis(&tmp, &c, force * SPIN_RATIO);
 		matBallRoll *= tmp;
-
 	}
 	else { this->setPower(0, 0); }
 
@@ -218,6 +198,7 @@ void CSphere::ballUpdate(float timeDiff) // 공의 중심 좌표를 속도에 맞춰서 매 시
 	if (rate < 0) rate = 0;
 
 	this->setPower(getVelocity_X() * rate, getVelocity_Z() * rate);// 공이 움직일 때마다, 속도를 낮춤
+
 }
 
 double CSphere::getVelocity_X()
@@ -238,40 +219,10 @@ void CSphere::setPower(double vx, double vz) // 공의 속도를 바꿈
 	this->m_velocity_z = vz;
 }
 
-void CSphere::setCenter(float x, float y, float z) // 공의 중심 좌표를 변경함
-{
-	D3DXMATRIX m;
-
-	this->center_x = x;
-	this->center_y = y;
-	this->center_z = z;
-
-	
-	D3DXMatrixTranslation(&m, x, y, z);
-
-	this->setLocalTransform( m );
-}
-
-void CSphere::setLocalTransform(const D3DXMATRIX& mLocal)
-{
-	m_mLocal = mLocal;
-}
-
 float CSphere::getRadius(void) const
 {
 	return (this->m_radius);
 }// 공의 반지름을 받아옴
-
-const D3DXMATRIX& CSphere::getLocalTransform(void) const
-{
-	return m_mLocal;
-}
-
-D3DXVECTOR3 CSphere::getCenter(void) const // 공의 중심 좌표를 반환함
-{
-	D3DXVECTOR3 org(center_x, center_y, center_z);
-	return org;
-}
 
 BallType CSphere::getBallType() const
 {
@@ -284,7 +235,7 @@ LPD3DXMESH CSphere::_createMappedSphere(IDirect3DDevice9* pDev)
 	// create the sphere
 	LPD3DXMESH mesh;
 	if (FAILED(D3DXCreateSphere(pDev, this->getRadius(), 50, 50, &mesh, NULL)))
-		return NULL;
+		return nullptr;
 
 	// create a copy of the mesh with texture coordinates,
 	// since the D3DX function doesn't include them
@@ -299,7 +250,7 @@ LPD3DXMESH CSphere::_createMappedSphere(IDirect3DDevice9* pDev)
 	// lock the vertex buffer
 	//LPVERTEX pVerts;
 	struct _VERTEX* pVerts;
-	if (SUCCEEDED(texMesh->LockVertexBuffer(0, (void **)&pVerts))) {
+	if (SUCCEEDED(texMesh->LockVertexBuffer(0, reinterpret_cast<void **>(&pVerts)))) {
 
 		// get vertex count
 		int numVerts = texMesh->GetNumVertices();

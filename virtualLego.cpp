@@ -26,7 +26,7 @@
 #include <cstdio>
 #include <cassert>
 
-IDirect3DDevice9* Device = NULL;
+IDirect3DDevice9* Device = nullptr;
 
 // 창의 크기
 const int Width  = 1024;
@@ -146,19 +146,19 @@ bool Setup()
 	// 16개의 공을 생성함
 	for (i=0;i<16;i++) {
 		if (false == g_sphere[i].create(Device, sphereColor[i])) return false;
-		g_sphere[i].setCenter(spherePos[i][0], (float)M_RADIUS , spherePos[i][1]);
+		g_sphere[i].setPosition(spherePos[i][0], static_cast<float>(M_RADIUS) , spherePos[i][1]);
 		g_sphere[i].setPower(0,0);
 	}
 
 	// 6개의 구멍을 생성함
 	for (i = 0; i<6; i++) {
 		if (false == g_hole[i].create(Device, d3d::BLACK)) return false;
-		g_hole[i].setCenter(holePos[i][0], -0.23f, holePos[i][1]);
+		g_hole[i].setPosition(holePos[i][0], -0.23f, holePos[i][1]);
 	}
 
 	// 파란색 공을 생성함
 	if (false == g_target_blueball.create(Device, "guide")) return false;
-	g_target_blueball.setCenter(.0f, (float)M_RADIUS , .0f);
+	g_target_blueball.setPosition(.0f, static_cast<float>(M_RADIUS) , .0f);
 
 	// 광원 설정
 	D3DLIGHT9 lit;
@@ -185,7 +185,7 @@ bool Setup()
 	
 	// Set the projection matrix.
 	D3DXMatrixPerspectiveFovLH(&g_mProj, D3DX_PI / 4,
-		(float)Width / (float)Height, 1.0f, 100.0f);
+		static_cast<float>(Width) / static_cast<float>(Height), 1.0f, 100.0f);
 	Device->SetTransform(D3DTS_PROJECTION, &g_mProj);
 	
 	// Set render states.
@@ -193,7 +193,7 @@ bool Setup()
 	Device->SetRenderState(D3DRS_SPECULARENABLE, TRUE);
 	Device->SetRenderState(D3DRS_SHADEMODE, D3DSHADE_GOURAUD);
 	
-	g_light.setLight(Device, g_mWorld);
+	g_light.draw(Device, g_mWorld);
 	return true;
 }
 
@@ -226,7 +226,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 
 	if( Device )
 	{
-		Device->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0x00afafaf, 1.0f, 0);
+		Device->Clear(0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0x00afafaf, 1.0f, 0);
 		Device->BeginScene();
 		
 		// update the position of each ball. during update, check whether each ball hit by walls.
@@ -276,7 +276,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		g_frame.draw(Device, g_mWorld);
 		
 		Device->EndScene();
-		Device->Present(0, 0, 0, 0);
+		Device->Present(nullptr, nullptr, nullptr, nullptr);
 		//Device->SetTexture( 0, NULL );
 	}
 
@@ -284,7 +284,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		g_sphere[6], g_sphere[7], g_sphere[8], g_sphere[9], g_sphere[10], g_sphere[11], g_sphere[12], 
 		g_sphere[13], g_sphere[14], g_sphere[15] }))
 	{
-		MessageBox(0, "플레이어 바뀜 ", 0, 0);
+		MessageBox(nullptr, "플레이어 바뀜 ", nullptr, 0);
 	}
 
 	return true;
@@ -292,24 +292,24 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 
 //+-4.56은 세로벽의 좌표, +-3.06은 가로벽의 좌표, 0.15는 각각 가로벽과 세로벽의 depth와 width
 void preventBallOut(CSphere& ball, int *old_x, int *old_z) {
-	if (ball.getCenter().x + ball.getRadius() > 4.56f - (0.15f / 2))
+	if (ball.getPosition().x + ball.getRadius() > 4.56f - (0.15f / 2))
 	{
-		ball.setCenter(4.56f - (0.15f / 2) - ball.getRadius(), ball.getCenter().y, ball.getCenter().z);
+		ball.setPosition(4.56f - (0.15f / 2) - ball.getRadius(), ball.getPosition().y, ball.getPosition().z);
 		*old_x = 4.56f - (0.15f / 2) - ball.getRadius();
 	}
-	if (ball.getCenter().x - ball.getRadius() < -4.56f + (0.15f / 2))
+	if (ball.getPosition().x - ball.getRadius() < -4.56f + (0.15f / 2))
 	{
-		ball.setCenter(-4.56f + (0.15f / 2) + ball.getRadius(), ball.getCenter().y, ball.getCenter().z);
+		ball.setPosition(-4.56f + (0.15f / 2) + ball.getRadius(), ball.getPosition().y, ball.getPosition().z);
 		*old_x = -4.56f + (0.15f / 2) + ball.getRadius();
 	}
-	if (ball.getCenter().z + ball.getRadius() > 3.06f - (0.15f / 2))
+	if (ball.getPosition().z + ball.getRadius() > 3.06f - (0.15f / 2))
 	{
-		ball.setCenter(ball.getCenter().x, ball.getCenter().y, 3.06f - (0.15f / 2) - ball.getRadius());
+		ball.setPosition(ball.getPosition().x, ball.getPosition().y, 3.06f - (0.15f / 2) - ball.getRadius());
 		*old_z = 3.06f - (0.15f / 2) - ball.getRadius();
 	}
-	if (ball.getCenter().z - ball.getRadius() < -3.06f + (0.15f / 2))
+	if (ball.getPosition().z - ball.getRadius() < -3.06f + (0.15f / 2))
 	{
-		ball.setCenter(ball.getCenter().x, ball.getCenter().y, -3.06f + (0.15f / 2) + ball.getRadius());
+		ball.setPosition(ball.getPosition().x, ball.getPosition().y, -3.06f + (0.15f / 2) + ball.getRadius());
 		*old_z = -3.06f + (0.15f / 2) + ball.getRadius();
 	}
 }
@@ -409,8 +409,8 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		}
 		else if (wParam == VK_SPACE && !turnManager.isProcessing()){	// 스페이스 바의 경우 파란 공과 하얀 공의 위치를 받아서
 			// 그 거리와 방향만큼 하얀 공의 속도를 조정한다.
-			D3DXVECTOR3 targetpos = g_target_blueball.getCenter();
-			D3DXVECTOR3	whitepos = g_sphere[0].getCenter();
+			D3DXVECTOR3 targetpos = g_target_blueball.getPosition();
+			D3DXVECTOR3	whitepos = g_sphere[0].getPosition();
 			double theta = acos(sqrt(pow(targetpos.x - whitepos.x, 2)) / sqrt(pow(targetpos.x - whitepos.x, 2) +
 				pow(targetpos.z - whitepos.z, 2)));		// 기본 1 사분면
 			if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x >= 0) { theta = -theta; }	//4 사분면
@@ -433,8 +433,8 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			CSphere preMovedWhiteBall(BallType::NONE);
 			bool canMove = true;
-			D3DXVECTOR3 coord3d = g_sphere[0].getCenter();
-			preMovedWhiteBall.setCenter(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
+			D3DXVECTOR3 coord3d = g_sphere[0].getPosition();
+			preMovedWhiteBall.setPosition(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
 
 			for (int i = 0; i < 6; i++)
 			{
@@ -454,7 +454,7 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			if (canMove)
 			{
-				g_sphere[0].setCenter(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
+				g_sphere[0].setPosition(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
 				old_x = new_x;
 				old_z = new_z;
 				preventBallOut(g_sphere[0], &old_x, &old_z);
@@ -465,9 +465,9 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			dx = (old_x - new_x);// * 0.01f;
 			dz = (old_z - new_z);// * 0.01f;
 		
-			D3DXVECTOR3 coord3d=g_target_blueball.getCenter();
+			D3DXVECTOR3 coord3d=g_target_blueball.getPosition();
 		
-			g_target_blueball.setCenter(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
+			g_target_blueball.setPosition(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
 			
 			old_x = new_x;
 			old_z = new_z;
@@ -488,17 +488,17 @@ int WINAPI WinMain(HINSTANCE hinstance,
 				   PSTR cmdLine,
 				   int showCmd)
 {
-	srand(static_cast<unsigned int>(time(NULL)));
+	srand(static_cast<unsigned int>(time(nullptr)));
 	
 	if(!d3d::InitD3D(hinstance, Width, Height, true, D3DDEVTYPE_HAL, &Device))
 	{
-		::MessageBox(0, "InitD3D() - FAILED", 0, 0);
+		::MessageBox(nullptr, "InitD3D() - FAILED", nullptr, 0);
 		return 0;
 	}
 	
 	if(!Setup())
 	{
-		::MessageBox(0, "Setup() - FAILED", 0, 0);
+		::MessageBox(nullptr, "Setup() - FAILED", nullptr, 0);
 		return 0;
 	}
 	

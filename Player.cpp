@@ -22,3 +22,13 @@ unsigned int Player::getPlayerId() const
 {
 	return this->playerID;
 }
+
+BallType Player::getBallType() const
+{
+	return this->playerBallType;
+}
+
+void Player::setBallType(BallType ballType)
+{
+	this->playerBallType = ballType;
+}

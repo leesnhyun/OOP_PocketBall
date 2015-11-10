@@ -6,7 +6,7 @@ CBorder::CBorder()
 {
 	D3DXMatrixIdentity(&m_mLocal);
 	ZeroMemory(&m_mtrl, sizeof(m_mtrl));
-	mesh = NULL;
+	mesh = nullptr;
 }
 
 // 테두리의 소멸자
@@ -21,7 +21,7 @@ CBorder::~CBorder()
 bool CBorder::create(IDirect3DDevice9* pDevice, float ix, float iz, float idepth, D3DXCOLOR color)
 //테두리를 화면에 생성함
 {
-	if (NULL == pDevice) return false;
+	if (pDevice == nullptr) return false;
 
 	// 메쉬를 생성하기 위해 adj버퍼와 material버퍼를 만듦.
 	HRESULT hr = 0;
@@ -43,7 +43,7 @@ bool CBorder::create(IDirect3DDevice9* pDevice, float ix, float iz, float idepth
 	// x파일로부터 메터리얼(material)과 텍스쳐(texture)를 추출합니다.
 	if (mtrlBuffer != 0 && numMtrls != 0)
 	{
-		D3DXMATERIAL* mtrls = (D3DXMATERIAL*)mtrlBuffer->GetBufferPointer();
+		D3DXMATERIAL* mtrls = static_cast<D3DXMATERIAL*>(mtrlBuffer->GetBufferPointer());
 
 		for (int i = 0; i < numMtrls; i++)
 		{
@@ -85,14 +85,14 @@ bool CBorder::create(IDirect3DDevice9* pDevice, float ix, float iz, float idepth
 		D3DXMESHOPT_ATTRSORT |
 		D3DXMESHOPT_COMPACT |
 		D3DXMESHOPT_VERTEXCACHE,
-		(DWORD*)adjBuffer->GetBufferPointer(),
-		0, 0, 0);
+		static_cast<DWORD*>(adjBuffer->GetBufferPointer()),
+		nullptr, nullptr, nullptr);
 
 	d3d::Release<ID3DXBuffer*>(adjBuffer); // adjacent 버퍼 쓰기 완료
 
 	if (FAILED(hr))
 	{
-		::MessageBox(0, "Optimize failed", 0, 0);
+		::MessageBox(nullptr, "Optimize failed", nullptr, 0);
 		return false;
 	}
 
@@ -104,16 +104,16 @@ bool CBorder::create(IDirect3DDevice9* pDevice, float ix, float iz, float idepth
 // 벽을 화면에서 소멸시킴
 void CBorder::destroy()
 {
-	if (mesh != NULL) {
+	if (mesh != nullptr) {
 		mesh->Release();
-		mesh = NULL;
+		mesh = nullptr;
 	}
 }
 
 // 테두리를 화면에 그려냄
 void CBorder::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)
 {
-	if (NULL == pDevice) return;
+	if (pDevice == nullptr) return;
 	pDevice->SetTransform(D3DTS_WORLD, &mWorld);
 	pDevice->MultiplyTransform(D3DTS_WORLD, &m_mLocal);
 

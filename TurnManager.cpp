@@ -7,7 +7,7 @@ using std::vector;
 TurnManager::TurnManager(const initializer_list<unsigned int>& playerIdList)
 {
 	vector<int> idListVector(playerIdList.begin(), playerIdList.end());
-	this->playerIdList = (unsigned int *) calloc(playerIdList.size(), sizeof(unsigned int));
+	this->playerIdList = static_cast<unsigned int *> (calloc(playerIdList.size(), sizeof(unsigned int)));
 	this->playerNumber = playerIdList.size();
 	this->nowTurnPlayerIndex = 0;
 	this->totalTurnCount = 0;
@@ -21,7 +21,7 @@ TurnManager::TurnManager(const initializer_list<unsigned int>& playerIdList)
 
 TurnManager::TurnManager(const TurnManager& toCopy)
 {
-	this->playerIdList = (unsigned int *) calloc(toCopy.playerNumber, sizeof(unsigned int));
+	this->playerIdList = static_cast<unsigned int *>(calloc(toCopy.playerNumber, sizeof(unsigned int)));
 	this->nowTurnPlayerIndex = toCopy.nowTurnPlayerIndex;
 	this->playerNumber = toCopy.playerNumber;
 	this->totalTurnCount = toCopy.totalTurnCount;

@@ -26,19 +26,19 @@ bool d3d::InitD3D(
 	WNDCLASS wc;
 
 	wc.style         = CS_HREDRAW | CS_VREDRAW;
-	wc.lpfnWndProc   = (WNDPROC)d3d::WndProc; 
+	wc.lpfnWndProc   = static_cast<WNDPROC>(d3d::WndProc); 
 	wc.cbClsExtra    = 0;
 	wc.cbWndExtra    = 0;
 	wc.hInstance     = hInstance;
-	wc.hIcon         = LoadIcon(0, IDI_APPLICATION);
-	wc.hCursor       = LoadCursor(0, IDC_ARROW);
-	wc.hbrBackground = (HBRUSH)GetStockObject(WHITE_BRUSH);
-	wc.lpszMenuName  = 0;
+	wc.hIcon         = LoadIcon(nullptr, IDI_APPLICATION);
+	wc.hCursor       = LoadCursor(nullptr, IDC_ARROW);
+	wc.hbrBackground = static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
+	wc.lpszMenuName  = nullptr;
 	wc.lpszClassName = "Direct3D9App";
 
 	if( !RegisterClass(&wc) ) 
 	{
-		::MessageBox(0, "RegisterClass() - FAILED", 0, 0);
+		::MessageBox(nullptr, "RegisterClass() - FAILED", nullptr, 0);
 		return false;
 	}
 		
@@ -47,11 +47,11 @@ bool d3d::InitD3D(
 		"Virtual Billiard", 
 		WS_EX_TOPMOST,
 		0, 0, width, height,
-		0 /*parent hwnd*/, 0 /* menu */, hInstance, 0 /*extra*/); 
+		nullptr /*parent hwnd*/, nullptr /* menu */, hInstance, nullptr /*extra*/); 
 
 	if( !hwnd )
 	{
-		::MessageBox(0, "CreateWindow() - FAILED", 0, 0);
+		::MessageBox(nullptr, "CreateWindow() - FAILED", nullptr, 0);
 		return false;
 	}
 
@@ -66,12 +66,12 @@ bool d3d::InitD3D(
 
 	// Step 1: Create the IDirect3D9 object.
 
-	IDirect3D9* d3d9 = 0;
+	IDirect3D9* d3d9 = nullptr;
 	d3d9 = Direct3DCreate9(D3D_SDK_VERSION);
 
 	if( !d3d9 )
 	{
-		::MessageBox(0, "Direct3DCreate9() - FAILED", 0, 0);
+		::MessageBox(nullptr, "Direct3DCreate9() - FAILED", nullptr, 0);
 		return false;
 	}
 
@@ -134,7 +134,7 @@ bool d3d::InitD3D(
 		if( FAILED(hr) )
 		{
 			d3d9->Release(); // done with d3d9 object
-			::MessageBox(0, "CreateDevice() - FAILED", 0, 0);
+			::MessageBox(nullptr, "CreateDevice() - FAILED", nullptr, 0);
 			return false;
 		}
 	}
@@ -149,7 +149,7 @@ int d3d::EnterMsgLoop( bool (*ptr_display)(float timeDelta) )
 	MSG msg;
 	::ZeroMemory(&msg, sizeof(MSG));
 
-	static double lastTime = (double)timeGetTime(); 
+	static double lastTime = static_cast<double>(timeGetTime()); 
 
 	while(msg.message != WM_QUIT)
 	{
@@ -160,9 +160,9 @@ int d3d::EnterMsgLoop( bool (*ptr_display)(float timeDelta) )
 		}
 		else
 		{	
-			double currTime  = (double)timeGetTime();
+			double currTime  = static_cast<double>(timeGetTime());
 			double timeDelta = (currTime - lastTime)*0.0007;
-			ptr_display((float)timeDelta);
+			ptr_display(static_cast<float>(timeDelta));
 
 			lastTime = currTime;
 		}

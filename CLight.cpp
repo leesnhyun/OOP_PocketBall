@@ -2,31 +2,13 @@
 #include "CLight.h"
 
 // 광원의 생성자
-CLight::CLight()
+CLight::CLight(const D3DLIGHT9& lit, float radius)
 {
 	static DWORD i = 0;
 	m_index = i++;
-	D3DXMatrixIdentity(&m_mLocal);
+	D3DXMatrixIdentity(&mLocal);
 	::ZeroMemory(&m_lit, sizeof(m_lit));
-	m_pMesh = NULL;
-	m_bound._center = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_bound._radius = 0.0f;
-}
-
-// 광원의 소멸자
-CLight::~CLight()
-{
-
-}
-
-// 광원을 화면에 그려냄
-bool CLight::create(IDirect3DDevice9* pDevice, const D3DLIGHT9& lit, float radius)
-{
-	if (NULL == pDevice)
-		return false;
-	if (FAILED(D3DXCreateSphere(pDevice, radius, 10, 10, &m_pMesh, NULL)))
-		return false;
-
+	m_pMesh = nullptr;
 	m_bound._center = lit.Position;
 	m_bound._radius = radius;
 
@@ -43,44 +25,55 @@ bool CLight::create(IDirect3DDevice9* pDevice, const D3DLIGHT9& lit, float radiu
 	m_lit.Attenuation2 = lit.Attenuation2;
 	m_lit.Theta = lit.Theta;
 	m_lit.Phi = lit.Phi;
+}
+
+// 광원의 소멸자
+CLight::~CLight()
+{
+
+}
+
+// 광원을 화면에 그려냄
+bool CLight::create(IDirect3DDevice9* pDevice)
+{
+	if (pDevice == nullptr)
+	{
+		return false;
+	}
+
+	if (FAILED(D3DXCreateSphere(pDevice, m_bound._radius, 10, 10, &m_pMesh, NULL)))
+	{
+		return false;
+	}
+
 	return true;
 }
 
 // 광원을 화면에서 소멸시킴
 void CLight::destroy()
 {
-	if (m_pMesh != NULL) {
+	if (m_pMesh != nullptr)
+	{
 		m_pMesh->Release();
-		m_pMesh = NULL;
+		m_pMesh = nullptr;
 	}
 }
 
 // 광원의 속성값을 변경함
-bool CLight::setLight(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)
+void CLight::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)
 {
-	if (NULL == pDevice)
-		return false;
+	if (pDevice == nullptr)
+	{
+		return;
+	}
 
 	D3DXVECTOR3 pos(m_bound._center);
-	D3DXVec3TransformCoord(&pos, &pos, &m_mLocal);
+	D3DXVec3TransformCoord(&pos, &pos, &mLocal);
 	D3DXVec3TransformCoord(&pos, &pos, &mWorld);
 	m_lit.Position = pos;
 
 	pDevice->SetLight(m_index, &m_lit);
 	pDevice->LightEnable(m_index, TRUE);
-	return true;
-}
-
-// 광원을 그려냄
-void CLight::draw(IDirect3DDevice9* pDevice)
-{
-	if (NULL == pDevice)
-		return;
-	D3DXMATRIX m;
-	D3DXMatrixTranslation(&m, m_lit.Position.x, m_lit.Position.y, m_lit.Position.z);
-	pDevice->SetTransform(D3DTS_WORLD, &m);
-	pDevice->SetMaterial(&d3d::WHITE_MTRL);
-	m_pMesh->DrawSubset(0);
 }
 
 // 광원의 위치를 얻어냄
