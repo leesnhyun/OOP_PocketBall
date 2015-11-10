@@ -12,12 +12,9 @@ enum class BallType
 class Player
 {
 private:
-	/* Instance func or member. */
 	unsigned int playerID;						// 이 플레이어의 ID
 	unsigned int numTakenBall;					// 획득한 공의 개수
 public:
-	int& a;
-	/* Instance func or member. */
 	Player(unsigned int playerID);
 	BallType playerBallType;					// 플레이어가 목표로 하는 공의 종류
 	void addTakenBall(unsigned int numBall);	// 지금 획득한 공의 개수를 누적시킴
