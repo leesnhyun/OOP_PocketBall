@@ -16,6 +16,7 @@ private:
 	unsigned int playerID;						// 이 플레이어의 ID
 	unsigned int numTakenBall;					// 획득한 공의 개수
 public:
+	int& a;
 	/* Instance func or member. */
 	Player(unsigned int playerID);
 	BallType playerBallType;					// 플레이어가 목표로 하는 공의 종류
