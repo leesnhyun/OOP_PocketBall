@@ -143,6 +143,7 @@
     <ClCompile Include="CBorder.cpp" />
     <ClCompile Include="CHole.cpp" />
     <ClCompile Include="CLight.cpp" />
+    <ClCompile Include="CObject.cpp" />
     <ClCompile Include="CSphere.cpp" />
     <ClCompile Include="CWall.cpp" />
     <ClCompile Include="d3dUtility.cpp" />
@@ -155,11 +156,14 @@
     <ClInclude Include="CBorder.h" />
     <ClInclude Include="CHole.h" />
     <ClInclude Include="CLight.h" />
+    <ClInclude Include="CObject.h" />
     <ClInclude Include="CSphere.h" />
     <ClInclude Include="CWall.h" />
     <ClInclude Include="d3dUtility.h" />
     <ClInclude Include="FoulManager.h" />
+    <ClInclude Include="Hittable.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Removable.h" />
     <ClInclude Include="TurnManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
