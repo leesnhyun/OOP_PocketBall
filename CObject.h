@@ -12,6 +12,7 @@ public:
 	D3DXVECTOR3 getPosition() const;
 	void setPosition(float x, float y, float z);
 	void setLocalTransform(const D3DXMATRIX& mLocal);
+	D3DXMATRIX getLocalTransform() const;
 	virtual ~CObject();
 };
 #endif

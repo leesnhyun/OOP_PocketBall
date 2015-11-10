@@ -23,6 +23,11 @@ void CObject::setLocalTransform(const D3DXMATRIX& mLocal)
 	this->mLocal = mLocal;
 }
 
+D3DXMATRIX CObject::getLocalTransform() const
+{
+	return mLocal;
+}
+
 CObject::~CObject()
 {
 }
