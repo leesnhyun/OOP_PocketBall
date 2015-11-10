@@ -3,6 +3,7 @@
 #include "d3dUtility.h"
 class CObject
 {
+protected:
 	float center_x, center_y, center_z;
 	D3DXMATRIX mLocal;
 public:

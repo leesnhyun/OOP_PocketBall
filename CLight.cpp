@@ -6,7 +6,7 @@ CLight::CLight(const D3DLIGHT9& lit, float radius)
 {
 	static DWORD i = 0;
 	m_index = i++;
-	D3DXMatrixIdentity(&m_mLocal);
+	D3DXMatrixIdentity(&mLocal);
 	::ZeroMemory(&m_lit, sizeof(m_lit));
 	m_pMesh = NULL;
 	m_bound._center = lit.Position;
@@ -68,7 +68,7 @@ void CLight::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)
 	}
 
 	D3DXVECTOR3 pos(m_bound._center);
-	D3DXVec3TransformCoord(&pos, &pos, &m_mLocal);
+	D3DXVec3TransformCoord(&pos, &pos, &mLocal);
 	D3DXVec3TransformCoord(&pos, &pos, &mWorld);
 	m_lit.Position = pos;
 

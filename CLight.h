@@ -10,7 +10,6 @@
 class CLight : public CObject {
 private:
 	DWORD m_index;
-	D3DXMATRIX m_mLocal;
 	D3DLIGHT9 m_lit;
 	ID3DXMesh* m_pMesh;
 	d3d::BoundingSphere m_bound;

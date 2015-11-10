@@ -3,12 +3,19 @@
 #include <cmath>
 
 // ±¸¸ÛÀÇ »ý¼ºÀÚ¸¦ Á¤ÀÇ
-CHole::CHole()
+CHole::CHole(float radius, D3DXCOLOR color)
 {
-	D3DXMatrixIdentity(&m_mLocal);				// Transform Matrix¸¦ ´ÜÀ§Çà·Ä·Î ÃÊ±âÈ­
+	D3DXMatrixIdentity(&mLocal);				// Transform Matrix¸¦ ´ÜÀ§Çà·Ä·Î ÃÊ±âÈ­
 	ZeroMemory(&m_mtrl, sizeof(m_mtrl));		// memsetÀ» ÅëÇØ ¸ðµÎ 0À¸·Î ÃÊ±âÈ­
 	m_radius = 0;
 	m_pSphereMesh = NULL;
+
+	m_mtrl.Ambient = color;
+	m_mtrl.Diffuse = color;
+	m_mtrl.Specular = color;
+	m_mtrl.Emissive = d3d::BLACK;
+	m_mtrl.Power = 5.0f;
+	m_radius = radius;
 }
 
 // ±¸¸ÛÀÇ ¼Ò¸êÀÚ¸¦ Á¤ÀÇ
@@ -18,16 +25,12 @@ CHole::~CHole()
 }
 
 // ±¸¸ÛÀ» È­¸é¿¡ »ý¼ºÇÔ
-bool CHole::create(IDirect3DDevice9* pDevice, D3DXCOLOR color)
+bool CHole::create(IDirect3DDevice9* pDevice)
 {
-	if (NULL == pDevice) return false;
-
-	m_mtrl.Ambient = color;
-	m_mtrl.Diffuse = color;
-	m_mtrl.Specular = color;
-	m_mtrl.Emissive = d3d::BLACK;
-	m_mtrl.Power = 5.0f;
-	m_radius = 0.25f;
+	if (NULL == pDevice)
+	{
+		return false;
+	}
 
 	// ÀÔÃ¼¸¦ ±×¸®°í È¸Àü½ÃÅµ´Ï´Ù.
 	HRESULT hr = D3DXCreateCylinder(pDevice, m_radius, m_radius, 0.5f, 50, 50, &m_pSphereMesh, NULL);
@@ -36,8 +39,11 @@ bool CHole::create(IDirect3DDevice9* pDevice, D3DXCOLOR color)
 	D3DXMatrixRotationX(&m, 33);
 	this->setLocalTransform(m);
 	
-	if (FAILED(hr)) return false;
-	
+	if (FAILED(hr))
+	{
+		return false;
+	}
+
 	return true;
 }
 
@@ -55,7 +61,7 @@ void CHole::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// ±¸¸ÛÀ» È
 	if (NULL == pDevice) return;
 
 	pDevice->SetTransform(D3DTS_WORLD, &mWorld);
-	pDevice->MultiplyTransform(D3DTS_WORLD, &m_mLocal);
+	pDevice->MultiplyTransform(D3DTS_WORLD, &mLocal);
 	pDevice->SetMaterial(&m_mtrl);
 	m_pSphereMesh->DrawSubset(0);
 }
@@ -63,9 +69,10 @@ void CHole::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// ±¸¸ÛÀ» È
 // ±¸¸Û¿¡ °øÀÌ µé¾î°¡¾ß ÇÏ´ÂÁö È®ÀÎ
 bool CHole::hasIntersected(CSphere& ball)
 {
-	double xDistance = pow((this->center_x - ball.getCenter().x), 2);
+	// TODO : Type checking..
+	double xDistance = pow((this->center_x - ball.getPosition().x), 2);
 	double yDistance = 0;
-	double zDistance = pow((this->center_z - ball.getCenter().z), 2);
+	double zDistance = pow((this->center_z - ball.getPosition().z), 2);
 	double totalDistance = sqrt(xDistance + yDistance + zDistance);
 
 	if (totalDistance < (this->getRadius()))
@@ -81,21 +88,10 @@ void CHole::hitBy(CSphere& ball)
 {
 	if (this->hasIntersected(ball))
 	{
-		ball.setCenter(100000, -100.0f, 100000);
+		ball.setPosition(100000, -100.0f, 100000);
 		ball.setPower(0.0f, 0.0f);
 		ball.die();
 	}
-}
-
-void CHole::setCenter(float x, float y, float z) // ±¸¸ÛÀÇ Áß½É ÁÂÇ¥¸¦ º¯°æÇÔ
-{
-	D3DXMATRIX m;
-	this->center_x = x;
-	this->center_y = y;
-	this->center_z = z;
-	D3DXMatrixTranslation(&m, x, y, z);
-
-	this->setLocalTransform(m);
 }
 
 float CHole::getRadius(void) const
@@ -103,19 +99,8 @@ float CHole::getRadius(void) const
 	return m_radius;
 }// ±¸¸ÛÀÇ ¹ÝÁö¸§À» ¹Þ¾Æ¿È
 
-const D3DXMATRIX& CHole::getLocalTransform(void) const
-{
-	return m_mLocal;
-}
-
 void CHole::setLocalTransform(const D3DXMATRIX& mLocal)
 {
-	m_mLocal *= mLocal;
+	this->mLocal *= mLocal;
 	// È¸Àüº¯È¯À» Àû¿ëÇÏ±â À§ÇØ ´©Àû.
-}
-
-D3DXVECTOR3 CHole::getCenter(void) const // ±¸¸ÛÀÇ Áß½É ÁÂÇ¥¸¦ ¹ÝÈ¯ÇÔ
-{
-	D3DXVECTOR3 org(center_x, center_y, center_z);
-	return org;
 }

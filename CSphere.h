@@ -11,7 +11,7 @@
 // 구체(공) 클래스에 대한 정의
 // -----------------------------------------------------------------------------
 class CSphere : public CObject, public Hittable{
-private:
+protected:
 	float m_radius;						// 반지름
 	float m_velocity_x;
 	float m_velocity_z;
@@ -22,7 +22,6 @@ private:
 	// DirectX에서의 좌표는 화면에 대해서 화면을 마주 보는 사람의 입장에서 
 	// 앞으로 z축, 위로 y축, 오른쪽으로 x축이다.
 
-	int deadDate;
 	const char* ballNumber;
 	BallType ballType;
 	float pre_center_x, pre_center_z; // 이전 위치 보관, 충돌 시에 사용해야 함
@@ -30,9 +29,6 @@ private:
 public:
 	CSphere(BallType ballType, const char* number);
 	~CSphere();
-	bool isDead() const;													// 공의 죽은 여부를 가져옴.
-	int getDeadDate() const;												// 공이 죽은 시점을 가져옴.
-	void die();																// 들어감
 	bool create(IDirect3DDevice9* pDevice);				// 공을 화면에 생성함
 	void destroy();															// 공을 화면에서 소멸시킴
 	void draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld);			// 공을 화면에 그려냄

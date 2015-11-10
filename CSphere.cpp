@@ -29,28 +29,11 @@ CSphere::CSphere(BallType ballType, const char* number)
 	m_velocity_z = 0;
 	m_pSphereMesh = nullptr;
 	this->ballType = ballType;
-	this->deadDate = -1;
-	this->ballType = ballType;
 }
 
 // 공의 소멸자를 정의
 CSphere::~CSphere()
 {
-}
-
-bool CSphere::isDead() const
-{
-	return (this->deadDate >= 0);
-}
-
-int CSphere::getDeadDate() const
-{
-	return this->deadDate;
-}
-
-void CSphere::die()
-{
-	this->deadDate = turnManager.getCurrentTurnNumber();
 }
 
 // 공을 화면에 생성함(D3DXCOLOR color)
