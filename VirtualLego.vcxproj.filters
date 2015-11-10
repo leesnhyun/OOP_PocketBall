@@ -45,7 +45,7 @@
     <ClCompile Include="FoulManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CObject.cpp">
+    <ClCompile Include="Status.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -77,13 +77,13 @@
     <ClInclude Include="FoulManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Hittable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Removable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Status.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
