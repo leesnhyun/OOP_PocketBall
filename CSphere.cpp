@@ -105,10 +105,6 @@ void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// °øÀ» È
 	pDevice->SetTexture(0, Tex);
 	pDevice->SetMaterial(&m_mtrl);
 	//pDevice->SetMaterial(&d3d::WHITE_MTRL);
-	
-
-	//D3DXMATRIX m;
-	//D3DXMatrixRotationY(&m, 30);
 
 	m_pSphereMesh->DrawSubset(0);
 }
@@ -144,6 +140,7 @@ void CSphere::hitBy(CSphere& ball)
 		//this - ball·Î ¾çÀÇ º¤ÅÍ¸¦ Á¤ÇÔ
 		D3DXVECTOR3 cord = this->getCenter();
 		D3DXVECTOR3 ball_cord = ball.getCenter();
+
 		//º¸°£¹ýÀ¸·Î ±Ù»çÇÏ¿© Ãæµ¹ ½ÃÁ¡ÀÇ ÁÂÇ¥·Î ÀÌµ¿ÇÔ.
 		this->setCenter((cord.x + this->pre_center_x) / 2, cord.y, (cord.z + this->pre_center_z) / 2);
 		ball.setCenter((ball_cord.x + ball.pre_center_x) / 2, ball_cord.y, (ball_cord.z + ball.pre_center_z) / 2);
@@ -216,12 +213,12 @@ void CSphere::ballUpdate(float timeDiff) // °øÀÇ Áß½É ÁÂÇ¥¸¦ ¼Óµµ¿¡ ¸ÂÃç¼­ ¸Å ½Ã
 	if (rate < 0) rate = 0;
 
 	this->setPower(getVelocity_X() * rate, getVelocity_Z() * rate);// °øÀÌ ¿òÁ÷ÀÏ ¶§¸¶´Ù, ¼Óµµ¸¦ ³·Ãã
-	
+
 	// °ø È¸Àü½ÃÄÑº¸ÀÚ
-	D3DXMATRIX matBallRoll;
-	//D3DXMatrixRotationYawPitchRoll(&matBallRoll, 0.0f, timeDiff, 0.0f);
-	//D3DXMatrixRotationY(&matBallRoll, timeDiff);
-	//this->m_mLocal *= matBallRoll;
+	//cord = this->getCenter();
+	
+	//D3DXVECTOR3 normalVector(-(this->getVelocity_Z()), 0, (this->getVelocity_X()));
+	
 
 }
 
@@ -257,6 +254,11 @@ void CSphere::setCenter(float x, float y, float z) // °øÀÇ Áß½É ÁÂÇ¥¸¦ º¯°æÇÔ
 	this->setLocalTransform(m);
 }
 
+void CSphere::setLocalTransform(const D3DXMATRIX& mLocal)
+{
+	m_mLocal = mLocal;
+}
+
 float CSphere::getRadius(void) const
 {
 	return (this->m_radius);
@@ -265,11 +267,6 @@ float CSphere::getRadius(void) const
 const D3DXMATRIX& CSphere::getLocalTransform(void) const
 {
 	return m_mLocal;
-}
-
-void CSphere::setLocalTransform(const D3DXMATRIX& mLocal)
-{
-	m_mLocal = mLocal;
 }
 
 D3DXVECTOR3 CSphere::getCenter(void) const // °øÀÇ Áß½É ÁÂÇ¥¸¦ ¹ÝÈ¯ÇÔ

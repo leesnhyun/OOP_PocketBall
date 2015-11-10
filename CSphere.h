@@ -21,6 +21,7 @@ private:
 	D3DXMATRIX m_mLocal;
 	D3DMATERIAL9 m_mtrl;
 	ID3DXMesh* m_pSphereMesh;
+	D3DXMATRIX matBallRoll;
 	// DirectX에서의 좌표는 화면에 대해서 화면을 마주 보는 사람의 입장에서 
 	// 앞으로 z축, 위로 y축, 오른쪽으로 x축이다.
 

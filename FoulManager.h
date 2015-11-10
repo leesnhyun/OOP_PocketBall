@@ -17,6 +17,7 @@ class FoulManager
 	//패배
 	void isEightBallBadToIn();	// 자신의 공을 다 넣지 않고, 8번 공 넣음
 	void isEightBallWithFoul();	// 8번 공을 넣으면서 파울
+
 public:
 	FoulManager();
 
