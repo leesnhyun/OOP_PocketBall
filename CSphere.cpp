@@ -17,16 +17,17 @@ extern TurnManager turnManager;
 
 
 // 공의 생성자를 정의
-CSphere::CSphere(BallType ballType, const char* number)
+CSphere::CSphere(BallType ballType, const char* ballImageFileName)
 {
 	D3DXMatrixIdentity(&mLocal);
 	ZeroMemory(&m_mtrl, sizeof(m_mtrl)); // memset을 통해 모두 0으로 초기화
 	m_radius = 0.16f;
 	m_velocity_x = 0;
 	m_velocity_z = 0;
-	m_pSphereMesh = nullptr;;
+	m_pSphereMesh = nullptr;
 	D3DXMatrixIdentity(&this->matBallRoll);
 	this->ballType = ballType;
+	strcpy(this->ballImageFileName, ballImageFileName);
 }
 
 // 공의 소멸자를 정의
@@ -56,7 +57,7 @@ bool CSphere::create(IDirect3DDevice9* pDevice)
 
 	char* filePath = new char[10];
 	strcpy(filePath, "./res/");
-	strcat(filePath, ballNumber);
+	strcat(filePath, this->ballImageFileName);
 	strcat(filePath, ".bmp");
 
 	if (FAILED(D3DXCreateTextureFromFile(pDevice, filePath, &Tex)))

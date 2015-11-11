@@ -30,7 +30,7 @@ public:
 	void setTurnProgressStatus(bool toSet) noexcept;
 	void setTurnChangeStatus(bool toSet) noexcept;
 	void setGameEndStatus(bool toSet) noexcept;
-	void Status::setTurnPlayer(int playerID);
+	void Status::setTurnPlayer(int playerID) throw (PlayerNotFoundException);
 	void nextTurnCount() noexcept;
 };
 
