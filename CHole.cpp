@@ -38,6 +38,7 @@ bool CHole::create(IDirect3DDevice9* pDevice)
 	
 	if (FAILED(hr))
 	{
+		MessageBox(0, "fail rotation", 0, 0);
 		return false;
 	}
 
