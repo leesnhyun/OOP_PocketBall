@@ -10,27 +10,32 @@
 //        
 ////////////////////////////////////////////////////////////////////////////////
 
+#include <ctime>
+#include <array>
+
 #include "d3dUtility.h"
-#include "CSphere.h"
+
 #include "CLight.h"
+#include "CFloor.h"
 #include "CWall.h"
 #include "CHole.h"
 #include "CBorder.h"
-#include "TurnManager.h"
 #include "Player.h"
-#include "FoulManager.h"
 
-#include <ctime>
+#include "FoulManager.h"
+#include "TurnManager.h"
+
+#include "CSphere.h"
 #include "CHandSphere.h"
 #include "CStripeSphere.h"
 #include "CSolidSphere.h"
 #include "CEightSphere.h"
-#include <array>
+#include "CTargetSphere.h"
+
 #include "CTopWall.h"
 #include "CRightWall.h"
 #include "CBottomWall.h"
 #include "CLeftWall.h"
-#include "CTargetSphere.h"
 
 using std::array;
 
@@ -45,6 +50,7 @@ const float BALL_SET_RATIO = 1.82f;
 
 // 16개의 공의 위치를 초기화 함.
 const float spherePos[16][2] = { 
+	
 	//white ball
 	{ -2.7f, 0 }, 
 	
@@ -73,9 +79,6 @@ const float holePos[6][2] = {
 								{-4.45f,2.95f}, {0.05f,3.05f}, {4.5f,2.95f}
 							};
 
-// 공의 색상을 초기화 함.
-const char* sphereColor[16] = { "0", "s9", "1", "s10", "2", "3", "s11", "4", "s12", "s13", "5", "6", "7", "s14", "s15", "8" };
-
 // -----------------------------------------------------------------------------
 // Transform matrices
 // -----------------------------------------------------------------------------
@@ -88,15 +91,18 @@ D3DXMATRIX g_mProj;
 // Global variables
 // 전역 변수
 // -----------------------------------------------------------------------------
-CWall	g_legoPlane;
-array<CWall, 6> g_legowall = {
-	CTopWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL), 
-	CTopWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL), 
-	CRightWall(0.15f, 0.3f, 5.40f, d3d::TABLE_WALL),
-	CBottomWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL),
-	CBottomWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL),
-	CLeftWall(0.15f, 0.3f, 5.40f, d3d::TABLE_WALL)
+CFloor g_legoPlane(9, 0.03f, 6, d3d::TABLE_PANE);
+
+array<CWall*, 6> g_legowall = 
+{
+	new CTopWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL), 
+	new CTopWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL), 
+	new CRightWall(0.15f, 0.3f, 5.40f, d3d::TABLE_WALL),
+	new CBottomWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL),
+	new CBottomWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL),
+	new CLeftWall(0.15f, 0.3f, 5.40f, d3d::TABLE_WALL)
 };
+
 array<CSphere, 16> g_sphere = 
 { 
 	CHandSphere("0"), CSolidSphere("1"), CSolidSphere("2"), CSolidSphere("3"), 
@@ -104,14 +110,16 @@ array<CSphere, 16> g_sphere =
 	CEightSphere("8"), CStripeSphere("s9"), CStripeSphere("s10"), CStripeSphere("s11"),
 	CStripeSphere("s12"), CStripeSphere("S13"), CStripeSphere("s14"), CStripeSphere("s15") 
 };
+
 CTargetSphere g_target_blueball("guide");
+
 CLight	g_light;
 CHole	g_hole[6];
 
-CBorder g_frame;
+CBorder g_border(d3d::TABLE_BORDER);
+// g_border.create(Device, -1, -1, 9, d3d::TABLE_BORDER)
 
 double g_camera_pos[3] = {0.0, 5.0, -8.0};
-
 
 
 // -----------------------------------------------------------------------------
@@ -135,11 +143,11 @@ bool Setup()
 	D3DXMatrixIdentity(&g_mProj);
 	
 	// 프레임생성
-	if (false == g_frame.create(Device, -1, -1, 9, d3d::TABLE_BORDER)) return false;
-	g_frame.setPosition(0.115f, -0.44f, 0.00f);
+	if (false == g_border.create(Device)) return false;
+	g_border.setPosition(0.115f, -0.44f, 0.00f);
 
 	// 초록색 바닥을 생성
-	if (false == g_legoPlane.create(Device, -1, -1, 9, 0.03f, 6, false, d3d::TABLE_PANE)) return false;
+	if (false == g_legoPlane.create(Device)) return false;
 	g_legoPlane.setPosition(0.0f, -0.0006f / 5, 0.0f);
 	
 	//// 벽을 생성 ////
@@ -148,21 +156,21 @@ bool Setup()
 	//     [4]     [3]
 
 	// 가로벽 (9*0.3f*0.15) , (0, 0.12, 3.06)
-	if (false == g_legowall[0].create(Device)) return false;
-	g_legowall[0].setPosition(-2.2f, 0.12f, 3.06f);
-	if (false == g_legowall[1].create(Device)) return false;
-	g_legowall[1].setPosition(2.3f, 0.12f, 3.06f);
+	if (false == g_legowall[0]->create(Device)) return false;
+	g_legowall[0]->setPosition(-2.2f, 0.12f, 3.06f);
+	if (false == g_legowall[1]->create(Device)) return false;
+	g_legowall[1]->setPosition(2.3f, 0.12f, 3.06f);
 
-	if (false == g_legowall[3].create(Device)) return false;
-	g_legowall[3].setPosition(-2.2f, 0.12f, -3.06f);
-	if (false == g_legowall[4].create(Device)) return false;
-	g_legowall[4].setPosition(2.3f, 0.12f, -3.06f);
+	if (false == g_legowall[3]->create(Device)) return false;
+	g_legowall[3]->setPosition(-2.2f, 0.12f, -3.06f);
+	if (false == g_legowall[4]->create(Device)) return false;
+	g_legowall[4]->setPosition(2.3f, 0.12f, -3.06f);
 
 	// 세로벽 (0.15f*0.3f*6.24f) , (4.56, 0.12, 0)
-	if (false == g_legowall[2].create(Device)) return false;
-	g_legowall[2].setPosition(-4.56f, 0.12f, 0.0f);
-	if (false == g_legowall[5].create(Device)) return false;
-	g_legowall[5].setPosition(4.56f, 0.12f, 0.0f);
+	if (false == g_legowall[2]->create(Device)) return false;
+	g_legowall[2]->setPosition(-4.56f, 0.12f, 0.0f);
+	if (false == g_legowall[5]->create(Device)) return false;
+	g_legowall[5]->setPosition(4.56f, 0.12f, 0.0f);
 	////////
 
 	// 16개의 공을 생성함
@@ -211,7 +219,7 @@ void Cleanup(void)
 {
 	g_legoPlane.destroy();
 	for(int i = 0 ; i < 4; i++) {
-		g_legowall[i].destroy();
+		g_legowall[i]->destroy();
 	}
 	destroyAllLegoBlock();
 	g_light.destroy();
@@ -242,7 +250,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		// 공의 위치를 갱신한다. 갱신하는 중에는 각각의 공이 벽과 충돌 했는지 확인한다.
 		for( i = 0; i < 16; i++) {
 			g_sphere[i].ballUpdate(timeDelta);
-			for(j = 0; j < 6; j++){ g_legowall[j].hitBy(g_sphere[i]); }
+			for (j = 0; j < 6; j++){ g_legowall[j]->hitBy(g_sphere[i]); }
 		}
 
 		// check whether any two balls hit together and update the direction of balls
@@ -270,7 +278,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		g_legoPlane.draw(Device, g_mWorld);
 		
 		for (i = 0; i < 6; i++)
-			g_legowall[i].draw(Device, g_mWorld);
+			g_legowall[i]->draw(Device, g_mWorld);
 
 		for (i = 0; i < 16; i++)
 			g_sphere[i].draw(Device, g_mWorld);
@@ -282,7 +290,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		//g_light.draw(Device);
 
 		// 프레임을 그린다
-		g_frame.draw(Device, g_mWorld);
+		g_border.draw(Device, g_mWorld);
 		
 		Device->EndScene();
 		Device->Present(nullptr, nullptr, nullptr, nullptr);

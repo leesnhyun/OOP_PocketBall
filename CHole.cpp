@@ -3,19 +3,17 @@
 #include <cmath>
 
 // ±¸¸ÛÀÇ »ý¼ºÀÚ¸¦ Á¤ÀÇ
-CHole::CHole(float radius, D3DXCOLOR color)
+CHole::CHole() : m_radius(0.25)
 {
 	D3DXMatrixIdentity(&mLocal);				// Transform Matrix¸¦ ´ÜÀ§Çà·Ä·Î ÃÊ±âÈ­
 	ZeroMemory(&m_mtrl, sizeof(m_mtrl));		// memsetÀ» ÅëÇØ ¸ðµÎ 0À¸·Î ÃÊ±âÈ­
-	m_radius = 0;
 	m_pSphereMesh = nullptr;
 
-	m_mtrl.Ambient = color;
-	m_mtrl.Diffuse = color;
-	m_mtrl.Specular = color;
+	m_mtrl.Ambient = d3d::BLACK;
+	m_mtrl.Diffuse = d3d::BLACK;
+	m_mtrl.Specular = d3d::BLACK;
 	m_mtrl.Emissive = d3d::BLACK;
 	m_mtrl.Power = 5.0f;
-	m_radius = radius;
 }
 
 // ±¸¸ÛÀÇ ¼Ò¸êÀÚ¸¦ Á¤ÀÇ
@@ -67,7 +65,7 @@ void CHole::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// ±¸¸ÛÀ» È
 }
 
 // ±¸¸Û¿¡ °øÀÌ µé¾î°¡¾ß ÇÏ´ÂÁö È®ÀÎ
-bool CHole::hasIntersected(CSphere& ball)
+bool CHole::hasIntersected(CSphere& ball) const
 {
 	// TODO : Type checking..
 	double xDistance = pow((this->center_x - ball.getPosition().x), 2);
@@ -75,7 +73,7 @@ bool CHole::hasIntersected(CSphere& ball)
 	double zDistance = pow((this->center_z - ball.getPosition().z), 2);
 	double totalDistance = sqrt(xDistance + yDistance + zDistance);
 
-	if (totalDistance < (this->getRadius()))
+	if (totalDistance < (this->getRadius()) && !ball.isDisabled())
 	{
 		return true;
 	}
@@ -90,7 +88,7 @@ void CHole::hitBy(CSphere& ball)
 	{
 		ball.setPosition(100000, -100.0f, 100000);
 		ball.setPower(0.0f, 0.0f);
-		//ball.die();
+		ball.disable();
 	}
 }
 

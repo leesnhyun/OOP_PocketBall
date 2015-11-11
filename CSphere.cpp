@@ -19,14 +19,16 @@ extern TurnManager turnManager;
 // °øÀÇ »ý¼ºÀÚ¸¦ Á¤ÀÇ
 CSphere::CSphere(BallType ballType, const char* ballImageFileName)
 {
-	D3DXMatrixIdentity(&mLocal);
 	ZeroMemory(&m_mtrl, sizeof(m_mtrl)); // memsetÀ» ÅëÇØ ¸ðµÎ 0À¸·Î ÃÊ±âÈ­
-	m_radius = 0.16f;
-	m_velocity_x = 0;
-	m_velocity_z = 0;
-	m_pSphereMesh = nullptr;
-	D3DXMatrixIdentity(&this->matBallRoll);
+	this->m_radius = 0.16f;
+	this->m_velocity_x = 0;
+	this->m_velocity_z = 0;
+	this->m_pSphereMesh = nullptr;
 	this->ballType = ballType;
+	
+	D3DXMatrixIdentity(&mLocal);
+	D3DXMatrixIdentity(&this->matBallRoll);
+
 	strcpy(this->ballImageFileName, ballImageFileName);
 }
 
@@ -62,9 +64,11 @@ bool CSphere::create(IDirect3DDevice9* pDevice)
 
 	if (FAILED(D3DXCreateTextureFromFile(pDevice, filePath, &Tex)))
 	{
+		delete[] filePath;
 		return false;
 	}
 
+	delete[] filePath;
 	return true;
 }
 
@@ -81,15 +85,11 @@ void CSphere::destroy()// °øÀ» È­¸é¿¡¼­ ¼Ò¸ê½ÃÅ´
 void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// °øÀ» È­¸é¿¡ ±×·Á³¿
 {
 	// TODO : RemoverbleÀÇ disable È®ÀÎ Ãß°¡
-	if (pDevice == nullptr){
-		return;
-	}
-
+	if (pDevice == nullptr) return;
+	
 
 	pDevice->SetTransform(D3DTS_WORLD, &mWorld);
-	
 	pDevice->MultiplyTransform(D3DTS_WORLD, &mLocal);
-
 	pDevice->MultiplyTransform(D3DTS_WORLD, &matBallRoll);
 	
 	pDevice->SetTexture(0, Tex);
@@ -99,7 +99,7 @@ void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// °øÀ» È
 
 
 // µÎ °øÀÌ Ãæµ¹ Çß´ÂÁö È®ÀÎ
-bool CSphere::hasIntersected(CSphere& ball) const
+bool CSphere::hasIntersected(CSphere& ball) const noexcept
 {
 	D3DXVECTOR3 cord = this->getPosition();
 	D3DXVECTOR3 ball_cord = ball.getPosition();
@@ -116,7 +116,7 @@ bool CSphere::hasIntersected(CSphere& ball) const
 }
 
 // °øÀÌ Ãæµ¹ÇÑ °æ¿ì, µÎ °øÀÇ ¹æÇâ°ú ¼Óµµ¸¦ ¹Ù²Þ.
-void CSphere::hitBy(CSphere& ball)
+void CSphere::hitBy(CSphere& ball) noexcept
 {
 	if (this->hasIntersected(ball))
 	{

@@ -143,6 +143,7 @@
     <ClCompile Include="CBorder.cpp" />
     <ClCompile Include="CBottomWall.cpp" />
     <ClCompile Include="CEightSphere.cpp" />
+    <ClCompile Include="CFloor.cpp" />
     <ClCompile Include="CHandSphere.cpp" />
     <ClCompile Include="CHole.cpp" />
     <ClCompile Include="CLeftWall.cpp" />
@@ -166,6 +167,7 @@
     <ClInclude Include="CBorder.h" />
     <ClInclude Include="CBottomWall.h" />
     <ClInclude Include="CEightSphere.h" />
+    <ClInclude Include="CFloor.h" />
     <ClInclude Include="CHandSphere.h" />
     <ClInclude Include="CHole.h" />
     <ClInclude Include="CLeftWall.h" />

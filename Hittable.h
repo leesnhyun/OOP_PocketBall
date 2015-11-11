@@ -1,5 +1,6 @@
 #ifndef _HITTABLE_
 #define _HITTABLE_
+
 #define noexcept throw ()
 #define BLANK_BLOCK {}
 class CSphere;
@@ -11,4 +12,5 @@ public:
 	virtual void hitBy(CSphere& ball) noexcept = 0;
 	virtual ~Hittable() BLANK_BLOCK
 };
+
 #endif
