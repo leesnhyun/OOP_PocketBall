@@ -40,6 +40,7 @@ private:
 public:
 	Status(vector<Player> playerList);
 	Player& getTurnPlayer() noexcept;
+	vector<int> getPlayerIdList() const noexcept;
 	bool getFoulStatus() const noexcept;
 	bool getTurnProgressStatus() const noexcept;
 	bool getTurnChangeStatus() const noexcept;
