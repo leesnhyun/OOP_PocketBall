@@ -104,8 +104,6 @@ array<CWall*, 6> g_legowall =
 	new CLeftWall(0.15f, 0.3f, 5.40f, d3d::TABLE_WALL)
 };
 
-CSphere a = CHandSphere("0");
-
 array<CSphere, 16> g_sphere = 
 { 
 	CHandSphere("0"), CSolidSphere("1"), CSolidSphere("2"), CSolidSphere("3"), 
@@ -120,7 +118,6 @@ CLight	g_light;
 CHole	g_hole[6];
 
 CBorder g_border(d3d::TABLE_BORDER);
-// g_border.create(Device, -1, -1, 9, d3d::TABLE_BORDER)
 
 double g_camera_pos[3] = {0.0, 5.0, -8.0};
 
@@ -182,15 +179,10 @@ bool Setup()
 	g_legowall[4]->setPosition(2.3f, 0.12f, -3.06f);
 
 	// 세로벽 (0.15f*0.3f*6.24f) , (4.56, 0.12, 0)
-	/*if (false == g_legowall[2]->create(Device)) return false;
-	g_legowall[2]->setPosition(0, 0.0f, 0);
-	if (false == g_legowall[5]->create(Device)) return false;
-	g_legowall[5]->setPosition(4.56f, 0.12f, 0.0f);*/
 	if (false == g_legowall[2]->create(Device)) return false;
-	g_legowall[2]->setPosition(-80.0, 0.0f, 0);
+	g_legowall[2]->setPosition(-4.56f, 0.12f, 0.0f);
 	if (false == g_legowall[5]->create(Device)) return false;
 	g_legowall[5]->setPosition(4.56f, 0.12f, 0.0f);
-	////////
 
 	// 16개의 공을 생성함
 	for (i=0;i<16;i++) {

@@ -66,6 +66,6 @@ void CWall::adjustPosition(CSphere& ball)
 	ball.setPosition((ball.getPosition().x + ball.getPreCenter_x()) / 2, ball.getPosition().y, (ball.getPosition().z + ball.getPreCenter_z()) / 2);
 	if (this->hasIntersected(ball))
 	{
-		this->setPosition(ball.getPreCenter_x(), ball.getPosition().y, ball.getPreCenter_z());
+		ball.setPosition(ball.getPreCenter_x(), ball.getPosition().y, ball.getPreCenter_z());
 	}
 }
