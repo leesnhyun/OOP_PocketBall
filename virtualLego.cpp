@@ -93,14 +93,14 @@ D3DXMATRIX g_mProj;
 // -----------------------------------------------------------------------------
 CFloor g_legoPlane;
 
-array<CWall, 6> g_legowall = 
+array<CWall*, 6> g_legowall = 
 {
-	CTopWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL), 
-	CTopWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL), 
-	CRightWall(0.15f, 0.3f, 5.40f, d3d::TABLE_WALL),
-	CBottomWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL),
-	CBottomWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL),
-	CLeftWall(0.15f, 0.3f, 5.40f, d3d::TABLE_WALL)
+	new CTopWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL), 
+	new CTopWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL), 
+	new CRightWall(0.15f, 0.3f, 5.40f, d3d::TABLE_WALL),
+	new CBottomWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL),
+	new CBottomWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL),
+	new CLeftWall(0.15f, 0.3f, 5.40f, d3d::TABLE_WALL)
 };
 
 array<CSphere, 16> g_sphere = 
@@ -156,21 +156,21 @@ bool Setup()
 	//     [4]     [3]
 
 	// 가로벽 (9*0.3f*0.15) , (0, 0.12, 3.06)
-	if (false == g_legowall[0].create(Device)) return false;
-	g_legowall[0].setPosition(-2.2f, 0.12f, 3.06f);
-	if (false == g_legowall[1].create(Device)) return false;
-	g_legowall[1].setPosition(2.3f, 0.12f, 3.06f);
+	if (false == g_legowall[0]->create(Device)) return false;
+	g_legowall[0]->setPosition(-2.2f, 0.12f, 3.06f);
+	if (false == g_legowall[1]->create(Device)) return false;
+	g_legowall[1]->setPosition(2.3f, 0.12f, 3.06f);
 
-	if (false == g_legowall[3].create(Device)) return false;
-	g_legowall[3].setPosition(-2.2f, 0.12f, -3.06f);
-	if (false == g_legowall[4].create(Device)) return false;
-	g_legowall[4].setPosition(2.3f, 0.12f, -3.06f);
+	if (false == g_legowall[3]->create(Device)) return false;
+	g_legowall[3]->setPosition(-2.2f, 0.12f, -3.06f);
+	if (false == g_legowall[4]->create(Device)) return false;
+	g_legowall[4]->setPosition(2.3f, 0.12f, -3.06f);
 
 	// 세로벽 (0.15f*0.3f*6.24f) , (4.56, 0.12, 0)
-	if (false == g_legowall[2].create(Device)) return false;
-	g_legowall[2].setPosition(-4.56f, 0.12f, 0.0f);
-	if (false == g_legowall[5].create(Device)) return false;
-	g_legowall[5].setPosition(4.56f, 0.12f, 0.0f);
+	if (false == g_legowall[2]->create(Device)) return false;
+	g_legowall[2]->setPosition(-4.56f, 0.12f, 0.0f);
+	if (false == g_legowall[5]->create(Device)) return false;
+	g_legowall[5]->setPosition(4.56f, 0.12f, 0.0f);
 	////////
 
 	// 16개의 공을 생성함
@@ -219,7 +219,7 @@ void Cleanup(void)
 {
 	g_legoPlane.destroy();
 	for(int i = 0 ; i < 4; i++) {
-		g_legowall[i].destroy();
+		g_legowall[i]->destroy();
 	}
 	destroyAllLegoBlock();
 	g_light.destroy();
@@ -250,7 +250,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		// 공의 위치를 갱신한다. 갱신하는 중에는 각각의 공이 벽과 충돌 했는지 확인한다.
 		for( i = 0; i < 16; i++) {
 			g_sphere[i].ballUpdate(timeDelta);
-			for(j = 0; j < 6; j++){ g_legowall[j].hitBy(g_sphere[i]); }
+			for (j = 0; j < 6; j++){ g_legowall[j]->hitBy(g_sphere[i]); }
 		}
 
 		// check whether any two balls hit together and update the direction of balls
@@ -278,7 +278,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		g_legoPlane.draw(Device, g_mWorld);
 		
 		for (i = 0; i < 6; i++)
-			g_legowall[i].draw(Device, g_mWorld);
+			g_legowall[i]->draw(Device, g_mWorld);
 
 		for (i = 0; i < 16; i++)
 			g_sphere[i].draw(Device, g_mWorld);
