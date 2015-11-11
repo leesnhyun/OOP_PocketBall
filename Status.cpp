@@ -14,6 +14,18 @@ Player& Status::getTurnPlayer() noexcept
 	return this->nowPlayer;
 }
 
+vector<int> Status::getPlayerIdList() const noexcept
+{
+	vector<int> idList;
+
+	for (Player player : this->playerList)
+	{
+		idList.push_back(player.getPlayerId());
+	}
+
+	return idList;
+}
+
 void Status::setTurnPlayer(int playerID)
 {
 	vector<Player>::iterator foundIndex = find_if(this->playerList.begin(), this->playerList.end(), [playerID](Player player) {

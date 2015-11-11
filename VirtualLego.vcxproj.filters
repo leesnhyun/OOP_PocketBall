@@ -101,9 +101,6 @@
     <ClInclude Include="Hittable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Removable.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Status.h">
       <Filter>Header Files</Filter>
     </ClInclude>
