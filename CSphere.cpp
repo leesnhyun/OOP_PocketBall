@@ -99,7 +99,7 @@ void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// °øÀ» È
 
 
 // µÎ °øÀÌ Ãæµ¹ Çß´ÂÁö È®ÀÎ
-bool CSphere::hasIntersected(CSphere& ball)
+bool CSphere::hasIntersected(CSphere& ball) const noexcept
 {
 	D3DXVECTOR3 cord = this->getPosition();
 	D3DXVECTOR3 ball_cord = ball.getPosition();
@@ -116,7 +116,7 @@ bool CSphere::hasIntersected(CSphere& ball)
 }
 
 // °øÀÌ Ãæµ¹ÇÑ °æ¿ì, µÎ °øÀÇ ¹æÇâ°ú ¼Óµµ¸¦ ¹Ù²Þ.
-void CSphere::hitBy(CSphere& ball)
+void CSphere::hitBy(CSphere& ball) noexcept
 {
 	if (this->hasIntersected(ball))
 	{

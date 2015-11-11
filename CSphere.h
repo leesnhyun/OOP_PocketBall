@@ -32,7 +32,7 @@ public:
 	bool create(IDirect3DDevice9* pDevice); // 공을 화면에 생성함
 	void destroy(); // 공을 화면에서 소멸시킴
 	void draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld); // 공을 화면에 그려냄
-	bool hasIntersected(CSphere& ball) noexcept; // 두 공이 충돌 했는지 확인
+	bool hasIntersected(CSphere& ball) const noexcept; // 두 공이 충돌 했는지 확인
 	void hitBy(CSphere& ball) noexcept; // 공이 충돌한 경우, 두 공의 방향과 속도를 바꿈.
 	void ballUpdate(float timeDiff); // 공의 중심 좌표를 속도에 맞춰서 매 시간 간격마다 갱신함
 	double getVelocity_X(); // 공의 x축 속도를 반환함
