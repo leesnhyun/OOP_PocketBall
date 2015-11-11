@@ -54,9 +54,7 @@ void CWall::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)
 	if (pDevice == nullptr) return;
 	
 	pDevice->SetTransform(D3DTS_WORLD, &mWorld);
-	D3DXMATRIX mLocal = getLocalTransform();
 	pDevice->MultiplyTransform(D3DTS_WORLD, &mLocal);
-	setLocalTransform(mLocal);
 	pDevice->SetMaterial(&m_mtrl);
 	
 	m_pBoundMesh->DrawSubset(0);
