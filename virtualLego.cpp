@@ -46,7 +46,7 @@ using std::array;
 IDirect3DDevice9* Device = nullptr;
 
 // 창의 크기
-const int Width  = 1024;
+const int Width  = 1366;
 const int Height = 768;
 const float BALL_SET_RATIO = 1.82f;
 
