@@ -1,6 +1,7 @@
 #include "FoulManager.h"
 #include "TurnManager.h"
 #include "Status.h"
+#include "CHandSphere.h"
 
 extern Status status;
 extern CSphere	g_sphere[16];
@@ -19,7 +20,7 @@ void FoulManager::reset()
 void FoulManager::isNoHitHandBall()
 {
 	//TODO : add firsthitball
-	if (firstHitBall == -1) status.setFoulStatus(true);
+	if (dynamic_cast<CHandSphere&>(g_sphere[0]).getFirstHitBallType() == BallType::NONE) status.setFoulStatus(true);
 }
 
 void FoulManager::isHandBallInHole()
@@ -33,7 +34,7 @@ void FoulManager::isHandBallInHole()
 void FoulManager::isFirstHitNotMyBall()
 {
 	//TODO : add firsthitball balltype
-	if (status.getTurnPlayer().getBallType() != g_sphere[].getBallType()) status.setFoulStatus(true);
+	if (status.getTurnPlayer().getBallType() != dynamic_cast<CHandSphere&>(g_sphere[0]).getFirstHitBallType()) status.setFoulStatus(true);
 }
 
 bool FoulManager::isEightBallBadToIn()
