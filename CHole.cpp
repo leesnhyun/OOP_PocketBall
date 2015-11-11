@@ -33,10 +33,8 @@ bool CHole::create(IDirect3DDevice9* pDevice)
 
 	// ÀÔÃ¼¸¦ ±×¸®°í È¸Àü½ÃÅµ´Ï´Ù.
 	HRESULT hr = D3DXCreateCylinder(pDevice, m_radius, m_radius, 0.5f, 50, 50, &m_pSphereMesh, nullptr);
-	D3DXMatrixRotationX(&rotationMat, 0.35);
-	rotationMat *= rotationMat;
-
-	//setLocalTransform(m*mLocal);
+	D3DXMatrixRotationX(&rotationMat, 33);
+	setLocalTransform(mLocal);
 	
 	if (FAILED(hr))
 	{
@@ -61,7 +59,8 @@ void CHole::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// ±¸¸ÛÀ» È
 
 	pDevice->SetTransform(D3DTS_WORLD, &mWorld);
 	pDevice->MultiplyTransform(D3DTS_WORLD, &mLocal);
-	
+	pDevice->MultiplyTransform(D3DTS_WORLD, &rotationMat);
+
 	pDevice->SetMaterial(&m_mtrl);
 	m_pSphereMesh->DrawSubset(0);
 }

@@ -274,7 +274,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 
 		// draw plane, walls, and spheres
 		// 초록색 판을 그리고, 벽을 그리고, 공들을 그린다.
-		//g_legoPlane.draw(Device, g_mWorld);
+		g_legoPlane.draw(Device, g_mWorld);
 		
 		for (i = 0; i < 6; i++)
 			g_legowall[i]->draw(Device, g_mWorld);
