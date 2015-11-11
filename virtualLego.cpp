@@ -266,6 +266,12 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		for (i = 0; i < 6; i++){
 			for (j = 0; j < 16; j++) {
 				if (!status.getFoulStatus()) {
+					if (g_hole[i].hasIntersected(g_sphere[j]) && status.getTurnPlayer().getBallType() == BallType::NONE) {
+						// TODO : Check
+						BallType nowBallType = g_sphere[j].getBallType();
+						status.getTurnPlayer().setBallType(nowBallType);
+						status.getNoTurnPlayer().setBallType((nowBallType == BallType::STRIPE) ? BallType::SOLID : BallType::STRIPE);
+					}
 					g_hole[i].hitBy(g_sphere[j]);
 				}
 			}
