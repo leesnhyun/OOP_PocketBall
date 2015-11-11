@@ -4,7 +4,7 @@
 using std::find_if;
 using std::exception;
 
-Status::Status(vector<Player> playerList) : nowPlayer(0)
+Status::Status(vector<Player> playerList) : nowPlayer(playerList.at(0))
 {
 	this->playerList = vector<Player>(playerList.begin(), playerList.end());
 	this->currentTurnCount = 0;
@@ -17,6 +17,16 @@ Status::Status(vector<Player> playerList) : nowPlayer(0)
 Player& Status::getTurnPlayer() noexcept
 {
 	return this->nowPlayer;
+}
+
+Player& Status::getNotTurnPlayer() noexcept
+{
+	Player nowPlayer = this->nowPlayer;
+	vector<Player>::iterator foundIndex = find_if(this->playerList.begin(), this->playerList.end(), [nowPlayer](Player player) {
+		return (player.getPlayerId() != nowPlayer.getPlayerId());
+	});
+
+	return *foundIndex;
 }
 
 vector<int> Status::getPlayerIdList() const noexcept
