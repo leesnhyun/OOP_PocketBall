@@ -28,6 +28,7 @@ public:
 	void draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld);// 벽을 화면에 그려냄
 	virtual bool hasIntersected(CSphere& ball) const noexcept = 0;// 벽에 공이 충돌 했는지 확인
 	virtual void hitBy(CSphere& ball) noexcept = 0;
+	void adjustPosition(CSphere& ball);
 };
 
 #endif

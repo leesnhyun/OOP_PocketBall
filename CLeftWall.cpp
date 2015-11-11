@@ -14,7 +14,6 @@ bool CLeftWall::hasIntersected(CSphere& ball) const noexcept
 	{
 		if (ball.getPosition().x - ball.getRadius() < this->center_x + (this->m_width / 2))
 		{
-			ball.setPosition(this->center_x + (this->m_width / 2) + ball.getRadius(), ball.getPosition().y, ball.getPosition().z);
 			return true;
 		}
 	}
@@ -26,6 +25,7 @@ void CLeftWall::hitBy(CSphere& ball) noexcept
 {
 	if (hasIntersected(ball))
 	{
+		this->adjustPosition(ball);
 		ball.setPower(-ball.getVelocity_X() * (1 - LOSS_RATIO), ball.getVelocity_Z() * (1 - LOSS_RATIO));
 	}
 }

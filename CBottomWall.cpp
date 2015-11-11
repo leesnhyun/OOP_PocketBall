@@ -14,7 +14,6 @@ bool CBottomWall::hasIntersected(CSphere& ball) const noexcept
 	{
 		if (ball.getPosition().z - ball.getRadius() < this->center_z + (this->m_depth / 2))
 		{
-			ball.setPosition(ball.getPosition().x, ball.getPosition().y, this->center_z + (this->m_depth / 2) + ball.getRadius());
 			return true;
 		}
 	}
@@ -26,6 +25,7 @@ void CBottomWall::hitBy(CSphere& ball) noexcept
 {
 	if (hasIntersected(ball))
 	{
+		this->adjustPosition(ball);
 		ball.setPower(ball.getVelocity_X() * (1 - LOSS_RATIO), -ball.getVelocity_Z() * (1 - LOSS_RATIO));
 	}
 }

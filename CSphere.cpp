@@ -99,7 +99,7 @@ void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// °øÀ» È
 
 
 // µÎ °øÀÌ Ãæµ¹ Çß´ÂÁö È®ÀÎ
-bool CSphere::hasIntersected(CSphere& ball)
+bool CSphere::hasIntersected(CSphere& ball) const
 {
 	D3DXVECTOR3 cord = this->getPosition();
 	D3DXVECTOR3 ball_cord = ball.getPosition();
@@ -123,22 +123,11 @@ void CSphere::hitBy(CSphere& ball)
 		//µµ¿òÀ» ÁØ ÀÚ·á: http://blog.hansune.com/106
 		//this - ball·Î ¾çÀÇ º¤ÅÍ¸¦ Á¤ÇÔ
 
-		D3DXVECTOR3 cord = this->getPosition();
+		adjustPosition(ball);
 		D3DXVECTOR3 ball_cord = ball.getPosition();
-		//º¸°£¹ýÀ¸·Î ±Ù»çÇÏ¿© Ãæµ¹ ½ÃÁ¡ÀÇ ÁÂÇ¥·Î ÀÌµ¿ÇÔ.
-		this->setPosition((cord.x + this->pre_center_x) / 2, cord.y, (cord.z + this->pre_center_z) / 2);
-		ball.setPosition((ball_cord.x + ball.pre_center_x) / 2, ball_cord.y, (ball_cord.z + ball.pre_center_z) / 2);
-		if (this->hasIntersected(ball))
-		{
-			this->setPosition(this->pre_center_x, cord.y, this->pre_center_z);
-			ball.setPosition(ball.pre_center_x, ball_cord.y, ball.pre_center_z);
-		}
-
-		cord = this->getPosition();
-		ball_cord = ball.getPosition();
 		//µÎ °ø »çÀÌÀÇ ¹æÇâ º¤ÅÍ
-		double d_x = cord.x - ball_cord.x;
-		double d_z = cord.z - ball_cord.z;
+		double d_x = center_x - ball_cord.x;
+		double d_z = center_z - ball_cord.z;
 		double size_d = sqrt((d_x * d_x) + (d_z * d_z));
 
 		double vax = this->m_velocity_x;
@@ -197,13 +186,13 @@ void CSphere::ballUpdate(float timeDiff) // °øÀÇ Áß½É ÁÂÇ¥¸¦ ¼Óµµ¿¡ ¸ÂÃç¼­ ¸Å ½Ã
 
 }
 
-double CSphere::getVelocity_X()
+double CSphere::getVelocity_X() const
 {
 	return this->m_velocity_x;
 }
 // °øÀÇ xÃà ¼Óµµ¸¦ ¹ÝÈ¯ÇÔ
 
-double CSphere::getVelocity_Z()
+double CSphere::getVelocity_Z() const
 {
 	return this->m_velocity_z;
 }
@@ -238,6 +227,29 @@ int CSphere::getDisableTurn() const noexcept
 bool CSphere::isDisabled() const noexcept
 {
 	return (this->disableTurn != -1);
+}
+
+void CSphere::adjustPosition(CSphere& ball)
+{
+	D3DXVECTOR3 ball_cord = ball.getPosition();
+	//º¸°£¹ýÀ¸·Î ±Ù»çÇÏ¿© Ãæµ¹ ½ÃÁ¡ÀÇ ÁÂÇ¥·Î ÀÌµ¿ÇÔ.
+	this->setPosition((center_x + this->pre_center_x) / 2, center_y, (center_z + this->pre_center_z) / 2);
+	ball.setPosition((ball_cord.x + ball.pre_center_x) / 2, ball_cord.y, (ball_cord.z + ball.pre_center_z) / 2);
+	if (this->hasIntersected(ball))
+	{
+		this->setPosition(this->pre_center_x, center_y, this->pre_center_z);
+		ball.setPosition(ball.pre_center_x, ball_cord.y, ball.pre_center_z);
+	}
+}
+
+double CSphere::getPreCenter_x() const
+{
+	return this->pre_center_x;
+}
+
+double CSphere::getPreCenter_z() const
+{
+	return this->pre_center_z;
 }
 
 // private function

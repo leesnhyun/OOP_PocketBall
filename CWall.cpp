@@ -15,6 +15,7 @@ CWall::CWall(float iwidth, float iheight, float idepth, D3DXCOLOR color)
 	m_mtrl.Emissive = d3d::BLACK;
 	m_mtrl.Power = 5.0f;
 	m_width = iwidth;
+	m_height = iheight;
 	m_depth = idepth;
 
 	m_pBoundMesh = nullptr;
@@ -59,4 +60,14 @@ void CWall::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)
 	pDevice->SetMaterial(&m_mtrl);
 	
 	m_pBoundMesh->DrawSubset(0);
+}
+
+void CWall::adjustPosition(CSphere& ball)
+{
+	//보간법으로 근사하여 충돌 시점의 좌표로 이동함.
+	ball.setPosition((ball.getPosition().x + ball.getPreCenter_x()) / 2, ball.getPosition().y, (ball.getPosition().z + ball.getPreCenter_z()) / 2);
+	if (this->hasIntersected(ball))
+	{
+		this->setPosition(ball.getPreCenter_x(), ball.getPosition().y, ball.getPreCenter_z());
+	}
 }
