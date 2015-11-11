@@ -4,7 +4,7 @@
 #include "CHandSphere.h"
 
 extern Status status;
-extern CSphere	g_sphere[16];
+extern CSphere g_sphere[16];
 extern Player players[2];
 
 FoulManager::FoulManager()

@@ -1,7 +1,7 @@
 #include "d3dUtility.h"
 #include "CWall.h"
 
-static const float LOSS_RATIO = 0.006;
+const float CWall::LOSS_RATIO = 0.006;
 
 // 벽의 생성자
 CWall::CWall(float iwidth, float iheight, float idepth, D3DXCOLOR color)

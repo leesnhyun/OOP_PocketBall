@@ -19,5 +19,7 @@ public:
 	TurnManager(const vector<int>& playerIdList);									// 초기 생성.
 	bool processTurn(const array<CSphere, 16>& fieldBalls);							// 턴 처리를 시작.
 	bool isTurnFinished(const array<CSphere, 16>& fieldBalls);						// 턴이 종료되었는지에 대한 여부를 가져옴.
+	void processTriggerOff();
+	void processTriggerOn();
 };
 #endif

@@ -1,7 +1,7 @@
 #include "TurnManager.h"
 #include "Status.h"
 
-extern Status gameStatus;
+extern Status status;
 
 TurnManager::TurnManager(const vector<int>& playerIdList)
 {
@@ -12,7 +12,7 @@ TurnManager::TurnManager(const vector<int>& playerIdList)
 
 bool TurnManager::isTurnFinished(const array<CSphere, 16>& fieldBalls)
 {
-	if (!gameStatus.getTurnProgressStatus())
+	if (status.getTurnProgressStatus())
 	{
 		return false;
 	}
@@ -32,19 +32,30 @@ bool TurnManager::isTurnFinished(const array<CSphere, 16>& fieldBalls)
 
 void TurnManager::resetTurn()
 {
-	gameStatus.nextTurnCount();
-	gameStatus.setTurnChangeStatus(false);
-	gameStatus.setTurnPlayer(this->playerIdList.at(this->nowTurnPlayerIndex));
+	status.nextTurnCount();
+	status.setTurnChangeStatus(false);
+	status.setTurnPlayer(this->playerIdList.at(this->nowTurnPlayerIndex));
 	this->processTriggerOff();
 }
 
 void TurnManager::finishTurn()
 {
-	gameStatus.nextTurnCount();
-	gameStatus.setTurnChangeStatus(true);
+	status.nextTurnCount();
+	status.setTurnChangeStatus(true);
 	this->nowTurnPlayerIndex = (this->nowTurnPlayerIndex + 1) % this->playerIdList.size();
-	gameStatus.setTurnPlayer(this->playerIdList.at(this->nowTurnPlayerIndex));
+	status.setTurnPlayer(this->playerIdList.at(this->nowTurnPlayerIndex));
 	this->processTriggerOff();
+}
+
+void TurnManager::processTriggerOff()
+{
+	status.setTurnProgressStatus(false);
+}
+
+void TurnManager::processTriggerOn()
+{
+	status.setTurnProgressStatus(true);
+	status.setTurnChangeStatus(false);
 }
 
 bool TurnManager::processTurn(const array<CSphere, 16>& fieldBalls)
@@ -55,16 +66,13 @@ bool TurnManager::processTurn(const array<CSphere, 16>& fieldBalls)
 	}
 
 	// TODO : When lose.
-	if (gameStatus.getFoulStatus())
+	if (status.getFoulStatus())
 	{
 		this->finishTurn();
 	}
 	else
 	{
-		if (!foulManager.isLose())
-		{
-			this->finishTurn();
-		}
+
 	}
 	// TODO : Process
 	// TODO : How to reset turn?

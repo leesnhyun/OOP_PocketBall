@@ -122,6 +122,11 @@ CBorder g_border(d3d::TABLE_BORDER);
 
 double g_camera_pos[3] = {0.0, 5.0, -8.0};
 
+Player players[2] = { Player(1), Player(2) };
+vector<Player> playerVec = {players[0], players[1]};
+Status status(playerVec);
+TurnManager turnManager(status.getPlayerIdList());
+FoulManager foulManager;
 
 // -----------------------------------------------------------------------------
 // Functions
@@ -233,11 +238,6 @@ void Cleanup(void)
 // timeDelta는 이전 이미지 프레임과 현재 이미지 프레임의 사이의 시간값을 나타냅니다.
 // 공이 움직이는 거리는 무조건 "속도 * timeDelta"여야 합니다.
 
-Player players[2] = { Player(1), Player(2) };
-TurnManager turnManager({ players[0].getPlayerId(), players[1].getPlayerId() });
-FoulManager foulManager;
-Status status;
-
 bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여줌
 {
 	int i = 0;
@@ -267,7 +267,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		// 각각의 구멍에 대해, 공과 서로 충돌 했는지 확인하고, 공을 넣는다.
 		for (i = 0; i < 6; i++){
 			for (j = 0; j < 16; j++) {
-				if (!turnManager.isFreeBall()) {
+				if (!status.getFoulStatus()) {
 					g_hole[i].hitBy(g_sphere[j]);
 				}
 			}
@@ -297,9 +297,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		//Device->SetTexture( 0, NULL );
 	}
 
-	if (turnManager.processTurn({ g_sphere[0], g_sphere[1], g_sphere[2], g_sphere[3], g_sphere[4], g_sphere[5], 
-		g_sphere[6], g_sphere[7], g_sphere[8], g_sphere[9], g_sphere[10], g_sphere[11], g_sphere[12], 
-		g_sphere[13], g_sphere[14], g_sphere[15] }))
+	if (turnManager.processTurn(g_sphere))
 	{
 		MessageBox(nullptr, "플레이어 바뀜 ", nullptr, 0);
 	}
@@ -424,7 +422,7 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				break;
 			}
 		}
-		else if (wParam == VK_SPACE && !turnManager.isProcessing()){	// 스페이스 바의 경우 파란 공과 하얀 공의 위치를 받아서
+		else if (wParam == VK_SPACE && !status.getTurnProgressStatus()){	// 스페이스 바의 경우 파란 공과 하얀 공의 위치를 받아서
 			// 그 거리와 방향만큼 하얀 공의 속도를 조정한다.
 			D3DXVECTOR3 targetpos = g_target_blueball.getPosition();
 			D3DXVECTOR3	whitepos = g_sphere[0].getPosition();
@@ -443,7 +441,7 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		double dx;
 		double dz;
 		
-		if ((LOWORD(wParam) & MK_LBUTTON) && !turnManager.isProcessing() && turnManager.isFreeBall()) {
+		if ((LOWORD(wParam) & MK_LBUTTON) && !status.getTurnProgressStatus() && status.getFoulStatus()) {
 			// 마우스 왼쪽 버튼을 누를 때는, 흰 공의 위치를 옮긴다.
 			dx = (old_x - new_x);// * 0.01f;
 			dz = (old_z - new_z);// * 0.01f;
