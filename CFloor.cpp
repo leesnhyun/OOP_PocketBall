@@ -14,7 +14,7 @@ CFloor::CFloor(float iwidth, float iheight, float idepth, D3DXCOLOR color)
 	m_mtrl.Power = 5.0f;
 	m_width = iwidth;
 	m_depth = idepth;
-
+	m_height = iheight;
 	m_pBoundMesh = nullptr;
 }
 
