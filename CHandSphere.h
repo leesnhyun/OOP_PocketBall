@@ -4,7 +4,11 @@
 
 class CHandSphere : public CSphere
 {
+private:
+	BallType firstHitBallType;
 public:
 	CHandSphere(const char * ballImageFileName);
+	BallType getFirstHitBallType() const noexcept;
+	void setFirstHitBallType(BallType ballType) noexcept;
 };
 #endif
