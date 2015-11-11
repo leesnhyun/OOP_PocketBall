@@ -27,8 +27,7 @@ public:
 	bool hasIntersected(CSphere& ball) const;								// 구멍에 공이 들어가야 하는지 확인
 	void hitBy(CSphere& ball);												// 구멍을 넣어야 하는 경우 공을 제거하고 스택에 넣는다.
 	
-	float getRadius() const;												// 구멍의 반지름을 받아옴
-	void setLocalTransform(const D3DXMATRIX& mLocal);						
+	float getRadius() const;												// 구멍의 반지름을 받아옴						
 };
 
 #endif
