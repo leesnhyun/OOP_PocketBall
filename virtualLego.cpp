@@ -182,8 +182,12 @@ bool Setup()
 	g_legowall[4]->setPosition(2.3f, 0.12f, -3.06f);
 
 	// 세로벽 (0.15f*0.3f*6.24f) , (4.56, 0.12, 0)
-	if (false == g_legowall[2]->create(Device)) return false;
+	/*if (false == g_legowall[2]->create(Device)) return false;
 	g_legowall[2]->setPosition(0, 0.0f, 0);
+	if (false == g_legowall[5]->create(Device)) return false;
+	g_legowall[5]->setPosition(4.56f, 0.12f, 0.0f);*/
+	if (false == g_legowall[2]->create(Device)) return false;
+	g_legowall[2]->setPosition(-80.0, 0.0f, 0);
 	if (false == g_legowall[5]->create(Device)) return false;
 	g_legowall[5]->setPosition(4.56f, 0.12f, 0.0f);
 	////////
@@ -278,7 +282,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 
 		// draw plane, walls, and spheres
 		// 초록색 판을 그리고, 벽을 그리고, 공들을 그린다.
-		g_legoPlane.draw(Device, g_mWorld);
+		//g_legoPlane.draw(Device, g_mWorld);
 		
 		for (i = 0; i < 6; i++)
 			g_legowall[i]->draw(Device, g_mWorld);

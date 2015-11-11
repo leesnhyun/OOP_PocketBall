@@ -15,6 +15,7 @@ private:
 	float m_radius;
 	D3DMATERIAL9 m_mtrl;
 	ID3DXMesh* m_pSphereMesh;
+	D3DXMATRIX rotationMat;
 	// DirectX에서의 좌표는 화면에 대해서 앞으로 x축, 위로 y축, 오른쪽으로 z축이다.
 
 public:

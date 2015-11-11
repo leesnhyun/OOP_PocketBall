@@ -83,7 +83,6 @@ void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// °øÀ» È
 	// TODO : RemoverbleÀÇ disable È®ÀÎ Ãß°¡
 	if (pDevice == nullptr) return;
 	
-
 	pDevice->SetTransform(D3DTS_WORLD, &mWorld);
 	pDevice->MultiplyTransform(D3DTS_WORLD, &mLocal);
 	pDevice->MultiplyTransform(D3DTS_WORLD, &matBallRoll);
