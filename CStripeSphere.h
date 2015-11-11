@@ -9,8 +9,6 @@ private:
 	int disableTurn;
 public:
 	CStripeSphere(const char * ballImageFileName);
-	bool hasIntersected(CSphere& ball) const noexcept;
-	void hitBy(CSphere& ball) noexcept;
 	void disable() noexcept;
 	int getDisableTurn() const noexcept;
 	bool isDisabled() const noexcept;

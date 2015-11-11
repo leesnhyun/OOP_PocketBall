@@ -6,16 +6,6 @@ CSolidSphere::CSolidSphere(const char * ballImageFileName) : CSphere(BallType::S
 
 }
 
-bool CSolidSphere::hasIntersected(CSphere& ball) const noexcept
-{
-
-}
-
-void CSolidSphere::hitBy(CSphere& ball) noexcept
-{
-
-}
-
 void CSolidSphere::disable() noexcept
 {
 

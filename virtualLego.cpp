@@ -30,6 +30,7 @@
 #include "CRightWall.h"
 #include "CBottomWall.h"
 #include "CLeftWall.h"
+#include "CTargetSphere.h"
 
 using std::array;
 
@@ -103,7 +104,7 @@ array<CSphere, 16> g_sphere =
 	CEightSphere("8"), CStripeSphere("s9"), CStripeSphere("s10"), CStripeSphere("s11"),
 	CStripeSphere("s12"), CStripeSphere("S13"), CStripeSphere("s14"), CStripeSphere("s15") 
 };
-CSphere	g_target_blueball(BallType::NONE);
+CTargetSphere g_target_blueball("guide");
 CLight	g_light;
 CHole	g_hole[6];
 
@@ -173,12 +174,12 @@ bool Setup()
 
 	// 6개의 구멍을 생성함
 	for (i = 0; i<6; i++) {
-		if (false == g_hole[i].create(Device, d3d::BLACK)) return false;
+		if (false == g_hole[i].create(Device)) return false;
 		g_hole[i].setPosition(holePos[i][0], -0.23f, holePos[i][1]);
 	}
 
 	// 파란색 공을 생성함
-	if (false == g_target_blueball.create(Device, "guide")) return false;
+	if (false == g_target_blueball.create(Device)) return false;
 	g_target_blueball.setPosition(.0f, static_cast<float>(NEED_TO_BE_CHANGED) , .0f);
 
 	if (false == g_light.create(Device))
@@ -439,7 +440,7 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			dx = (old_x - new_x);// * 0.01f;
 			dz = (old_z - new_z);// * 0.01f;
 
-			CSphere preMovedWhiteBall(BallType::NONE);
+			CHandSphere preMovedWhiteBall("0");
 			bool canMove = true;
 			D3DXVECTOR3 coord3d = g_sphere[0].getPosition();
 			preMovedWhiteBall.setPosition(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);

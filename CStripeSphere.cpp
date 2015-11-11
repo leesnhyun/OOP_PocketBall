@@ -6,16 +6,6 @@ CStripeSphere::CStripeSphere(const char * ballImageFileName) : CSphere(BallType:
 
 }
 
-bool CStripeSphere::hasIntersected(CSphere& ball) const noexcept
-{
-
-}
-
-void CStripeSphere::hitBy(CSphere& ball) noexcept
-{
-
-}
-
 void CStripeSphere::disable() noexcept
 {
 

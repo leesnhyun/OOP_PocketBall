@@ -5,13 +5,3 @@ CHandSphere::CHandSphere(const char * ballImageFileName) : CSphere(BallType::HAN
 {
 		
 }
-
-bool CHandSphere::hasIntersected(CSphere& ball) const noexcept
-{
-
-}
-
-void CHandSphere::hitBy(CSphere& ball) noexcept
-{
-
-}

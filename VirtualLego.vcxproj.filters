@@ -81,6 +81,9 @@
     <ClCompile Include="CWall.cpp">
       <Filter>Source Files\CObject</Filter>
     </ClCompile>
+    <ClCompile Include="CTargetSphere.cpp">
+      <Filter>Source Files\CObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dUtility.h">
@@ -144,6 +147,9 @@
       <Filter>Header Files\CObject</Filter>
     </ClInclude>
     <ClInclude Include="CWall.h">
+      <Filter>Header Files\CObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CTargetSphere.h">
       <Filter>Header Files\CObject</Filter>
     </ClInclude>
   </ItemGroup>
