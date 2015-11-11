@@ -15,12 +15,13 @@ struct _VERTEX
 
 extern TurnManager turnManager;
 
+const float CSphere::COMMON_RADIUS = 0.16f;
 
 // 공의 생성자를 정의
 CSphere::CSphere(BallType ballType, const char* ballImageFileName)
 {
 	ZeroMemory(&m_mtrl, sizeof(m_mtrl)); // memset을 통해 모두 0으로 초기화
-	this->m_radius = 0.16f;
+	this->m_radius = CSphere::COMMON_RADIUS;
 	this->m_velocity_x = 0;
 	this->m_velocity_z = 0;
 	this->m_pSphereMesh = nullptr;
@@ -29,7 +30,7 @@ CSphere::CSphere(BallType ballType, const char* ballImageFileName)
 	D3DXMatrixIdentity(&mLocal);
 	D3DXMatrixIdentity(&this->matBallRoll);
 
-	strcpy(this->ballImageFileName, ballImageFileName);
+	this->ballImageFileName = ballImageFileName;
 }
 
 // 공의 소멸자를 정의
@@ -57,18 +58,13 @@ bool CSphere::create(IDirect3DDevice9* pDevice)
 
 	this->m_pSphereMesh = _createMappedSphere(pDevice);
 
-	char* filePath = new char[10];
-	strcpy(filePath, "./res/");
-	strcat(filePath, this->ballImageFileName);
-	strcat(filePath, ".bmp");
+	string filePath = "./res/" + this->ballImageFileName + ".bmp";
 
-	if (FAILED(D3DXCreateTextureFromFile(pDevice, filePath, &Tex)))
+	if (FAILED(D3DXCreateTextureFromFile(pDevice, filePath.c_str(), &Tex)))
 	{
-		delete[] filePath;
 		return false;
 	}
 
-	delete[] filePath;
 	return true;
 }
 

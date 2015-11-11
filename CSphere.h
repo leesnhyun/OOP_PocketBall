@@ -6,6 +6,9 @@
 #include "CObject.h"
 #include "CWall.h"
 #include "Hittable.h"
+#include <string>
+
+using std::string;
 
 // -----------------------------------------------------------------------------
 // CSphere class definition
@@ -18,7 +21,7 @@ private:
 	D3DMATERIAL9 m_mtrl;
 	ID3DXMesh* m_pSphereMesh;
 	D3DXMATRIX matBallRoll;
-	char* ballImageFileName;
+	string ballImageFileName;
 	BallType ballType;
 protected:
 	int disableTurn = -1;
@@ -28,6 +31,7 @@ protected:
 	float pre_center_x, pre_center_z; // 이전 위치 보관, 충돌 시에 사용해야 함
 
 public:
+	static const float COMMON_RADIUS;
 	CSphere(BallType ballType, const char* ballImageFileName);
 	virtual ~CSphere();
 	bool create(IDirect3DDevice9* pDevice); // 공을 화면에 생성함

@@ -41,8 +41,6 @@
 using std::array;
 
 IDirect3DDevice9* Device = nullptr;
-#define NEED_TO_BE_CHANGED 0
-#define NEED_RATIO_CHANGED 0
 
 // 창의 크기
 const int Width  = 1024;
@@ -56,22 +54,22 @@ const float spherePos[16][2] = {
 	{ -2.7f, 0 }, 
 	
 	{ +1.5f, 0 }, 
-	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO)), NEED_TO_BE_CHANGED + 0.01f }, 
-	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO)), -(NEED_TO_BE_CHANGED + 0.01f) }, 
-	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 4), -(NEED_TO_BE_CHANGED * 4 + 0.04f) }, 
-	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 2), -(NEED_TO_BE_CHANGED * 2 + 0.02f) }, 
-	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 2), (NEED_TO_BE_CHANGED * 2 + 0.02f) },
-	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 3), -(NEED_TO_BE_CHANGED + 0.01f) }, 
-	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 3), (NEED_TO_BE_CHANGED + 0.01f) },
-	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 3), -(NEED_TO_BE_CHANGED * 3 + 0.03f) }, 
-	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 3), (NEED_TO_BE_CHANGED * 3 + 0.03f) },
-	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 4), -(NEED_TO_BE_CHANGED * 2 + 0.02f) }, 
-	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 4), (NEED_TO_BE_CHANGED * 2 + 0.02f) }, 
-	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 4), 0 }, 
-	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 4), 
-	(NEED_TO_BE_CHANGED * 4 + 0.04f) },
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO)), CSphere::COMMON_RADIUS + 0.01f }, 
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO)), -(CSphere::COMMON_RADIUS + 0.01f) }, 
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 4), -(CSphere::COMMON_RADIUS * 4 + 0.04f) }, 
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 2), -(CSphere::COMMON_RADIUS * 2 + 0.02f) }, 
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 2), (CSphere::COMMON_RADIUS * 2 + 0.02f) },
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 3), -(CSphere::COMMON_RADIUS + 0.01f) }, 
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 3), (CSphere::COMMON_RADIUS + 0.01f) },
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 3), -(CSphere::COMMON_RADIUS * 3 + 0.03f) }, 
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 3), (CSphere::COMMON_RADIUS * 3 + 0.03f) },
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 4), -(CSphere::COMMON_RADIUS * 2 + 0.02f) }, 
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 4), (CSphere::COMMON_RADIUS * 2 + 0.02f) }, 
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 4), 0 }, 
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 4), 
+	(CSphere::COMMON_RADIUS * 4 + 0.04f) },
 	//balck ball
-	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 2), 0 } };
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 2), 0 } };
 
 // 6개의 구멍의 위치를 초기화 함.
 // const float holePos[6][2] = { {-4.23f,-2.73f}, {0,-2.73f}, {4.23f,-2.73f}, {-4.23f,2.73f}, {0,2.73f}, {4.23f,2.73f}};
@@ -103,6 +101,8 @@ array<CWall*, 6> g_legowall =
 	new CBottomWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL),
 	new CLeftWall(0.15f, 0.3f, 5.40f, d3d::TABLE_WALL)
 };
+
+CSphere a = CHandSphere("0");
 
 array<CSphere, 16> g_sphere = 
 { 
@@ -182,7 +182,7 @@ bool Setup()
 	// 16개의 공을 생성함
 	for (i=0;i<16;i++) {
 		if (false == g_sphere[i].create(Device)) return false;
-		g_sphere[i].setPosition(spherePos[i][0], static_cast<float>(NEED_TO_BE_CHANGED) , spherePos[i][1]);
+		g_sphere[i].setPosition(spherePos[i][0], static_cast<float>(CSphere::COMMON_RADIUS) , spherePos[i][1]);
 		g_sphere[i].setPower(0,0);
 	}
 
@@ -194,7 +194,7 @@ bool Setup()
 
 	// 파란색 공을 생성함
 	if (false == g_target_blueball.create(Device)) return false;
-	g_target_blueball.setPosition(.0f, static_cast<float>(NEED_TO_BE_CHANGED) , .0f);
+	g_target_blueball.setPosition(.0f, static_cast<float>(CSphere::COMMON_RADIUS) , .0f);
 
 	if (false == g_light.create(Device))
 		return false;
@@ -297,7 +297,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		//Device->SetTexture( 0, NULL );
 	}
 
-	if (turnManager.processTurn(g_sphere))
+	if (turnManager.isTurnFinished(g_sphere))
 	{
 		MessageBox(nullptr, "플레이어 바뀜 ", nullptr, 0);
 	}
