@@ -13,6 +13,12 @@
       <UniqueIdentifier>{2efbb58a-4a21-4dfa-a932-0299757fb5c5}</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
     </Filter>
+    <Filter Include="Header Files\CObject">
+      <UniqueIdentifier>{ea7e950a-1eea-4867-b15d-3e32ea259315}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\CObject">
+      <UniqueIdentifier>{c6ff8cca-679d-4c6c-abc4-c8e6ad902226}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="d3dUtility.cpp">
@@ -21,25 +27,10 @@
     <ClCompile Include="virtualLego.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CSphere.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CWall.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CLight.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CHole.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="TurnManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CBorder.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="FoulManager.cpp">
@@ -48,57 +39,57 @@
     <ClCompile Include="Status.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CHandSphere.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CEightSphere.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CStripeSphere.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CSolidSphere.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CTopWall.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="CBorder.cpp">
+      <Filter>Source Files\CObject</Filter>
     </ClCompile>
     <ClCompile Include="CBottomWall.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\CObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CEightSphere.cpp">
+      <Filter>Source Files\CObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CHandSphere.cpp">
+      <Filter>Source Files\CObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CHole.cpp">
+      <Filter>Source Files\CObject</Filter>
     </ClCompile>
     <ClCompile Include="CLeftWall.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\CObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CLight.cpp">
+      <Filter>Source Files\CObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CObject.cpp">
+      <Filter>Source Files\CObject</Filter>
     </ClCompile>
     <ClCompile Include="CRightWall.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\CObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CSolidSphere.cpp">
+      <Filter>Source Files\CObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CSphere.cpp">
+      <Filter>Source Files\CObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CStripeSphere.cpp">
+      <Filter>Source Files\CObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CTopWall.cpp">
+      <Filter>Source Files\CObject</Filter>
+    </ClCompile>
+    <ClCompile Include="CWall.cpp">
+      <Filter>Source Files\CObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dUtility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CSphere.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CWall.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CLight.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CHole.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TurnManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CBorder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="FoulManager.h">
@@ -113,32 +104,47 @@
     <ClInclude Include="Status.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CObject.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CHandSphere.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CEightSphere.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CStripeSphere.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CSolidSphere.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CTopWall.h">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="CBorder.h">
+      <Filter>Header Files\CObject</Filter>
     </ClInclude>
     <ClInclude Include="CBottomWall.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\CObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CEightSphere.h">
+      <Filter>Header Files\CObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CHandSphere.h">
+      <Filter>Header Files\CObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CHole.h">
+      <Filter>Header Files\CObject</Filter>
     </ClInclude>
     <ClInclude Include="CLeftWall.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\CObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CLight.h">
+      <Filter>Header Files\CObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CObject.h">
+      <Filter>Header Files\CObject</Filter>
     </ClInclude>
     <ClInclude Include="CRightWall.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\CObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CSolidSphere.h">
+      <Filter>Header Files\CObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CSphere.h">
+      <Filter>Header Files\CObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CStripeSphere.h">
+      <Filter>Header Files\CObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CTopWall.h">
+      <Filter>Header Files\CObject</Filter>
+    </ClInclude>
+    <ClInclude Include="CWall.h">
+      <Filter>Header Files\CObject</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

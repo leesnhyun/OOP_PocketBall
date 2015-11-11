@@ -25,6 +25,15 @@
 #include <cstdlib>
 #include <cstdio>
 #include <cassert>
+#include "CHandSphere.h"
+#include "CStripeSphere.h"
+#include "CSolidSphere.h"
+#include "CEightSphere.h"
+#include <array>
+#include "CTopWall.h"
+#include "CRightWall.h"
+#include "CBottomWall.h"
+#include "CLeftWall.h"
 
 IDirect3DDevice9* Device = nullptr;
 #define NEED_TO_BE_CHANGED 0
@@ -81,9 +90,21 @@ D3DXMATRIX g_mProj;
 // 전역 변수
 // -----------------------------------------------------------------------------
 CWall	g_legoPlane;
-CWall	g_legowall[6];
-CSphere	g_sphere[16] {BallType::HAND, BallType::STRIPE, BallType::SOLID, BallType::STRIPE, BallType::SOLID, BallType::SOLID, BallType::STRIPE,
-BallType::SOLID, BallType::STRIPE, BallType::STRIPE, BallType::SOLID, BallType::SOLID, BallType::SOLID, BallType::STRIPE, BallType::STRIPE, BallType::EIGHT};
+std::array<CWall, 6> g_legowall = {
+	CTopWall(-1, -1, 4.0f, 0.3f, 0.15f, d3d::TABLE_WALL), 
+	CTopWall(-1, -1, 4.0f, 0.3f, 0.15f, d3d::TABLE_WALL), 
+	CRightWall(-1, -1, 4.0f, 0.3f, 0.15f, d3d::TABLE_WALL),
+	CBottomWall(-1, -1, 4.0f, 0.3f, 0.15f, d3d::TABLE_WALL),
+	CBottomWall(-1, -1, 0.15f, 0.3f, 5.40f, d3d::TABLE_WALL),
+	CLeftWall(-1, -1, 0.15f, 0.3f, 5.40f, d3d::TABLE_WALL)
+};
+std::array<CSphere, 16> g_sphere = 
+{ 
+	CHandSphere("0"), CSolidSphere("1"), CSolidSphere("2"), CSolidSphere("3"), 
+	CSolidSphere("4"), CSolidSphere("5"), CSolidSphere("6"), CSolidSphere("7"), 
+	CEightSphere("8"), CStripeSphere("s9"), CStripeSphere("s10"), CStripeSphere("s11"),
+	CStripeSphere("s12"), CStripeSphere("S13"), CStripeSphere("s14"), CStripeSphere("s15") 
+};
 CSphere	g_target_blueball(BallType::NONE);
 CLight	g_light;
 CHole	g_hole[6];
@@ -128,26 +149,26 @@ bool Setup()
 	//     [4]     [3]
 
 	// 가로벽 (9*0.3f*0.15) , (0, 0.12, 3.06)
-	if (false == g_legowall[0].create(Device, -1, -1, 4.0f, 0.3f, 0.15f, false, d3d::TABLE_WALL)) return false;
+	if (false == g_legowall[0].create(Device)) return false;
 	g_legowall[0].setPosition(-2.2f, 0.12f, 3.06f);
-	if (false == g_legowall[1].create(Device, -1, -1, 4.0f, 0.3f, 0.15f, false, d3d::TABLE_WALL)) return false;
+	if (false == g_legowall[1].create(Device)) return false;
 	g_legowall[1].setPosition(2.3f, 0.12f, 3.06f);
 
-	if (false == g_legowall[3].create(Device, -1, -1, 4.0f, 0.3f, 0.15f, false, d3d::TABLE_WALL)) return false;
+	if (false == g_legowall[3].create(Device)) return false;
 	g_legowall[3].setPosition(-2.2f, 0.12f, -3.06f);
-	if (false == g_legowall[4].create(Device, -1, -1, 4.0f, 0.3f, 0.15f, false, d3d::TABLE_WALL)) return false;
+	if (false == g_legowall[4].create(Device)) return false;
 	g_legowall[4].setPosition(2.3f, 0.12f, -3.06f);
 
 	// 세로벽 (0.15f*0.3f*6.24f) , (4.56, 0.12, 0)
-	if (false == g_legowall[2].create(Device, -1, -1, 0.15f, 0.3f, 5.40f, true, d3d::TABLE_WALL)) return false;
+	if (false == g_legowall[2].create(Device)) return false;
 	g_legowall[2].setPosition(-4.56f, 0.12f, 0.0f);
-	if (false == g_legowall[5].create(Device, -1, -1, 0.15f, 0.3f, 5.40f, true, d3d::TABLE_WALL)) return false;
+	if (false == g_legowall[5].create(Device)) return false;
 	g_legowall[5].setPosition(4.56f, 0.12f, 0.0f);
 	////////
 
 	// 16개의 공을 생성함
 	for (i=0;i<16;i++) {
-		if (false == g_sphere[i].create(Device, sphereColor[i])) return false;
+		if (false == g_sphere[i].create(Device)) return false;
 		g_sphere[i].setPosition(spherePos[i][0], static_cast<float>(NEED_TO_BE_CHANGED) , spherePos[i][1]);
 		g_sphere[i].setPower(0,0);
 	}
