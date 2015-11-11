@@ -36,6 +36,7 @@
 #include "CRightWall.h"
 #include "CBottomWall.h"
 #include "CLeftWall.h"
+#include "Status.h"
 
 using std::array;
 
@@ -235,6 +236,7 @@ void Cleanup(void)
 Player players[2] = { Player(1), Player(2) };
 TurnManager turnManager({ players[0].getPlayerId(), players[1].getPlayerId() });
 FoulManager foulManager;
+Status status;
 
 bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여줌
 {
