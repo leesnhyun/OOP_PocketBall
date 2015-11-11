@@ -1,8 +1,11 @@
 #include "TurnManager.h"
 #include "Status.h"
+#include "CHandSphere.h"
+#include <array>
+using std::array;
 
 extern Status status;
-
+extern array<CSphere, 16> g_sphere;
 TurnManager::TurnManager(const vector<int>& playerIdList)
 {
 	this->playerIdList = playerIdList;
@@ -60,7 +63,7 @@ void TurnManager::processTriggerOn()
 
 bool TurnManager::processTurn(const array<CSphere, 16>& fieldBalls)
 {
-	if (!this->isTurnFinished(fieldBalls))
+	if (!this->isTurnFinished(fieldBalls) || status.getGameEndStatus())
 	{
 		return false;
 	}
@@ -72,9 +75,25 @@ bool TurnManager::processTurn(const array<CSphere, 16>& fieldBalls)
 	}
 	else
 	{
-		this->resetTurn();
+		bool isPutMyBall = false;
+		for (int i = 0; i < 16; i++)
+		{
+			if (g_sphere[i].getDisableTurn() == status.getCurrentTurnCount()
+				&& g_sphere[i].getBallType() == status.getTurnPlayer().getBallType())
+			{
+				isPutMyBall = true;
+			}
+		}
+
+		if (isPutMyBall)
+		{
+			this->resetTurn();
+		}
+		else
+		{
+			this->finishTurn();
+		}
 	}
-	// TODO : Process
-	// TODO : How to reset turn?
+
 	return true;
 }
