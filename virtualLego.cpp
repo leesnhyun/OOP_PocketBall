@@ -27,6 +27,8 @@
 #include <cassert>
 
 IDirect3DDevice9* Device = nullptr;
+#define NEED_TO_BE_CHANGED 0
+#define NEED_RATIO_CHANGED 0
 
 // 창의 크기
 const int Width  = 1024;
@@ -39,22 +41,22 @@ const float spherePos[16][2] = {
 	{ -2.7f, 0 }, 
 	
 	{ +1.5f, 0 }, 
-	{ (1.5f + (M_RADIUS * BALL_SET_RATIO)), M_RADIUS + 0.01f }, 
-	{ (1.5f + (M_RADIUS * BALL_SET_RATIO)), -(M_RADIUS + 0.01f) }, 
-	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 4), -(M_RADIUS * 4 + 0.04f) }, 
-	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 2), -(M_RADIUS * 2 + 0.02f) }, 
-	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 2), (M_RADIUS * 2 + 0.02f) },
-	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 3), -(M_RADIUS + 0.01f) }, 
-	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 3), (M_RADIUS + 0.01f) },
-	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 3), -(M_RADIUS * 3 + 0.03f) }, 
-	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 3), (M_RADIUS * 3 + 0.03f) },
-	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 4), -(M_RADIUS * 2 + 0.02f) }, 
-	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 4), (M_RADIUS * 2 + 0.02f) }, 
-	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 4), 0 }, 
-	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 4), 
-	(M_RADIUS * 4 + 0.04f) },
+	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO)), NEED_TO_BE_CHANGED + 0.01f }, 
+	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO)), -(NEED_TO_BE_CHANGED + 0.01f) }, 
+	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 4), -(NEED_TO_BE_CHANGED * 4 + 0.04f) }, 
+	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 2), -(NEED_TO_BE_CHANGED * 2 + 0.02f) }, 
+	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 2), (NEED_TO_BE_CHANGED * 2 + 0.02f) },
+	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 3), -(NEED_TO_BE_CHANGED + 0.01f) }, 
+	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 3), (NEED_TO_BE_CHANGED + 0.01f) },
+	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 3), -(NEED_TO_BE_CHANGED * 3 + 0.03f) }, 
+	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 3), (NEED_TO_BE_CHANGED * 3 + 0.03f) },
+	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 4), -(NEED_TO_BE_CHANGED * 2 + 0.02f) }, 
+	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 4), (NEED_TO_BE_CHANGED * 2 + 0.02f) }, 
+	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 4), 0 }, 
+	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 4), 
+	(NEED_TO_BE_CHANGED * 4 + 0.04f) },
 	//balck ball
-	{ (1.5f + (M_RADIUS * BALL_SET_RATIO) * 2), 0 } };
+	{ (1.5f + (NEED_TO_BE_CHANGED * BALL_SET_RATIO) * 2), 0 } };
 
 // 6개의 구멍의 위치를 초기화 함.
 // const float holePos[6][2] = { {-4.23f,-2.73f}, {0,-2.73f}, {4.23f,-2.73f}, {-4.23f,2.73f}, {0,2.73f}, {4.23f,2.73f}};
@@ -146,7 +148,7 @@ bool Setup()
 	// 16개의 공을 생성함
 	for (i=0;i<16;i++) {
 		if (false == g_sphere[i].create(Device, sphereColor[i])) return false;
-		g_sphere[i].setPosition(spherePos[i][0], static_cast<float>(M_RADIUS) , spherePos[i][1]);
+		g_sphere[i].setPosition(spherePos[i][0], static_cast<float>(NEED_TO_BE_CHANGED) , spherePos[i][1]);
 		g_sphere[i].setPower(0,0);
 	}
 
@@ -158,7 +160,7 @@ bool Setup()
 
 	// 파란색 공을 생성함
 	if (false == g_target_blueball.create(Device, "guide")) return false;
-	g_target_blueball.setPosition(.0f, static_cast<float>(M_RADIUS) , .0f);
+	g_target_blueball.setPosition(.0f, static_cast<float>(NEED_TO_BE_CHANGED) , .0f);
 
 	// 광원 설정
 	D3DLIGHT9 lit;

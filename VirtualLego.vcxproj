@@ -141,10 +141,18 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CBorder.cpp" />
+    <ClCompile Include="CBottomWall.cpp" />
+    <ClCompile Include="CEightSphere.cpp" />
+    <ClCompile Include="CHandSphere.cpp" />
     <ClCompile Include="CHole.cpp" />
+    <ClCompile Include="CLeftWall.cpp" />
     <ClCompile Include="CLight.cpp" />
     <ClCompile Include="CObject.cpp" />
+    <ClCompile Include="CRightWall.cpp" />
+    <ClCompile Include="CSolidSphere.cpp" />
     <ClCompile Include="CSphere.cpp" />
+    <ClCompile Include="CStripeSphere.cpp" />
+    <ClCompile Include="CTopWall.cpp" />
     <ClCompile Include="CWall.cpp" />
     <ClCompile Include="d3dUtility.cpp" />
     <ClCompile Include="FoulManager.cpp" />
@@ -155,10 +163,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CBorder.h" />
+    <ClInclude Include="CBottomWall.h" />
+    <ClInclude Include="CEightSphere.h" />
+    <ClInclude Include="CHandSphere.h" />
     <ClInclude Include="CHole.h" />
+    <ClInclude Include="CLeftWall.h" />
     <ClInclude Include="CLight.h" />
     <ClInclude Include="CObject.h" />
+    <ClInclude Include="CRightWall.h" />
+    <ClInclude Include="CSolidSphere.h" />
     <ClInclude Include="CSphere.h" />
+    <ClInclude Include="CStripeSphere.h" />
+    <ClInclude Include="CTopWall.h" />
     <ClInclude Include="CWall.h" />
     <ClInclude Include="d3dUtility.h" />
     <ClInclude Include="FoulManager.h" />

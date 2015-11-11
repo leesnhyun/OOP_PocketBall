@@ -7,6 +7,25 @@
 #define BLANK_BLOCK {}
 
 using std::vector;
+using std::exception;
+
+/* Custom Exception Class. */
+class PlayerNotFoundException : public exception
+{
+private:
+	char * exceptionMessageString;
+public:
+	PlayerNotFoundException(const char * exceptionMessage)
+	{
+		strcpy(this->exceptionMessageString, exceptionMessage);
+	}
+
+	virtual const char * what() const noexcept
+	{
+		return exceptionMessageString;
+
+	}
+};
 
 class Status
 {
@@ -30,22 +49,8 @@ public:
 	void setTurnProgressStatus(bool toSet) noexcept;
 	void setTurnChangeStatus(bool toSet) noexcept;
 	void setGameEndStatus(bool toSet) noexcept;
-	void Status::setTurnPlayer(int playerID) throw (PlayerNotFoundException);
+	void setTurnPlayer(int playerID) throw (PlayerNotFoundException);
 	void nextTurnCount() noexcept;
-};
-
-/* Custom Exception Class. */
-class PlayerNotFoundException : public exception
-{
-private:
-	const char * exceptionMessageString;
-public:
-	PlayerNotFoundException(const char * exceptionMessage);
-	virtual const char * what() const noexcept
-	{
-		return exceptionMessageString;
-
-	}
 };
 
 #endif

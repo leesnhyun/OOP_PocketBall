@@ -90,7 +90,7 @@ void CHole::hitBy(CSphere& ball)
 	{
 		ball.setPosition(100000, -100.0f, 100000);
 		ball.setPower(0.0f, 0.0f);
-		ball.die();
+		//ball.die();
 	}
 }
 

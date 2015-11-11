@@ -16,7 +16,7 @@ Player& Status::getTurnPlayer() noexcept
 
 void Status::setTurnPlayer(int playerID)
 {
-	auto foundIndex = find_if(this->playerList.begin(), this->playerList.end(), [playerID](Player player) {
+	vector<Player>::iterator foundIndex = find_if(this->playerList.begin(), this->playerList.end(), [playerID](Player player) {
 		return (player.getPlayerId() == playerID);
 	});
 
