@@ -5,6 +5,8 @@
 
 class CStripeSphere : public CSphere, public Removable
 {
+private:
+	int disableTurn;
 public:
 	CStripeSphere(const char * ballImageFileName);
 	bool hasIntersected(CSphere& ball) const noexcept;

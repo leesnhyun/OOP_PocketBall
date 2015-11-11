@@ -15,3 +15,18 @@ void CStripeSphere::hitBy(CSphere& ball) noexcept
 {
 
 }
+
+void CStripeSphere::disable() noexcept
+{
+
+}
+
+int CStripeSphere::getDisableTurn() const noexcept
+{
+
+}
+
+bool CStripeSphere::isDisabled() const noexcept
+{
+
+}

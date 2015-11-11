@@ -15,3 +15,18 @@ void CEightSphere::hitBy(CSphere& ball) noexcept
 {
 
 }
+
+void CEightSphere::disable() noexcept
+{
+
+}
+
+int CEightSphere::getDisableTurn() const noexcept
+{
+
+}
+
+bool CEightSphere::isDisabled() const noexcept
+{
+
+}

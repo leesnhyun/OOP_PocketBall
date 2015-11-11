@@ -15,3 +15,18 @@ void CSolidSphere::hitBy(CSphere& ball) noexcept
 {
 
 }
+
+void CSolidSphere::disable() noexcept
+{
+
+}
+
+int CSolidSphere::getDisableTurn() const noexcept
+{
+
+}
+
+bool CSolidSphere::isDisabled() const noexcept
+{
+
+}

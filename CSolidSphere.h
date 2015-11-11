@@ -5,6 +5,8 @@
 
 class CSolidSphere : public CSphere, public Removable
 {
+private:
+	int disableTurn;
 public:
 	CSolidSphere(const char * ballImageFileName);
 	bool hasIntersected(CSphere& ball) const noexcept;

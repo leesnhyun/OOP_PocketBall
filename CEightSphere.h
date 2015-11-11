@@ -5,6 +5,8 @@
 
 class CEightSphere : public CSphere, public Removable
 {
+private:
+	int disableTurn;
 public:
 	CEightSphere(const char * ballImageFileName);
 	bool hasIntersected(CSphere& ball) const noexcept;
