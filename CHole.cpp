@@ -77,6 +77,14 @@ bool CHole::hasIntersected(CSphere& ball) const
 	{
 		return true;
 	}
+	//+-4.56은 세로벽의 좌표, +-3.06은 가로벽의 좌표, 0.15는 각각 가로벽과 세로벽의 depth와 width
+	if (ball.getPosition().x + ball.getRadius() > 4.56f - (0.15f / 2) ||
+		ball.getPosition().x - ball.getRadius() < -4.56f + (0.15f / 2) ||
+		ball.getPosition().z + ball.getRadius() > 3.06f - (0.15f / 2) ||
+		ball.getPosition().z - ball.getRadius() < -3.06f + (0.15f / 2))
+	{
+		return true;
+	}
 
 	return false;
 }
