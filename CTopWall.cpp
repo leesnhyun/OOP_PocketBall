@@ -9,8 +9,8 @@ CTopWall::CTopWall(float iwidth, float iheight, float idepth, D3DXCOLOR color)
 
 bool CTopWall::hasIntersected(CSphere& ball) const noexcept
 {
-	if (ball.getPosition().x + ball.getRadius() > this->center_x - (this->m_width / 2) &&
-	ball.getPosition().x - ball.getRadius() < this->center_x + (this->m_width / 2))
+	if (ball.getPosition().x > this->center_x - (this->m_width / 2) &&
+	ball.getPosition().x < this->center_x + (this->m_width / 2))
 	{
 		if (ball.getPosition().z + ball.getRadius() > this->center_z - (this->m_depth / 2))
 		{

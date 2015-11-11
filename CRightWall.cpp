@@ -9,8 +9,8 @@ CRightWall::CRightWall(float iwidth, float iheight, float idepth, D3DXCOLOR colo
 
 bool CRightWall::hasIntersected(CSphere& ball) const noexcept
 {
-	if (ball.getPosition().z + ball.getRadius() > this->center_z - (this->m_depth / 2) &&
-	ball.getPosition().z - ball.getRadius() < this->center_z + (this->m_depth / 2))
+	if (ball.getPosition().z > this->center_z - (this->m_depth / 2) &&
+	ball.getPosition().z < this->center_z + (this->m_depth / 2))
 	{
 		if (ball.getPosition().x + ball.getRadius() > this->center_x - (this->m_width / 2))
 		{
