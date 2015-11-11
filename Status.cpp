@@ -19,7 +19,7 @@ Player& Status::getTurnPlayer() noexcept
 	return this->nowPlayer;
 }
 
-Player& Status::getNoTurnPlayer() noexcept
+Player& Status::getNotTurnPlayer() noexcept
 {
 	Player nowPlayer = this->nowPlayer;
 	vector<Player>::iterator foundIndex = find_if(this->playerList.begin(), this->playerList.end(), [nowPlayer](Player player) {
