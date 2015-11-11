@@ -12,7 +12,7 @@ TurnManager::TurnManager(const vector<int>& playerIdList)
 
 bool TurnManager::isTurnFinished(const array<CSphere, 16>& fieldBalls)
 {
-	if (status.getTurnProgressStatus())
+	if (!status.getTurnProgressStatus())
 	{
 		return false;
 	}
@@ -72,7 +72,7 @@ bool TurnManager::processTurn(const array<CSphere, 16>& fieldBalls)
 	}
 	else
 	{
-
+		this->resetTurn();
 	}
 	// TODO : Process
 	// TODO : How to reset turn?
