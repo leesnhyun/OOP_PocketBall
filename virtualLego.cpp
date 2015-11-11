@@ -12,6 +12,8 @@
 
 #include <ctime>
 #include <array>
+#include <cstdlib>
+#include <cstdio>
 
 #include "d3dUtility.h"
 
@@ -145,6 +147,8 @@ bool Setup()
 	D3DXMatrixIdentity(&g_mView);
 	D3DXMatrixIdentity(&g_mProj);
 	
+	::MessageBox(nullptr, "Setup() - FAILED", nullptr, 0);
+
 	// 프레임생성
 	if (false == g_border.create(Device)) return false;
 	g_border.setPosition(0.115f, -0.44f, 0.00f);
@@ -179,7 +183,6 @@ bool Setup()
 	g_legowall[2]->setPosition(4.56f, 0.12f, 0.0f);
 	if (false == g_legowall[5]->create(Device)) return false;
 	g_legowall[5]->setPosition(-4.56f, 0.12f, 0.0f);
-	////////
 
 	// 16개의 공을 생성함
 	for (i=0;i<16;i++) {
