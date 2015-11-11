@@ -19,14 +19,16 @@ extern TurnManager turnManager;
 // 공의 생성자를 정의
 CSphere::CSphere(BallType ballType, const char* ballImageFileName)
 {
-	D3DXMatrixIdentity(&mLocal);
 	ZeroMemory(&m_mtrl, sizeof(m_mtrl)); // memset을 통해 모두 0으로 초기화
-	m_radius = 0.16f;
-	m_velocity_x = 0;
-	m_velocity_z = 0;
-	m_pSphereMesh = nullptr;
-	D3DXMatrixIdentity(&this->matBallRoll);
+	this->m_radius = 0.16f;
+	this->m_velocity_x = 0;
+	this->m_velocity_z = 0;
+	this->m_pSphereMesh = nullptr;
 	this->ballType = ballType;
+	
+	D3DXMatrixIdentity(&mLocal);
+	D3DXMatrixIdentity(&this->matBallRoll);
+
 	strcpy(this->ballImageFileName, ballImageFileName);
 }
 
@@ -62,9 +64,11 @@ bool CSphere::create(IDirect3DDevice9* pDevice)
 
 	if (FAILED(D3DXCreateTextureFromFile(pDevice, filePath, &Tex)))
 	{
+		delete[] filePath;
 		return false;
 	}
 
+	delete[] filePath;
 	return true;
 }
 
@@ -81,15 +85,11 @@ void CSphere::destroy()// 공을 화면에서 소멸시킴
 void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// 공을 화면에 그려냄
 {
 	// TODO : Removerble의 disable 확인 추가
-	if (pDevice == nullptr){
-		return;
-	}
-
+	if (pDevice == nullptr) return;
+	
 
 	pDevice->SetTransform(D3DTS_WORLD, &mWorld);
-	
 	pDevice->MultiplyTransform(D3DTS_WORLD, &mLocal);
-
 	pDevice->MultiplyTransform(D3DTS_WORLD, &matBallRoll);
 	
 	pDevice->SetTexture(0, Tex);
@@ -166,6 +166,7 @@ void CSphere::hitBy(CSphere& ball)
 	}
 }
 */
+
 void CSphere::ballUpdate(float timeDiff) // 공의 중심 좌표를 속도에 맞춰서 매 시간 간격마다 갱신함
 {
 	const float TIME_SCALE = 3.3F;
