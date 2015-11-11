@@ -156,6 +156,11 @@ bool Setup()
 	if (false == g_border.create(Device)) return false;
 	g_border.setPosition(0.115f, -0.44f, 0.00f);
 
+	// 6개의 구멍을 생성함
+	for (i = 0; i<6; i++) {
+		if (false == g_hole[i].create(Device)) return false;
+		g_hole[i].setPosition(holePos[i][0], -0.23f, holePos[i][1]);
+	}
 	// 초록색 바닥을 생성
 	if (false == g_legoPlane.create(Device)) return false;
 	g_legoPlane.setPosition(0.0f, -0.0006f / 5, 0.0f);
@@ -178,7 +183,7 @@ bool Setup()
 
 	// 세로벽 (0.15f*0.3f*6.24f) , (4.56, 0.12, 0)
 	if (false == g_legowall[2]->create(Device)) return false;
-	g_legowall[2]->setPosition(-4.56f, 0.12f, 0.0f);
+	g_legowall[2]->setPosition(0, 0.0f, 0);
 	if (false == g_legowall[5]->create(Device)) return false;
 	g_legowall[5]->setPosition(4.56f, 0.12f, 0.0f);
 	////////
@@ -188,12 +193,6 @@ bool Setup()
 		if (false == g_sphere[i].create(Device)) return false;
 		g_sphere[i].setPosition(spherePos[i][0], static_cast<float>(CSphere::COMMON_RADIUS) , spherePos[i][1]);
 		g_sphere[i].setPower(0,0);
-	}
-
-	// 6개의 구멍을 생성함
-	for (i = 0; i<6; i++) {
-		if (false == g_hole[i].create(Device)) return false;
-		g_hole[i].setPosition(holePos[i][0], -0.23f, holePos[i][1]);
 	}
 
 	// 파란색 공을 생성함
@@ -301,7 +300,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		//Device->SetTexture( 0, NULL );
 	}
 
-	if (turnManager.isTurnFinished(g_sphere))
+	if (turnManager.processTurn(g_sphere))
 	{
 		MessageBox(nullptr, "플레이어 바뀜 ", nullptr, 0);
 	}

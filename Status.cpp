@@ -7,6 +7,11 @@ using std::exception;
 Status::Status(vector<Player> playerList) : nowPlayer(0)
 {
 	this->playerList = vector<Player>(playerList.begin(), playerList.end());
+	this->currentTurnCount = 0;
+	this->foulStatus = false;
+	this->gameEndStatus = false;
+	this->turnProgressStatus = false;
+	this->turnChangeStatus = false;
 }
 
 Player& Status::getTurnPlayer() noexcept
