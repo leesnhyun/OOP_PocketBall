@@ -176,9 +176,9 @@ bool Setup()
 
 	// 세로벽 (0.15f*0.3f*6.24f) , (4.56, 0.12, 0)
 	if (false == g_legowall[2]->create(Device)) return false;
-	g_legowall[2]->setPosition(-4.56f, 0.12f, 0.0f);
+	g_legowall[2]->setPosition(4.56f, 0.12f, 0.0f);
 	if (false == g_legowall[5]->create(Device)) return false;
-	g_legowall[5]->setPosition(4.56f, 0.12f, 0.0f);
+	g_legowall[5]->setPosition(-4.56f, 0.12f, 0.0f);
 	////////
 
 	// 16개의 공을 생성함
