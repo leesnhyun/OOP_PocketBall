@@ -29,5 +29,4 @@ public:
 	
 	float getRadius() const;												// 구멍의 반지름을 받아옴						
 };
-
 #endif
