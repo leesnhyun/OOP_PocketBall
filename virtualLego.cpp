@@ -147,7 +147,6 @@ bool Setup()
 	D3DXMatrixIdentity(&g_mView);
 	D3DXMatrixIdentity(&g_mProj);
 	
-	::MessageBox(nullptr, "Setup() - FAILED", nullptr, 0);
 
 	// 프레임생성
 	if (false == g_border.create(Device)) return false;
