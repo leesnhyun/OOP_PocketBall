@@ -2,8 +2,21 @@
 #include "CLight.h"
 
 // 광원의 생성자
-CLight::CLight(const D3DLIGHT9& lit, float radius)
+CLight::CLight(float radius)
 {
+	D3DLIGHT9 lit;
+	::ZeroMemory(&lit, sizeof(lit));
+	lit.Type = D3DLIGHT_POINT;
+	lit.Diffuse = d3d::WHITE;
+	//lit.Diffuse      = d3d::BLACK; 
+	lit.Specular = d3d::BLACK * 0.9f;
+	lit.Ambient = d3d::WHITE * 0.9f;
+	lit.Position = D3DXVECTOR3(0.0f, 3.0f, 0.0f);
+	lit.Range = 80.0f;
+	lit.Attenuation0 = 0.0f;
+	lit.Attenuation1 = 0.9f;
+	lit.Attenuation2 = 0.0f;
+
 	static DWORD i = 0;
 	m_index = i++;
 	D3DXMatrixIdentity(&mLocal);

@@ -20,11 +20,7 @@
 #include "Player.h"
 #include "FoulManager.h"
 
-#include <vector>
 #include <ctime>
-#include <cstdlib>
-#include <cstdio>
-#include <cassert>
 #include "CHandSphere.h"
 #include "CStripeSphere.h"
 #include "CSolidSphere.h"
@@ -34,6 +30,8 @@
 #include "CRightWall.h"
 #include "CBottomWall.h"
 #include "CLeftWall.h"
+
+using std::array;
 
 IDirect3DDevice9* Device = nullptr;
 #define NEED_TO_BE_CHANGED 0
@@ -90,7 +88,7 @@ D3DXMATRIX g_mProj;
 // 전역 변수
 // -----------------------------------------------------------------------------
 CWall	g_legoPlane;
-std::array<CWall, 6> g_legowall = {
+array<CWall, 6> g_legowall = {
 	CTopWall(-1, -1, 4.0f, 0.3f, 0.15f, d3d::TABLE_WALL), 
 	CTopWall(-1, -1, 4.0f, 0.3f, 0.15f, d3d::TABLE_WALL), 
 	CRightWall(-1, -1, 4.0f, 0.3f, 0.15f, d3d::TABLE_WALL),
@@ -98,7 +96,7 @@ std::array<CWall, 6> g_legowall = {
 	CBottomWall(-1, -1, 0.15f, 0.3f, 5.40f, d3d::TABLE_WALL),
 	CLeftWall(-1, -1, 0.15f, 0.3f, 5.40f, d3d::TABLE_WALL)
 };
-std::array<CSphere, 16> g_sphere = 
+array<CSphere, 16> g_sphere = 
 { 
 	CHandSphere("0"), CSolidSphere("1"), CSolidSphere("2"), CSolidSphere("3"), 
 	CSolidSphere("4"), CSolidSphere("5"), CSolidSphere("6"), CSolidSphere("7"), 
@@ -183,20 +181,7 @@ bool Setup()
 	if (false == g_target_blueball.create(Device, "guide")) return false;
 	g_target_blueball.setPosition(.0f, static_cast<float>(NEED_TO_BE_CHANGED) , .0f);
 
-	// 광원 설정
-	D3DLIGHT9 lit;
-	::ZeroMemory(&lit, sizeof(lit));
-	lit.Type         = D3DLIGHT_POINT;
-	lit.Diffuse      = d3d::WHITE; 
-	//lit.Diffuse      = d3d::BLACK; 
-	lit.Specular     = d3d::BLACK * 0.9f;
-	lit.Ambient      = d3d::WHITE * 0.9f;
-	lit.Position     = D3DXVECTOR3(0.0f, 3.0f, 0.0f);
-	lit.Range        = 80.0f;
-	lit.Attenuation0 = 0.0f;
-	lit.Attenuation1 = 0.9f;
-	lit.Attenuation2 = 0.0f;
-	if (false == g_light.create(Device, lit))
+	if (false == g_light.create(Device))
 		return false;
 	
 	// 카메라의 위치와 시야를 설정함

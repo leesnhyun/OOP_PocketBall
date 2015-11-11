@@ -14,7 +14,7 @@ private:
 	ID3DXMesh* m_pMesh;
 	d3d::BoundingSphere m_bound;
 public:
-	CLight(const D3DLIGHT9& lit, float radius = 0.1f);																		   // 광원의 생성자
+	CLight(float radius = 0.1f);																		   // 광원의 생성자
 	~CLight();																		   // 광원의 소멸자
 	bool create(IDirect3DDevice9* pDevice);											   // 광원을 화면에 그려냄
 	void destroy();																	   // 광원을 화면에서 소멸시킴

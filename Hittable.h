@@ -1,9 +1,8 @@
 #ifndef _HITTABLE_
 #define _HITTABLE_
-#include "CSphere.h"
-#include <exception>
 #define noexcept throw ()
 #define BLANK_BLOCK {}
+class CSphere;
 
 class Hittable
 {
