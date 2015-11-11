@@ -5,7 +5,7 @@
 class CBottomWall : public CWall
 {
 public:
-	CBottomWall(float ix, float iz, float iwidth, float iheight, float idepth, D3DXCOLOR color);
+	CBottomWall(float iwidth, float iheight, float idepth, D3DXCOLOR color);
 	bool hasIntersected(CSphere& ball) const noexcept;
 	void hitBy(CSphere& ball) noexcept;
 };

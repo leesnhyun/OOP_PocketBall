@@ -4,7 +4,7 @@
 static const float LOSS_RATIO = 0.006;
 
 // 벽의 생성자
-CWall::CWall(float ix, float iz, float iwidth, float iheight, float idepth, D3DXCOLOR color)
+CWall::CWall(float iwidth, float iheight, float idepth, D3DXCOLOR color)
 {
 	D3DXMatrixIdentity(&mLocal);
 	ZeroMemory(&m_mtrl, sizeof(m_mtrl));

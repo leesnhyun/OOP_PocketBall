@@ -90,12 +90,12 @@ D3DXMATRIX g_mProj;
 // -----------------------------------------------------------------------------
 CWall	g_legoPlane;
 array<CWall, 6> g_legowall = {
-	CTopWall(-1, -1, 4.0f, 0.3f, 0.15f, d3d::TABLE_WALL), 
-	CTopWall(-1, -1, 4.0f, 0.3f, 0.15f, d3d::TABLE_WALL), 
-	CRightWall(-1, -1, 4.0f, 0.3f, 0.15f, d3d::TABLE_WALL),
-	CBottomWall(-1, -1, 4.0f, 0.3f, 0.15f, d3d::TABLE_WALL),
-	CBottomWall(-1, -1, 0.15f, 0.3f, 5.40f, d3d::TABLE_WALL),
-	CLeftWall(-1, -1, 0.15f, 0.3f, 5.40f, d3d::TABLE_WALL)
+	CTopWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL), 
+	CTopWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL), 
+	CRightWall(0.15f, 0.3f, 5.40f, d3d::TABLE_WALL),
+	CBottomWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL),
+	CBottomWall(4.0f, 0.3f, 0.15f, d3d::TABLE_WALL),
+	CLeftWall(0.15f, 0.3f, 5.40f, d3d::TABLE_WALL)
 };
 array<CSphere, 16> g_sphere = 
 { 
