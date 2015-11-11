@@ -91,7 +91,7 @@ D3DXMATRIX g_mProj;
 // Global variables
 // 전역 변수
 // -----------------------------------------------------------------------------
-CFloor g_legoPlane;
+CFloor g_legoPlane(9, 0.03f, 6, d3d::TABLE_PANE);
 
 array<CWall, 6> g_legowall = 
 {
