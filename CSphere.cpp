@@ -97,15 +97,10 @@ void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// °øÀ» È
 	m_pSphereMesh->DrawSubset(0);
 }
 
-/*
+
 // µÎ °øÀÌ Ãæµ¹ Çß´ÂÁö È®ÀÎ
 bool CSphere::hasIntersected(CSphere& ball)
 {
-	if (this->isDead() || ball.isDead())
-	{
-		return false;
-	}
-
 	D3DXVECTOR3 cord = this->getPosition();
 	D3DXVECTOR3 ball_cord = ball.getPosition();
 	double xDistance = abs((cord.x - ball_cord.x) * (cord.x - ball_cord.x));
@@ -165,7 +160,7 @@ void CSphere::hitBy(CSphere& ball)
 		ball.setPower(vbxp * cos_t - vbzp * sin_t, vbxp * sin_t + vbzp * cos_t);
 	}
 }
-*/
+
 void CSphere::ballUpdate(float timeDiff) // °øÀÇ Áß½É ÁÂÇ¥¸¦ ¼Óµµ¿¡ ¸ÂÃç¼­ ¸Å ½Ã°£ °£°Ý¸¶´Ù °»½ÅÇÔ
 {
 	const float TIME_SCALE = 3.3F;
@@ -228,6 +223,21 @@ float CSphere::getRadius(void) const
 BallType CSphere::getBallType() const
 {
 	return this->ballType;
+}
+
+void CSphere::disable() noexcept
+{
+	//TODO : get turn count to record disableTurn
+}
+
+int CSphere::getDisableTurn() const noexcept
+{
+	return this->disableTurn;
+}
+
+bool CSphere::isDisabled() const noexcept
+{
+	return (this->disableTurn != -1);
 }
 
 // private function

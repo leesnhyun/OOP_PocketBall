@@ -182,7 +182,6 @@
     <ClInclude Include="FoulManager.h" />
     <ClInclude Include="Hittable.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="Removable.h" />
     <ClInclude Include="Status.h" />
     <ClInclude Include="TurnManager.h" />
   </ItemGroup>
