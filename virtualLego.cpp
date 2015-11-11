@@ -16,6 +16,7 @@
 #include <cstdio>
 
 #include "d3dUtility.h"
+#include "d3dfont.h"
 
 #include "CLight.h"
 #include "CFloor.h"
@@ -127,6 +128,12 @@ Status status(playerVec);
 TurnManager turnManager(status.getPlayerIdList());
 FoulManager foulManager;
 
+CD3DFont* Font = 0;
+DWORD FrameCnt = 0;
+float TimeElapsed = 0;
+float FPS = 0;
+char FPSString[9];
+
 // -----------------------------------------------------------------------------
 // Functions
 // 전역 함수
@@ -146,6 +153,11 @@ bool Setup()
 	D3DXMatrixIdentity(&g_mWorld);
 	D3DXMatrixIdentity(&g_mView);
 	D3DXMatrixIdentity(&g_mProj);
+
+	// 글자생성
+	Font = new CD3DFont("Tahoma", 16, 0);
+	Font->InitDeviceObjects(Device);
+	Font->RestoreDeviceObjects();
 
 	// 프레임생성
 	if (false == g_border.create(Device)) return false;
@@ -178,9 +190,9 @@ bool Setup()
 
 	// 세로벽 (0.15f*0.3f*6.24f) , (4.56, 0.12, 0)
 	if (false == g_legowall[2]->create(Device)) return false;
-	g_legowall[2]->setPosition(-4.56f, 0.12f, 0.0f);
+	g_legowall[2]->setPosition(4.56f, 0.12f, 0.0f);
 	if (false == g_legowall[5]->create(Device)) return false;
-	g_legowall[5]->setPosition(4.56f, 0.12f, 0.0f);
+	g_legowall[5]->setPosition(-4.56f, 0.12f, 0.0f);
 
 	// 16개의 공을 생성함
 	for (i=0;i<16;i++) {
@@ -226,6 +238,12 @@ void Cleanup(void)
 	}
 	destroyAllLegoBlock();
 	g_light.destroy();
+
+	if (Font) {
+		Font->InvalidateDeviceObjects();
+		Font->DeleteDeviceObjects();
+		d3d::Delete<CD3DFont*>(Font);
+	}
 }
 
 
@@ -242,9 +260,30 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 
 	if( Device )
 	{
+		
+		// Status Message
+		FrameCnt++;
+		TimeElapsed += timeDelta;
+
+		if (TimeElapsed >= 1.0f)
+		{
+			FPS = (float)FrameCnt / TimeElapsed;
+
+
+			sprintf(FPSString, "%f", FPS);
+			FPSString[8] = '\0'; // mark end of string
+
+			TimeElapsed = 0.0f;
+			FrameCnt = 0;
+		}
+
+
 		Device->Clear(0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0x00afafaf, 1.0f, 0);
 		Device->BeginScene();
+
+		if (Font) Font->DrawText(200, 20, 0xff000000, FPSString);
 		
+
 		// update the position of each ball. during update, check whether each ball hit by walls.
 		// 공의 위치를 갱신한다. 갱신하는 중에는 각각의 공이 벽과 충돌 했는지 확인한다.
 		for( i = 0; i < 16; i++) {
