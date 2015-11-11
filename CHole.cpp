@@ -75,7 +75,7 @@ bool CHole::hasIntersected(CSphere& ball)
 	double zDistance = pow((this->center_z - ball.getPosition().z), 2);
 	double totalDistance = sqrt(xDistance + yDistance + zDistance);
 
-	if (totalDistance < (this->getRadius()))
+	if (totalDistance < (this->getRadius()) && !ball.isDisabled())
 	{
 		return true;
 	}
@@ -90,7 +90,7 @@ void CHole::hitBy(CSphere& ball)
 	{
 		ball.setPosition(100000, -100.0f, 100000);
 		ball.setPower(0.0f, 0.0f);
-		//ball.die();
+		ball.disable();
 	}
 }
 
