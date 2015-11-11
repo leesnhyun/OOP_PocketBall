@@ -157,7 +157,10 @@
     <ClCompile Include="CTargetSphere.cpp" />
     <ClCompile Include="CTopWall.cpp" />
     <ClCompile Include="CWall.cpp" />
+    <ClCompile Include="d3dfont.cpp" />
+    <ClCompile Include="d3dutil.cpp" />
     <ClCompile Include="d3dUtility.cpp" />
+    <ClCompile Include="dxutil.cpp" />
     <ClCompile Include="FoulManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Status.cpp" />
@@ -181,7 +184,10 @@
     <ClInclude Include="CTargetSphere.h" />
     <ClInclude Include="CTopWall.h" />
     <ClInclude Include="CWall.h" />
+    <ClInclude Include="d3dfont.h" />
+    <ClInclude Include="d3dutil.h" />
     <ClInclude Include="d3dUtility.h" />
+    <ClInclude Include="dxutil.h" />
     <ClInclude Include="FoulManager.h" />
     <ClInclude Include="Hittable.h" />
     <ClInclude Include="Player.h" />

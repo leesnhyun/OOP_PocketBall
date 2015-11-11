@@ -16,6 +16,7 @@
 #include <cstdio>
 
 #include "d3dUtility.h"
+#include "d3dfont.h"
 
 #include "CLight.h"
 #include "CFloor.h"
@@ -127,6 +128,12 @@ Status status(playerVec);
 TurnManager turnManager(status.getPlayerIdList());
 FoulManager foulManager;
 
+CD3DFont* Font = 0;
+DWORD FrameCnt = 0;
+float TimeElapsed = 0;
+float FPS = 0;
+char FPSString[9];
+
 // -----------------------------------------------------------------------------
 // Functions
 // 전역 함수
@@ -146,7 +153,11 @@ bool Setup()
 	D3DXMatrixIdentity(&g_mWorld);
 	D3DXMatrixIdentity(&g_mView);
 	D3DXMatrixIdentity(&g_mProj);
-	
+
+	// 글자생성
+	Font = new CD3DFont("Tahoma", 16, 0);
+	Font->InitDeviceObjects(Device);
+	Font->RestoreDeviceObjects();
 
 	// 프레임생성
 	if (false == g_border.create(Device)) return false;
@@ -227,6 +238,12 @@ void Cleanup(void)
 	}
 	destroyAllLegoBlock();
 	g_light.destroy();
+
+	if (Font) {
+		Font->InvalidateDeviceObjects();
+		Font->DeleteDeviceObjects();
+		d3d::Delete<CD3DFont*>(Font);
+	}
 }
 
 
@@ -243,9 +260,30 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 
 	if( Device )
 	{
+		
+		// Status Message
+		FrameCnt++;
+		TimeElapsed += timeDelta;
+
+		if (TimeElapsed >= 1.0f)
+		{
+			FPS = (float)FrameCnt / TimeElapsed;
+
+
+			sprintf(FPSString, "%f", FPS);
+			FPSString[8] = '\0'; // mark end of string
+
+			TimeElapsed = 0.0f;
+			FrameCnt = 0;
+		}
+
+
 		Device->Clear(0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0x00afafaf, 1.0f, 0);
 		Device->BeginScene();
+
+		if (Font) Font->DrawText(200, 20, 0xff000000, FPSString);
 		
+
 		// update the position of each ball. during update, check whether each ball hit by walls.
 		// 공의 위치를 갱신한다. 갱신하는 중에는 각각의 공이 벽과 충돌 했는지 확인한다.
 		for( i = 0; i < 16; i++) {
@@ -307,30 +345,6 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 	}
 
 	return true;
-}
-
-//+-4.56은 세로벽의 좌표, +-3.06은 가로벽의 좌표, 0.15는 각각 가로벽과 세로벽의 depth와 width
-void preventBallOut(CSphere& ball, int *old_x, int *old_z) {
-	if (ball.getPosition().x + ball.getRadius() > 4.56f - (0.15f / 2))
-	{
-		ball.setPosition(4.56f - (0.15f / 2) - ball.getRadius(), ball.getPosition().y, ball.getPosition().z);
-		*old_x = 4.56f - (0.15f / 2) - ball.getRadius();
-	}
-	if (ball.getPosition().x - ball.getRadius() < -4.56f + (0.15f / 2))
-	{
-		ball.setPosition(-4.56f + (0.15f / 2) + ball.getRadius(), ball.getPosition().y, ball.getPosition().z);
-		*old_x = -4.56f + (0.15f / 2) + ball.getRadius();
-	}
-	if (ball.getPosition().z + ball.getRadius() > 3.06f - (0.15f / 2))
-	{
-		ball.setPosition(ball.getPosition().x, ball.getPosition().y, 3.06f - (0.15f / 2) - ball.getRadius());
-		*old_z = 3.06f - (0.15f / 2) - ball.getRadius();
-	}
-	if (ball.getPosition().z - ball.getRadius() < -3.06f + (0.15f / 2))
-	{
-		ball.setPosition(ball.getPosition().x, ball.getPosition().y, -3.06f + (0.15f / 2) + ball.getRadius());
-		*old_z = -3.06f + (0.15f / 2) + ball.getRadius();
-	}
 }
 
 // 마우스 또는 키보드 입력 이벤트 처리 함수
@@ -457,6 +471,14 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			for (int i = 0; i < 6; i++)
 			{
+				if (g_legowall[i]->hasIntersected(preMovedWhiteBall))
+				{
+					canMove = false;
+				}
+			}
+
+			for (int i = 0; i < 6; i++)
+			{
 				if (g_hole[i].hasIntersected(preMovedWhiteBall))
 				{
 					canMove = false;
@@ -476,21 +498,40 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				g_sphere[0].setPosition(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
 				old_x = new_x;
 				old_z = new_z;
-				preventBallOut(g_sphere[0], &old_x, &old_z);
 			}
 		}
 
 		if (LOWORD(wParam) & MK_RBUTTON) {// 마우스 오른쪽 버튼을 누를 때는, 파란 공의 위치를 옮긴다.
 			dx = (old_x - new_x);// * 0.01f;
 			dz = (old_z - new_z);// * 0.01f;
-		
-			D3DXVECTOR3 coord3d=g_target_blueball.getPosition();
-		
-			g_target_blueball.setPosition(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
-			
-			old_x = new_x;
-			old_z = new_z;
-			preventBallOut(g_target_blueball, &old_x, &old_z);
+
+			CHandSphere preMovedWhiteBall("0");
+			bool canMove = true;
+			D3DXVECTOR3 coord3d = g_target_blueball.getPosition();
+			preMovedWhiteBall.setPosition(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
+
+			for (int i = 0; i < 6; i++)
+			{
+				if (g_legowall[i]->hasIntersected(preMovedWhiteBall))
+				{
+					canMove = false;
+				}
+			}
+
+			for (int i = 0; i < 6; i++)
+			{
+				if (g_hole[i].hasIntersected(preMovedWhiteBall))
+				{
+					canMove = false;
+				}
+			}
+
+			if (canMove)
+			{
+				g_target_blueball.setPosition(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
+				old_x = new_x;
+				old_z = new_z;
+			}
 		}
 		old_x = new_x;
 		old_z = new_z;

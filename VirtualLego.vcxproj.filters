@@ -87,6 +87,15 @@
     <ClCompile Include="CFloor.cpp">
       <Filter>Source Files\CObject</Filter>
     </ClCompile>
+    <ClCompile Include="dxutil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="d3dfont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="d3dutil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dUtility.h">
@@ -154,6 +163,15 @@
     </ClInclude>
     <ClInclude Include="CFloor.h">
       <Filter>Header Files\CObject</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dfont.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="d3dutil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dxutil.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
