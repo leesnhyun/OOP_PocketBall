@@ -19,9 +19,13 @@ private:
 	int windowHeight;
 
 	string playerName[2];
+	string playerBallCount[2];
+	string playerBallType[2];
+	
+	string turnStatus;
 
 	Player* players;
-	CD3DFont* FontObjects[2];
+	CD3DFont* FontObjects[7];
 
 public:
 	DisplayStatusManager(const int windowWidth, const int windowHeight, Player* players);
@@ -31,7 +35,10 @@ public:
 	void destory();
 
 	bool update();
-	void display();
+
+private:
+	string _getBallType(const BallType b);
+	string _getTurnStatus();
 
 };
 

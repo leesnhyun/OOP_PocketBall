@@ -164,7 +164,7 @@ bool Setup()
 	D3DXMatrixIdentity(&g_mProj);
 
 	// 상태창 매니저 생성
-	if (false == displayStatusManager.create("Tahoma", 16, Device)) return false;
+	if (false == displayStatusManager.create("Times New Roman", 16, Device)) return false;
 	
 	// 프레임생성
 	if (false == g_border.create(Device)) return false;
@@ -266,7 +266,6 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		Device->BeginScene();
 
 		// Status Display update
-		displayStatusManager.display();
 		displayStatusManager.update();
 		
 		// update the position of each ball. during update, check whether each ball hit by walls.
@@ -330,14 +329,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 
 	if (turnManager.processTurn(g_sphere))
 	{
-		if (status.getTurnChangeStatus())
-		{
-			MessageBox(nullptr, "플레이어 바뀜 ", nullptr, 0);
-		}
-		else
-		{
-			MessageBox(nullptr, "플레이어 안 바뀜 ", nullptr, 0);
-		}
+		// TODO :: ??
 	}
 	else
 	{

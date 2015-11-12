@@ -8,9 +8,9 @@ Player::Player(unsigned int playerID)
 	this->playerBallType = BallType::NONE;
 }
 
-void Player::addTakenBall(unsigned int numBall)
+void Player::setTakenBall(unsigned int numBall)
 {
-	this->numTakenBall += numTakenBall;
+	this->numTakenBall = numBall;
 }
 
 unsigned int Player::getNumTakenBall() const

@@ -19,7 +19,7 @@ private:
 
 public:
 	Player(unsigned int playerID);
-	void addTakenBall(unsigned int numBall);	// 지금 획득한 공의 개수를 누적시킴
+	void setTakenBall(unsigned int numBall);	// 지금 획득한 공의 개수를 누적시킴
 	unsigned int getNumTakenBall() const;		// 획득한 공의 개수를 반환함
 	unsigned int getPlayerId() const;			// 플레이어의 ID를 가져옴.
 
