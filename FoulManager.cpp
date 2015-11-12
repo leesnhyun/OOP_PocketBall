@@ -29,14 +29,24 @@ void FoulManager::isNoHitHandBall()
 
 void FoulManager::isHandBallInHole()
 {
-	// TODO : Where position..
-
 	if (g_sphere[0]->getDisableTurn() == status.getCurrentTurnCount())
 	{
 		g_sphere[0]->enable();
 		g_sphere[0]->setPower(0, 0);
-		g_sphere[0]->setPosition(g_sphere[0]->getPreCenter_x(), g_sphere[0]->getPosition().y, g_sphere[0]->getPreCenter_z());
-
+		g_sphere[0]->setPosition(0, g_sphere[0]->getPosition().y, 0);
+		int i;
+		while (true) {
+			for (i = 1; i < 16; i++)
+			{
+				if (g_sphere[0]->hasIntersected(*g_sphere[i]))
+				{
+					g_sphere[0]->setPosition(rand() % 5, g_sphere[0]->getPosition().y, rand() % 5);
+					break;
+				}
+			}
+			if (i == 16)
+				break;
+		}
 		status.setFoulStatus(true);
 	}
 }
