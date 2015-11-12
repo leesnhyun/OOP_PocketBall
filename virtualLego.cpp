@@ -105,12 +105,12 @@ array<CWall*, 6> g_legowall =
 	new CLeftWall(0.15f, 0.3f, 5.40f, d3d::TABLE_WALL)
 };
 
-array<CSphere, 16> g_sphere = 
+array<CSphere*, 16> g_sphere = 
 { 
-	CHandSphere("0"), CSolidSphere("1"), CSolidSphere("2"), CSolidSphere("3"), 
-	CSolidSphere("4"), CSolidSphere("5"), CSolidSphere("6"), CSolidSphere("7"), 
-	CEightSphere("8"), CStripeSphere("s9"), CStripeSphere("s10"), CStripeSphere("s11"),
-	CStripeSphere("s12"), CStripeSphere("S13"), CStripeSphere("s14"), CStripeSphere("s15") 
+	new CHandSphere("0"), new CSolidSphere("1"), new CSolidSphere("2"), new CSolidSphere("3"), 
+	new CSolidSphere("4"), new CSolidSphere("5"), new CSolidSphere("6"), new CSolidSphere("7"), 
+	new CEightSphere("8"), new CStripeSphere("s9"), new CStripeSphere("s10"), new CStripeSphere("s11"),
+	new CStripeSphere("s12"), new CStripeSphere("S13"), new CStripeSphere("s14"), new CStripeSphere("s15") 
 };
 
 CTargetSphere g_target_blueball("guide");
@@ -123,7 +123,7 @@ CBorder g_border(d3d::TABLE_BORDER);
 double g_camera_pos[3] = {0.0, 5.0, -8.0};
 
 Player players[2] = { Player(1), Player(2) };
-vector<Player> playerVec = {players[0], players[1]};
+vector<Player*> playerVec = {&players[0], &players[1]};
 Status status(playerVec);
 TurnManager turnManager(status.getPlayerIdList());
 FoulManager foulManager;
@@ -196,9 +196,9 @@ bool Setup()
 
 	// 16개의 공을 생성함
 	for (i=0;i<16;i++) {
-		if (false == g_sphere[i].create(Device)) return false;
-		g_sphere[i].setPosition(spherePos[i][0], static_cast<float>(CSphere::COMMON_RADIUS) , spherePos[i][1]);
-		g_sphere[i].setPower(0,0);
+		if (false == g_sphere[i]->create(Device)) return false;
+		g_sphere[i]->setPosition(spherePos[i][0], static_cast<float>(CSphere::COMMON_RADIUS) , spherePos[i][1]);
+		g_sphere[i]->setPower(0,0);
 	}
 
 	// 파란색 공을 생성함
@@ -283,12 +283,11 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 
 		if (Font) Font->DrawText(200, 20, 0xff000000, FPSString);
 		
-
 		// update the position of each ball. during update, check whether each ball hit by walls.
 		// 공의 위치를 갱신한다. 갱신하는 중에는 각각의 공이 벽과 충돌 했는지 확인한다.
 		for( i = 0; i < 16; i++) {
-			g_sphere[i].ballUpdate(timeDelta);
-			for (j = 0; j < 6; j++){ g_legowall[j]->hitBy(g_sphere[i]); }
+			g_sphere[i]->ballUpdate(timeDelta);
+			for (j = 0; j < 6; j++){ g_legowall[j]->hitBy(*g_sphere[i]); }
 		}
 
 		// check whether any two balls hit together and update the direction of balls
@@ -296,22 +295,24 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		for(i = 0 ;i < 16; i++){
 			for(j = 0 ; j < 16; j++) {
 				if(i >= j) {continue;}
-				g_sphere[i].hitBy(g_sphere[j]);
+				g_sphere[i]->hitBy(*g_sphere[j]);
 			}
 		}
 
 		// 각각의 구멍에 대해, 공과 서로 충돌 했는지 확인하고, 공을 넣는다.
 		for (i = 0; i < 6; i++){
 			for (j = 0; j < 16; j++) {
-				if (!status.getFoulStatus()) {
-					if (g_hole[i].hasIntersected(g_sphere[j]) && status.getTurnPlayer().getBallType() == BallType::NONE) {
-						// TODO : Check
-						BallType nowBallType = g_sphere[j].getBallType();
-						status.getTurnPlayer().setBallType(nowBallType);
-						//status.getNoTurnPlayer().setBallType((nowBallType == BallType::STRIPE) ? BallType::SOLID : BallType::STRIPE);
-					}
-					g_hole[i].hitBy(g_sphere[j]);
+
+				if (g_hole[i].hasIntersected(*g_sphere[j]) && status.getTurnPlayer()->getBallType() == BallType::NONE &&
+					g_sphere[j]->getBallType() != BallType::EIGHT && g_sphere[j]->getBallType() != BallType::HAND) {
+					// TODO : Check
+					BallType nowBallType = g_sphere[j]->getBallType();
+					status.getTurnPlayer()->setBallType(nowBallType);
+					status.getNotTurnPlayer()->setBallType((nowBallType == BallType::STRIPE) ? BallType::SOLID : BallType::STRIPE);
 				}
+
+				g_hole[i].hitBy(*g_sphere[j]);
+
 			}
 		}
 
@@ -323,7 +324,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 			g_legowall[i]->draw(Device, g_mWorld);
 
 		for (i = 0; i < 16; i++)
-			g_sphere[i].draw(Device, g_mWorld);
+			g_sphere[i]->draw(Device, g_mWorld);
 		
 		for (i = 0; i < 6; i++)
 			g_hole[i].draw(Device, g_mWorld);
@@ -339,9 +340,26 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		//Device->SetTexture( 0, NULL );
 	}
 
+	foulManager.checkFoul();
+
 	if (turnManager.processTurn(g_sphere))
 	{
-		MessageBox(nullptr, "플레이어 바뀜 ", nullptr, 0);
+		if (status.getTurnChangeStatus())
+		{
+			MessageBox(nullptr, "플레이어 바뀜 ", nullptr, 0);
+		}
+		else
+		{
+			MessageBox(nullptr, "플레이어 안 바뀜 ", nullptr, 0);
+		}
+	}
+	else
+	{
+		if (foulManager.isLose())
+		{
+			MessageBox(nullptr, "게임이 끝남", nullptr, 0);
+			status.setWinnerPlayer(status.getNotTurnPlayer()->getPlayerId());
+		}
 	}
 
 	return true;
@@ -443,14 +461,14 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		else if (wParam == VK_SPACE && !status.getTurnProgressStatus()){	// 스페이스 바의 경우 파란 공과 하얀 공의 위치를 받아서
 			// 그 거리와 방향만큼 하얀 공의 속도를 조정한다.
 			D3DXVECTOR3 targetpos = g_target_blueball.getPosition();
-			D3DXVECTOR3	whitepos = g_sphere[0].getPosition();
+			D3DXVECTOR3	whitepos = g_sphere[0]->getPosition();
 			double theta = acos(sqrt(pow(targetpos.x - whitepos.x, 2)) / sqrt(pow(targetpos.x - whitepos.x, 2) +
 				pow(targetpos.z - whitepos.z, 2)));		// 기본 1 사분면
 			if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x >= 0) { theta = -theta; }	//4 사분면
 			if (targetpos.z - whitepos.z >= 0 && targetpos.x - whitepos.x <= 0) { theta = PI - theta; } //2 사분면
 			if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x <= 0){ theta = PI + theta; } // 3 사분면
 			double distance = sqrt(pow(targetpos.x - whitepos.x, 2) + pow(targetpos.z - whitepos.z, 2));
-			g_sphere[0].setPower(distance * cos(theta), distance * sin(theta));
+			g_sphere[0]->setPower(distance * cos(theta), distance * sin(theta));
 			turnManager.processTriggerOn();
 		}
 	}else if(msg == WM_MOUSEMOVE){// 마우스가 움직일 때,
@@ -466,7 +484,7 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			CHandSphere preMovedWhiteBall("0");
 			bool canMove = true;
-			D3DXVECTOR3 coord3d = g_sphere[0].getPosition();
+			D3DXVECTOR3 coord3d = g_sphere[0]->getPosition();
 			preMovedWhiteBall.setPosition(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
 
 			for (int i = 0; i < 6; i++)
@@ -487,7 +505,7 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			for (int i = 1; i < 16; i++)
 			{
-				if (g_sphere[i].hasIntersected(preMovedWhiteBall))
+				if (g_sphere[i]->hasIntersected(preMovedWhiteBall))
 				{
 					canMove = false;
 				}
@@ -495,7 +513,7 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 			if (canMove)
 			{
-				g_sphere[0].setPosition(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
+				g_sphere[0]->setPosition(coord3d.x + dx*(-0.007f), coord3d.y, coord3d.z + dz*0.007f);
 				old_x = new_x;
 				old_z = new_z;
 			}

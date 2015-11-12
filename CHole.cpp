@@ -85,7 +85,7 @@ bool CHole::hasIntersected(CSphere& ball) const
 		ball.getPosition().z + ball.getRadius() > 3.06f - (0.15f / 2) ||
 		ball.getPosition().z - ball.getRadius() < -3.06f + (0.15f / 2))
 	{
-		return true;
+ 		return true;
 	}
 
 	return false;

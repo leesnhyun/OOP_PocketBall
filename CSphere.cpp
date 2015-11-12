@@ -2,6 +2,9 @@
 #include "CSphere.h"
 #include <cmath>
 #include "TurnManager.h"
+#include "Status.h"
+
+extern Status status;
 
 struct _VERTEX
 {
@@ -26,7 +29,7 @@ CSphere::CSphere(BallType ballType, const char* ballImageFileName)
 	this->m_velocity_z = 0;
 	this->m_pSphereMesh = nullptr;
 	this->ballType = ballType;
-	
+	this->disableTurn = -1;
 	D3DXMatrixIdentity(&mLocal);
 	D3DXMatrixIdentity(&this->matBallRoll);
 
@@ -212,6 +215,12 @@ BallType CSphere::getBallType() const
 void CSphere::disable() noexcept
 {
 	//TODO : get turn count to record disableTurn
+	this->disableTurn = status.getCurrentTurnCount();
+}
+
+void CSphere::enable() noexcept
+{
+	this->disableTurn = -1;
 }
 
 int CSphere::getDisableTurn() const noexcept

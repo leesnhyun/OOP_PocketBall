@@ -33,20 +33,22 @@ private:
 	bool foulStatus;
 	bool turnProgressStatus;
 	bool turnChangeStatus;
-	bool gameEndStatus;
-	vector<Player> playerList;
-	Player nowPlayer;
+	vector<Player *> playerList;
+	Player* pNowPlayer;
 	int currentTurnCount;
+	int winnerPlayer;
 public:
-	Status(vector<Player> playerList);
-	Player& getTurnPlayer() noexcept;
-	Player& getNotTurnPlayer() noexcept;
+	Status(vector<Player *> playerList);
+	Player* getTurnPlayer() noexcept;
+	Player* getNotTurnPlayer() noexcept;
 	vector<int> getPlayerIdList() const noexcept;
 	bool getFoulStatus() const noexcept;
 	bool getTurnProgressStatus() const noexcept;
 	bool getTurnChangeStatus() const noexcept;
 	bool getGameEndStatus() const noexcept;
 	int getCurrentTurnCount() const noexcept;
+	int getWinnerPlayer() const;
+	void setWinnerPlayer(int winner) noexcept;
 	void setFoulStatus(bool toSet) noexcept;
 	void setTurnProgressStatus(bool toSet) noexcept;
 	void setTurnChangeStatus(bool toSet) noexcept;

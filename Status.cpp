@@ -4,26 +4,27 @@
 using std::find_if;
 using std::exception;
 
-Status::Status(vector<Player> playerList) : nowPlayer(playerList.at(0))
+Status::Status(vector<Player*> playerList)
 {
-	this->playerList = vector<Player>(playerList.begin(), playerList.end());
+	this->playerList = vector<Player*>(playerList.begin(), playerList.end());
 	this->currentTurnCount = 0;
+	this->winnerPlayer = -1;
 	this->foulStatus = false;
-	this->gameEndStatus = false;
 	this->turnProgressStatus = false;
 	this->turnChangeStatus = false;
+	this->pNowPlayer = playerList.at(0);
 }
 
-Player& Status::getTurnPlayer() noexcept
+Player* Status::getTurnPlayer() noexcept
 {
-	return this->nowPlayer;
+	return this->pNowPlayer;
 }
 
-Player& Status::getNotTurnPlayer() noexcept
+Player* Status::getNotTurnPlayer() noexcept
 {
-	Player nowPlayer = this->nowPlayer;
-	vector<Player>::iterator foundIndex = find_if(this->playerList.begin(), this->playerList.end(), [nowPlayer](Player player) {
-		return (player.getPlayerId() != nowPlayer.getPlayerId());
+	Player* nowPlayer = this->pNowPlayer;
+	vector<Player*>::iterator foundIndex = find_if(this->playerList.begin(), this->playerList.end(), [nowPlayer](Player* pPlayer) {
+		return (pPlayer->getPlayerId() != nowPlayer->getPlayerId());
 	});
 
 	return *foundIndex;
@@ -33,9 +34,9 @@ vector<int> Status::getPlayerIdList() const noexcept
 {
 	vector<int> idList;
 
-	for (Player player : this->playerList)
+	for (Player* player : this->playerList)
 	{
-		idList.push_back(player.getPlayerId());
+		idList.push_back(player->getPlayerId());
 	}
 
 	return idList;
@@ -43,8 +44,8 @@ vector<int> Status::getPlayerIdList() const noexcept
 
 void Status::setTurnPlayer(int playerID)
 {
-	vector<Player>::iterator foundIndex = find_if(this->playerList.begin(), this->playerList.end(), [playerID](Player player) {
-		return (player.getPlayerId() == playerID);
+	vector<Player*>::iterator foundIndex = find_if(this->playerList.begin(), this->playerList.end(), [playerID](Player* pPlayer) {
+		return (pPlayer->getPlayerId() == playerID);
 	});
 
 	if (foundIndex == this->playerList.end())
@@ -52,7 +53,7 @@ void Status::setTurnPlayer(int playerID)
 		throw PlayerNotFoundException("플레이어 ID에 맞는 플레이어를 찾을 수 없습니다.");
 	}
 
-	this->nowPlayer = *foundIndex;
+	this->pNowPlayer = *foundIndex;
 }
 
 bool Status::getFoulStatus() const noexcept
@@ -72,12 +73,27 @@ bool Status::getTurnChangeStatus() const noexcept
 
 bool Status::getGameEndStatus() const noexcept
 {
-	return this->gameEndStatus;
+	return (this->winnerPlayer >= 0);
 }
 
 int Status::getCurrentTurnCount() const noexcept
 {
 	return this->currentTurnCount;
+}
+
+int Status::getWinnerPlayer() const
+{
+	if (winnerPlayer < 0)
+	{
+		throw PlayerNotFoundException("아직 게임이 끝나지 않았습니다.");
+	}
+
+	return this->winnerPlayer;
+}
+
+void Status::setWinnerPlayer(int winner) noexcept
+{
+	this->winnerPlayer = winner;
 }
 
 void Status::setFoulStatus(bool toSet) noexcept
@@ -93,11 +109,6 @@ void Status::setTurnProgressStatus(bool toSet) noexcept
 void Status::setTurnChangeStatus(bool toSet) noexcept
 {
 	this->turnChangeStatus = toSet;
-}
-
-void Status::setGameEndStatus(bool toSet) noexcept
-{
-	this->gameEndStatus = toSet;
 }
 
 void Status::nextTurnCount() noexcept
