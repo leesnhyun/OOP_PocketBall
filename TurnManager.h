@@ -1,5 +1,6 @@
 #ifndef _TURN_MANAGER_
 #define _TURN_MANAGER_
+
 #include "CSphere.h"
 #include <array>
 #include <vector>

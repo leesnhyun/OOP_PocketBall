@@ -27,6 +27,7 @@
 
 #include "FoulManager.h"
 #include "TurnManager.h"
+#include "DisplayStatusManager.h"
 
 #include "CSphere.h"
 #include "CHandSphere.h"
@@ -117,7 +118,6 @@ CTargetSphere g_target_blueball("guide");
 
 CLight	g_light;
 CHole	g_hole[6];
-
 CBorder g_border(d3d::TABLE_BORDER);
 
 double g_camera_pos[3] = {0.0, 5.0, -8.0};
@@ -125,8 +125,10 @@ double g_camera_pos[3] = {0.0, 5.0, -8.0};
 Player players[2] = { Player(1), Player(2) };
 vector<Player*> playerVec = {&players[0], &players[1]};
 Status status(playerVec);
+
 TurnManager turnManager(status.getPlayerIdList());
 FoulManager foulManager;
+DisplayStatusManager displayStatusManager(Width, Height, players);
 
 CD3DFont* Font = 0;
 DWORD FrameCnt = 0;
@@ -154,11 +156,9 @@ bool Setup()
 	D3DXMatrixIdentity(&g_mView);
 	D3DXMatrixIdentity(&g_mProj);
 
-	// 글자생성
-	Font = new CD3DFont("Tahoma", 16, 0);
-	Font->InitDeviceObjects(Device);
-	Font->RestoreDeviceObjects();
-
+	// 상태창 매니저 생성
+	if (false == displayStatusManager.create("Tahoma", 16, Device)) return false;
+	
 	// 프레임생성
 	if (false == g_border.create(Device)) return false;
 	g_border.setPosition(0.115f, -0.44f, 0.00f);
@@ -205,8 +205,7 @@ bool Setup()
 	if (false == g_target_blueball.create(Device)) return false;
 	g_target_blueball.setPosition(.0f, static_cast<float>(CSphere::COMMON_RADIUS) , .0f);
 
-	if (false == g_light.create(Device))
-		return false;
+	if (false == g_light.create(Device)) return false;
 	
 	// 카메라의 위치와 시야를 설정함
 	D3DXVECTOR3 pos(0.0f, 10.0f, 0.0f);
@@ -238,12 +237,8 @@ void Cleanup(void)
 	}
 	destroyAllLegoBlock();
 	g_light.destroy();
+	displayStatusManager.destory();
 
-	if (Font) {
-		Font->InvalidateDeviceObjects();
-		Font->DeleteDeviceObjects();
-		d3d::Delete<CD3DFont*>(Font);
-	}
 }
 
 
@@ -260,28 +255,12 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 
 	if( Device )
 	{
-		
-		// Status Message
-		FrameCnt++;
-		TimeElapsed += timeDelta;
-
-		if (TimeElapsed >= 1.0f)
-		{
-			FPS = (float)FrameCnt / TimeElapsed;
-
-
-			sprintf(FPSString, "%f", FPS);
-			FPSString[8] = '\0'; // mark end of string
-
-			TimeElapsed = 0.0f;
-			FrameCnt = 0;
-		}
-
-
 		Device->Clear(0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0x00afafaf, 1.0f, 0);
 		Device->BeginScene();
 
-		if (Font) Font->DrawText(200, 20, 0xff000000, FPSString);
+		// Status Display update
+		displayStatusManager.display();
+		displayStatusManager.update();
 		
 		// update the position of each ball. during update, check whether each ball hit by walls.
 		// 공의 위치를 갱신한다. 갱신하는 중에는 각각의 공이 벽과 충돌 했는지 확인한다.

@@ -96,6 +96,9 @@
     <ClCompile Include="d3dutil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="DisplayStatusManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="d3dUtility.h">
@@ -171,6 +174,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dxutil.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DisplayStatusManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

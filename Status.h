@@ -29,6 +29,7 @@ public:
 
 class Status
 {
+
 private:
 	bool foulStatus;
 	bool turnProgressStatus;
@@ -37,6 +38,7 @@ private:
 	Player* pNowPlayer;
 	int currentTurnCount;
 	int winnerPlayer;
+
 public:
 	Status(vector<Player *> playerList);
 	Player* getTurnPlayer() noexcept;
@@ -55,6 +57,7 @@ public:
 	void setGameEndStatus(bool toSet) noexcept;
 	void setTurnPlayer(int playerID) throw (PlayerNotFoundException);
 	void nextTurnCount() noexcept;
+
 };
 
 #endif

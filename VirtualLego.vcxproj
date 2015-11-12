@@ -160,6 +160,7 @@
     <ClCompile Include="d3dfont.cpp" />
     <ClCompile Include="d3dutil.cpp" />
     <ClCompile Include="d3dUtility.cpp" />
+    <ClCompile Include="DisplayStatusManager.cpp" />
     <ClCompile Include="dxutil.cpp" />
     <ClCompile Include="FoulManager.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -187,6 +188,7 @@
     <ClInclude Include="d3dfont.h" />
     <ClInclude Include="d3dutil.h" />
     <ClInclude Include="d3dUtility.h" />
+    <ClInclude Include="DisplayStatusManager.h" />
     <ClInclude Include="dxutil.h" />
     <ClInclude Include="FoulManager.h" />
     <ClInclude Include="Hittable.h" />
