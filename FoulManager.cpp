@@ -62,7 +62,7 @@ void FoulManager::isFirstHitNotMyBall()
 
 bool FoulManager::isEightBallBadToIn()
 {
-	if (g_sphere[8]->getDisableTurn() == status.getCurrentTurnCount() &&
+	if (g_sphere[8]->getDisableTurn() != -1 &&
 		status.getTurnPlayer()->getNumTakenBall() != 7)
 	{
 		return true;
@@ -72,7 +72,7 @@ bool FoulManager::isEightBallBadToIn()
 
 bool FoulManager::isEightBallWithFoul()
 {
-	if (g_sphere[8]->getDisableTurn() == status.getCurrentTurnCount() &&
+	if (g_sphere[8]->getDisableTurn() != -1 &&
 		status.getFoulStatus())
 	{
 		return true;
