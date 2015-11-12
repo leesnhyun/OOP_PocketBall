@@ -15,3 +15,16 @@ void CHandSphere::setFirstHitBallType(BallType ballType) noexcept
 {
 	this->firstHitBallType = ballType;
 }
+
+void CHandSphere::hitBy(CSphere& ball) noexcept
+{
+	if (this->hasIntersected(ball))
+	{
+		if (this->firstHitBallType == BallType::NONE)
+		{
+			this->firstHitBallType = ball.getBallType();
+		}
+
+		super::hitBy(ball);
+	}
+}

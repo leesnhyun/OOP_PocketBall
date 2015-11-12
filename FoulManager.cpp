@@ -4,7 +4,7 @@
 #include "CHandSphere.h"
 
 extern Status status;
-extern array<CSphere, 16> g_sphere;
+extern array<CSphere*, 16> g_sphere;
 extern Player players[2];
 
 FoulManager::FoulManager()
@@ -19,29 +19,50 @@ void FoulManager::reset()
 
 void FoulManager::isNoHitHandBall()
 {
-	//TODO : add firsthitball
-	if (dynamic_cast<CHandSphere&>(g_sphere[0]).getFirstHitBallType() == BallType::NONE) status.setFoulStatus(true);
+	CHandSphere& handSphere = dynamic_cast<CHandSphere&>(*g_sphere[0]);
+	if (handSphere.getFirstHitBallType() == BallType::NONE && status.getTurnProgressStatus() &&
+		(abs(handSphere.getVelocity_X()) < 0.01 && abs(handSphere.getVelocity_Z()) < 0.01))
+	{
+		MessageBox(NULL, "Nothing Hit", NULL, 0);
+		status.setFoulStatus(true);
+	}
 }
 
 void FoulManager::isHandBallInHole()
 {
-	if (g_sphere[0].getDisableTurn() == status.getCurrentTurnCount())
+	// TODO : Where position..
+
+	if (g_sphere[0]->getDisableTurn() == status.getCurrentTurnCount())
 	{
+		MessageBox(NULL, "HandBall", NULL, 0);
+		g_sphere[0]->enable();
+		g_sphere[0]->setPower(0, 0);
+		g_sphere[0]->setPosition(0, 0, 0);
 		status.setFoulStatus(true);
 	}
 }
 
 void FoulManager::isFirstHitNotMyBall()
 {
-	//TODO : add firsthitball balltype
-	if (status.getTurnPlayer()->getBallType() != dynamic_cast<CHandSphere&>(g_sphere[0]).getFirstHitBallType()) status.setFoulStatus(true);
+	BallType nowBallType = dynamic_cast<CHandSphere&>(*g_sphere[0]).getFirstHitBallType();
+
+	// 1. 플레이어들의 목표 공 종류가 결정됨
+	// 2. 현재 공이 최소 하나의 공은 맞힌 상태
+	// 3. 현재 플레이어 목표 종류와 맞힌 공이 일치하지 않음.
+	if (status.getTurnPlayer()->getBallType() != BallType::NONE && nowBallType != BallType::NONE
+		&& status.getTurnPlayer()->getBallType() != nowBallType)
+	{
+		MessageBox(NULL, "First hit is not mine.", NULL, 0);
+		status.setFoulStatus(true);
+	}
 }
 
 bool FoulManager::isEightBallBadToIn()
 {
-	if (g_sphere[8].getDisableTurn() == status.getCurrentTurnCount() &&
+	if (g_sphere[8]->getDisableTurn() == status.getCurrentTurnCount() &&
 		status.getTurnPlayer()->getNumTakenBall() != 7)
 	{
+		MessageBox(NULL, "EightBall HoleIn!", NULL, 0);
 		return true;
 	}
 	return false;
@@ -49,9 +70,10 @@ bool FoulManager::isEightBallBadToIn()
 
 bool FoulManager::isEightBallWithFoul()
 {
-	if (g_sphere[8].getDisableTurn() == status.getCurrentTurnCount() &&
+	if (g_sphere[8]->getDisableTurn() == status.getCurrentTurnCount() &&
 		status.getFoulStatus())
 	{
+		MessageBox(NULL, "EightBall With foul.", NULL, 0);
 		return true;
 	}
 	return false;

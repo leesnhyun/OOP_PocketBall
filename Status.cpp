@@ -8,8 +8,8 @@ Status::Status(vector<Player*> playerList)
 {
 	this->playerList = vector<Player*>(playerList.begin(), playerList.end());
 	this->currentTurnCount = 0;
+	this->winnerPlayer = -1;
 	this->foulStatus = false;
-	this->gameEndStatus = false;
 	this->turnProgressStatus = false;
 	this->turnChangeStatus = false;
 	this->pNowPlayer = playerList.at(0);
@@ -73,12 +73,27 @@ bool Status::getTurnChangeStatus() const noexcept
 
 bool Status::getGameEndStatus() const noexcept
 {
-	return this->gameEndStatus;
+	return (this->winnerPlayer >= 0);
 }
 
 int Status::getCurrentTurnCount() const noexcept
 {
 	return this->currentTurnCount;
+}
+
+int Status::getWinnerPlayer() const
+{
+	if (winnerPlayer < 0)
+	{
+		throw PlayerNotFoundException("아직 게임이 끝나지 않았습니다.");
+	}
+
+	return this->winnerPlayer;
+}
+
+void Status::setWinnerPlayer(int winner) noexcept
+{
+	this->winnerPlayer = winner;
 }
 
 void Status::setFoulStatus(bool toSet) noexcept
@@ -94,11 +109,6 @@ void Status::setTurnProgressStatus(bool toSet) noexcept
 void Status::setTurnChangeStatus(bool toSet) noexcept
 {
 	this->turnChangeStatus = toSet;
-}
-
-void Status::setGameEndStatus(bool toSet) noexcept
-{
-	this->gameEndStatus = toSet;
 }
 
 void Status::nextTurnCount() noexcept

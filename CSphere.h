@@ -24,6 +24,7 @@ private:
 	string ballImageFileName;
 	BallType ballType;
 protected:
+	typedef CSphere super;
 	int disableTurn = -1;
 	float m_radius;
 	float m_velocity_x;
@@ -46,6 +47,7 @@ public:
 	float getRadius() const; // 공의 반지름을 받아옴
 	BallType getBallType() const;
 	void disable() noexcept;
+	void enable() noexcept;
 	int getDisableTurn() const noexcept;
 	bool isDisabled() const noexcept;
 	void adjustPosition(CSphere& ball);
