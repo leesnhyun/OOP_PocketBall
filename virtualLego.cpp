@@ -308,7 +308,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 						// TODO : Check
 						BallType nowBallType = g_sphere[j].getBallType();
 						status.getTurnPlayer().setBallType(nowBallType);
-						status.getNoTurnPlayer().setBallType((nowBallType == BallType::STRIPE) ? BallType::SOLID : BallType::STRIPE);
+						//status.getNoTurnPlayer().setBallType((nowBallType == BallType::STRIPE) ? BallType::SOLID : BallType::STRIPE);
 					}
 					g_hole[i].hitBy(g_sphere[j]);
 				}
