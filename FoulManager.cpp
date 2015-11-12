@@ -35,7 +35,7 @@ void FoulManager::isHandBallInHole()
 	{
 		g_sphere[0]->enable();
 		g_sphere[0]->setPower(0, 0);
-		g_sphere[0]->setPosition(g_sphere[0]->getPreCenter_x(), 0, g_sphere[0]->getPreCenter_z());
+		g_sphere[0]->setPosition(g_sphere[0]->getPreCenter_x(), g_sphere[0]->getPosition().y, g_sphere[0]->getPreCenter_z());
 
 		status.setFoulStatus(true);
 	}
