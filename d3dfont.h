@@ -7,9 +7,9 @@
 //-----------------------------------------------------------------------------
 #ifndef D3DFONT_H
 #define D3DFONT_H
+
 #include <tchar.h>
 #include <D3D9.h>
-
 
 // Font creation flags
 #define D3DFONT_BOLD        0x0001
@@ -20,9 +20,6 @@
 #define D3DFONT_CENTERED    0x0001
 #define D3DFONT_TWOSIDED    0x0002
 #define D3DFONT_FILTERED    0x0004
-
-
-
 
 //-----------------------------------------------------------------------------
 // Name: class CD3DFont
