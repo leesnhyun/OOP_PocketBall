@@ -31,3 +31,4 @@ D3DXMATRIX CObject::getLocalTransform() const
 CObject::~CObject()
 {
 }
+

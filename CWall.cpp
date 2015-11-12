@@ -24,7 +24,6 @@ CWall::CWall(float iwidth, float iheight, float idepth, D3DXCOLOR color)
 // º®ÀÇ ¼Ò¸êÀÚ
 CWall::~CWall()
 {
-	
 }
 
 bool CWall::create(IDirect3DDevice9* pDevice)
@@ -42,7 +41,8 @@ bool CWall::create(IDirect3DDevice9* pDevice)
 // º®À» È­¸é¿¡¼­ ¼Ò¸ê½ÃÅ´
 void CWall::destroy()
 {
-	if (m_pBoundMesh != nullptr) {
+	if (m_pBoundMesh != nullptr)
+	{
 		m_pBoundMesh->Release();
 		m_pBoundMesh = nullptr;
 	}
@@ -52,11 +52,11 @@ void CWall::destroy()
 void CWall::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)
 {
 	if (pDevice == nullptr) return;
-	
+
 	pDevice->SetTransform(D3DTS_WORLD, &mWorld);
 	pDevice->MultiplyTransform(D3DTS_WORLD, &mLocal);
 	pDevice->SetMaterial(&m_mtrl);
-	
+
 	m_pBoundMesh->DrawSubset(0);
 }
 
@@ -69,3 +69,4 @@ void CWall::adjustPosition(CSphere& ball)
 		ball.setPosition(ball.getPreCenter_x(), ball.getPosition().y, ball.getPreCenter_z());
 	}
 }
+

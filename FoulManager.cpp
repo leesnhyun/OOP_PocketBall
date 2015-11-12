@@ -61,13 +61,18 @@ void FoulManager::isFirstHitNotMyBall()
 	if (status.getTurnPlayer()->getBallType() != BallType::NONE && nowBallType != BallType::NONE
 		&& status.getTurnPlayer()->getBallType() != nowBallType)
 	{
+		if (status.getTurnPlayer()->getNumTakenBall() == 7
+			&& nowBallType == BallType::EIGHT)
+		{
+			return;//자신의 모든 목표 공을 넣고, 8번 공을 친 경우는 파울이 아니다.
+		}
 		status.setFoulStatus(true);
 	}
 }
 
 bool FoulManager::isEightBallBadToIn()
 {
-	if (g_sphere[8]->getDisableTurn() == status.getCurrentTurnCount() &&
+	if (g_sphere[8]->getDisableTurn() != -1 &&
 		status.getTurnPlayer()->getNumTakenBall() != 7)
 	{
 		return true;
@@ -77,7 +82,7 @@ bool FoulManager::isEightBallBadToIn()
 
 bool FoulManager::isEightBallWithFoul()
 {
-	if (g_sphere[8]->getDisableTurn() == status.getCurrentTurnCount() &&
+	if (g_sphere[8]->getDisableTurn() != -1 &&
 		status.getFoulStatus())
 	{
 		return true;
@@ -96,3 +101,4 @@ bool FoulManager::isLose()
 {
 	return (isEightBallBadToIn() || isEightBallWithFoul());
 }
+

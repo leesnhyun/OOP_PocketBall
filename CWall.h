@@ -9,8 +9,8 @@
 // CWall class definition
 // 벽 클래스에 대한 정의
 // -----------------------------------------------------------------------------
-class CWall : public CObject, public Hittable {
-
+class CWall : public CObject, public Hittable
+{
 private:
 	D3DMATERIAL9 m_mtrl;
 	ID3DXMesh* m_pBoundMesh;
@@ -19,6 +19,7 @@ protected:
 	float m_width;																		// 벽의 너비
 	float m_depth;																		// 벽의 두께
 	float m_height;																		// 벽의 높이
+
 
 public:
 	static const float LOSS_RATIO;
@@ -35,3 +36,4 @@ public:
 };
 
 #endif
+

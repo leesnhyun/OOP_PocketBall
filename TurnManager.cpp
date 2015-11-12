@@ -137,3 +137,4 @@ bool TurnManager::processTurn(const array<CSphere*, 16>& fieldBalls)
 
 	return true;
 }
+

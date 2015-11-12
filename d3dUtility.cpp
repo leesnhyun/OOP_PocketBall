@@ -25,31 +25,31 @@ bool d3d::InitD3D(
 
 	WNDCLASS wc;
 
-	wc.style         = CS_HREDRAW | CS_VREDRAW;
-	wc.lpfnWndProc   = static_cast<WNDPROC>(d3d::WndProc); 
-	wc.cbClsExtra    = 0;
-	wc.cbWndExtra    = 0;
-	wc.hInstance     = hInstance;
-	wc.hIcon         = LoadIcon(nullptr, IDI_APPLICATION);
-	wc.hCursor       = LoadCursor(nullptr, IDC_ARROW);
+	wc.style = CS_HREDRAW | CS_VREDRAW;
+	wc.lpfnWndProc = static_cast<WNDPROC>(d3d::WndProc);
+	wc.cbClsExtra = 0;
+	wc.cbWndExtra = 0;
+	wc.hInstance = hInstance;
+	wc.hIcon = LoadIcon(nullptr, IDI_APPLICATION);
+	wc.hCursor = LoadCursor(nullptr, IDC_ARROW);
 	wc.hbrBackground = static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH));
-	wc.lpszMenuName  = nullptr;
+	wc.lpszMenuName = nullptr;
 	wc.lpszClassName = "Direct3D9App";
 
-	if( !RegisterClass(&wc) ) 
+	if (!RegisterClass(&wc))
 	{
 		::MessageBox(nullptr, "RegisterClass() - FAILED", nullptr, 0);
 		return false;
 	}
-		
+
 	HWND hwnd = 0;
 	hwnd = ::CreateWindow("Direct3D9App",
-		"Virtual Billiard", 
+		"Virtual Billiard",
 		WS_EX_TOPMOST,
 		0, 0, width, height,
-		nullptr /*parent hwnd*/, nullptr /* menu */, hInstance, nullptr /*extra*/); 
+		nullptr /*parent hwnd*/, nullptr /* menu */, hInstance, nullptr /*extra*/);
 
-	if( !hwnd )
+	if (!hwnd)
 	{
 		::MessageBox(nullptr, "CreateWindow() - FAILED", nullptr, 0);
 		return false;
@@ -69,7 +69,7 @@ bool d3d::InitD3D(
 	IDirect3D9* d3d9 = nullptr;
 	d3d9 = Direct3DCreate9(D3D_SDK_VERSION);
 
-	if( !d3d9 )
+	if (!d3d9)
 	{
 		::MessageBox(nullptr, "Direct3DCreate9() - FAILED", nullptr, 0);
 		return false;
@@ -81,57 +81,57 @@ bool d3d::InitD3D(
 	d3d9->GetDeviceCaps(D3DADAPTER_DEFAULT, deviceType, &caps);
 
 	int vp = 0;
-	if( caps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT )
+	if (caps.DevCaps & D3DDEVCAPS_HWTRANSFORMANDLIGHT)
 		vp = D3DCREATE_HARDWARE_VERTEXPROCESSING;
 	else
 		vp = D3DCREATE_SOFTWARE_VERTEXPROCESSING;
 
 	// Step 3: Fill out the D3DPRESENT_PARAMETERS structure.
- 
+
 	RECT rc;
 	GetClientRect(hwnd, &rc);
 	UINT w = rc.right - rc.left;
 	UINT h = rc.bottom - rc.top;
 	D3DPRESENT_PARAMETERS d3dpp;
-	d3dpp.BackBufferWidth            = w;
-	d3dpp.BackBufferHeight           = h;
-	d3dpp.BackBufferFormat           = D3DFMT_A8R8G8B8;
-	d3dpp.BackBufferCount            = 1;
-	d3dpp.MultiSampleType            = D3DMULTISAMPLE_NONE;
-	d3dpp.MultiSampleQuality         = 0;
-	d3dpp.SwapEffect                 = D3DSWAPEFFECT_DISCARD; 
-	d3dpp.hDeviceWindow              = hwnd;
-	d3dpp.Windowed                   = windowed;
-	d3dpp.EnableAutoDepthStencil     = true; 
-	d3dpp.AutoDepthStencilFormat     = D3DFMT_D24S8;
-	d3dpp.Flags                      = 0;
+	d3dpp.BackBufferWidth = w;
+	d3dpp.BackBufferHeight = h;
+	d3dpp.BackBufferFormat = D3DFMT_A8R8G8B8;
+	d3dpp.BackBufferCount = 1;
+	d3dpp.MultiSampleType = D3DMULTISAMPLE_NONE;
+	d3dpp.MultiSampleQuality = 0;
+	d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;
+	d3dpp.hDeviceWindow = hwnd;
+	d3dpp.Windowed = windowed;
+	d3dpp.EnableAutoDepthStencil = true;
+	d3dpp.AutoDepthStencilFormat = D3DFMT_D24S8;
+	d3dpp.Flags = 0;
 	d3dpp.FullScreen_RefreshRateInHz = D3DPRESENT_RATE_DEFAULT;
-	d3dpp.PresentationInterval       = D3DPRESENT_INTERVAL_IMMEDIATE;
+	d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;
 
 	// Step 4: Create the device.
 
 	hr = d3d9->CreateDevice(
 		D3DADAPTER_DEFAULT, // primary adapter
-		deviceType,         // device type
-		hwnd,               // window associated with device
-		vp,                 // vertex processing
-		&d3dpp,             // present parameters
-		device);            // return created device
+		                  deviceType, // device type
+		                  hwnd, // window associated with device
+		                  vp, // vertex processing
+		                  &d3dpp, // present parameters
+		                  device); // return created device
 
-	if( FAILED(hr) )
+	if (FAILED(hr))
 	{
 		// try again using a 16-bit depth buffer
 		d3dpp.AutoDepthStencilFormat = D3DFMT_D16;
-		
+
 		hr = d3d9->CreateDevice(
 			D3DADAPTER_DEFAULT,
-			deviceType,
-			hwnd,
-			vp,
-			&d3dpp,
-			device);
+			                  deviceType,
+			                  hwnd,
+			                  vp,
+			                  &d3dpp,
+			                  device);
 
-		if( FAILED(hr) )
+		if (FAILED(hr))
 		{
 			d3d9->Release(); // done with d3d9 object
 			::MessageBox(nullptr, "CreateDevice() - FAILED", nullptr, 0);
@@ -140,28 +140,28 @@ bool d3d::InitD3D(
 	}
 
 	d3d9->Release(); // done with d3d9 object
-	
+
 	return true;
 }
 
-int d3d::EnterMsgLoop( bool (*ptr_display)(float timeDelta) )
+int d3d::EnterMsgLoop(bool (*ptr_display)(float timeDelta))
 {
 	MSG msg;
 	::ZeroMemory(&msg, sizeof(MSG));
 
-	static double lastTime = static_cast<double>(timeGetTime()); 
+	static double lastTime = static_cast<double>(timeGetTime());
 
-	while(msg.message != WM_QUIT)
+	while (msg.message != WM_QUIT)
 	{
-		if(::PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
+		if (::PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
 		{
 			::TranslateMessage(&msg);
 			::DispatchMessage(&msg);
 		}
 		else
-		{	
-			double currTime  = static_cast<double>(timeGetTime());
-			double timeDelta = (currTime - lastTime)*0.0007;
+		{
+			double currTime = static_cast<double>(timeGetTime());
+			double timeDelta = (currTime - lastTime) * 0.0007;
 			ptr_display(static_cast<float>(timeDelta));
 
 			lastTime = currTime;
@@ -175,10 +175,10 @@ D3DLIGHT9 d3d::InitDirectionalLight(D3DXVECTOR3* direction, D3DXCOLOR* color)
 	D3DLIGHT9 light;
 	::ZeroMemory(&light, sizeof(light));
 
-	light.Type      = D3DLIGHT_DIRECTIONAL;
-	light.Ambient   = *color * 0.6f;
-	light.Diffuse   = *color;
-	light.Specular  = *color * 0.6f;
+	light.Type = D3DLIGHT_DIRECTIONAL;
+	light.Ambient = *color * 0.6f;
+	light.Diffuse = *color;
+	light.Specular = *color * 0.6f;
 	light.Direction = *direction;
 
 	return light;
@@ -189,13 +189,13 @@ D3DLIGHT9 d3d::InitPointLight(D3DXVECTOR3* position, D3DXCOLOR* color)
 	D3DLIGHT9 light;
 	::ZeroMemory(&light, sizeof(light));
 
-	light.Type      = D3DLIGHT_POINT;
-	light.Ambient   = *color * 0.6f;
-	light.Diffuse   = *color;
-	light.Specular  = *color * 0.6f;
-	light.Position  = *position;
-	light.Range        = 1000.0f;
-	light.Falloff      = 1.0f;
+	light.Type = D3DLIGHT_POINT;
+	light.Ambient = *color * 0.6f;
+	light.Diffuse = *color;
+	light.Specular = *color * 0.6f;
+	light.Position = *position;
+	light.Range = 1000.0f;
+	light.Falloff = 1.0f;
 	light.Attenuation0 = 1.0f;
 	light.Attenuation1 = 0.0f;
 	light.Attenuation2 = 0.0f;
@@ -208,19 +208,19 @@ D3DLIGHT9 d3d::InitSpotLight(D3DXVECTOR3* position, D3DXVECTOR3* direction, D3DX
 	D3DLIGHT9 light;
 	::ZeroMemory(&light, sizeof(light));
 
-	light.Type      = D3DLIGHT_SPOT;
-	light.Ambient   = *color * 0.0f;
-	light.Diffuse   = *color;
-	light.Specular  = *color * 0.6f;
-	light.Position  = *position;
+	light.Type = D3DLIGHT_SPOT;
+	light.Ambient = *color * 0.0f;
+	light.Diffuse = *color;
+	light.Specular = *color * 0.6f;
+	light.Position = *position;
 	light.Direction = *direction;
-	light.Range        = 1000.0f;
-	light.Falloff      = 1.0f;
+	light.Range = 1000.0f;
+	light.Falloff = 1.0f;
 	light.Attenuation0 = 1.0f;
 	light.Attenuation1 = 0.0f;
 	light.Attenuation2 = 0.0f;
-	light.Theta        = 0.4f;
-	light.Phi          = 0.9f;
+	light.Theta = 0.4f;
+	light.Phi = 0.9f;
 
 	return light;
 }
@@ -228,11 +228,11 @@ D3DLIGHT9 d3d::InitSpotLight(D3DXVECTOR3* position, D3DXVECTOR3* direction, D3DX
 D3DMATERIAL9 d3d::InitMtrl(D3DXCOLOR a, D3DXCOLOR d, D3DXCOLOR s, D3DXCOLOR e, float p)
 {
 	D3DMATERIAL9 mtrl;
-	mtrl.Ambient  = a;
-	mtrl.Diffuse  = d;
+	mtrl.Ambient = a;
+	mtrl.Diffuse = d;
 	mtrl.Specular = s;
 	mtrl.Emissive = e;
-	mtrl.Power    = p;
+	mtrl.Power = p;
 	return mtrl;
 }
 
@@ -250,8 +250,8 @@ d3d::BoundingBox::BoundingBox()
 
 bool d3d::BoundingBox::isPointInside(D3DXVECTOR3& p)
 {
-	if( p.x >= _min.x && p.y >= _min.y && p.z >= _min.z &&
-		p.x <= _max.x && p.y <= _max.y && p.z <= _max.z )
+	if (p.x >= _min.x && p.y >= _min.y && p.z >= _min.z &&
+		p.x <= _max.x && p.y <= _max.y && p.z <= _max.z)
 	{
 		return true;
 	}
@@ -265,3 +265,4 @@ d3d::BoundingSphere::BoundingSphere()
 {
 	_radius = 0.0f;
 }
+

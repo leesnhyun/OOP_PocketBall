@@ -10,3 +10,4 @@ public:
 	void hitBy(CSphere& ball) noexcept;
 };
 #endif
+

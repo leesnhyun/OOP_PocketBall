@@ -11,8 +11,8 @@
 using std::vector;
 using std::string;
 
-class DisplayStatusManager {
-
+class DisplayStatusManager
+{
 private:
 
 	int windowWidth;
@@ -21,7 +21,7 @@ private:
 	string playerName[2];
 	string playerBallCount[2];
 	string playerBallType[2];
-	
+
 	string turnStatus;
 
 	Player* players;
@@ -39,7 +39,7 @@ public:
 private:
 	string _getBallType(const BallType b);
 	string _getTurnStatus();
-
 };
 
 #endif
+

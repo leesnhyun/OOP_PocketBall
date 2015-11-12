@@ -5,9 +5,9 @@
 // 구멍의 생성자를 정의
 CHole::CHole() : m_radius(0.25)
 {
-	D3DXMatrixIdentity(&mLocal);				// Transform Matrix를 단위행렬로 초기화
-	D3DXMatrixIdentity(&rotationMat);				// Transform Matrix를 단위행렬로 초기화
-	ZeroMemory(&m_mtrl, sizeof(m_mtrl));		// memset을 통해 모두 0으로 초기화
+	D3DXMatrixIdentity(&mLocal); // Transform Matrix를 단위행렬로 초기화
+	D3DXMatrixIdentity(&rotationMat); // Transform Matrix를 단위행렬로 초기화
+	ZeroMemory(&m_mtrl, sizeof(m_mtrl)); // memset을 통해 모두 0으로 초기화
 	m_pSphereMesh = nullptr;
 
 	m_mtrl.Ambient = d3d::BLACK;
@@ -20,7 +20,6 @@ CHole::CHole() : m_radius(0.25)
 // 구멍의 소멸자를 정의
 CHole::~CHole()
 {
-
 }
 
 // 구멍을 화면에 생성함
@@ -35,7 +34,7 @@ bool CHole::create(IDirect3DDevice9* pDevice)
 	HRESULT hr = D3DXCreateCylinder(pDevice, m_radius, m_radius, 0.5f, 50, 50, &m_pSphereMesh, nullptr);
 	D3DXMatrixRotationX(&rotationMat, 33);
 	setLocalTransform(mLocal);
-	
+
 	if (FAILED(hr))
 	{
 		MessageBox(0, "fail rotation", 0, 0);
@@ -85,7 +84,7 @@ bool CHole::hasIntersected(CSphere& ball) const
 		ball.getPosition().z + ball.getRadius() > 3.06f - (0.15f / 2) ||
 		ball.getPosition().z - ball.getRadius() < -3.06f + (0.15f / 2))
 	{
- 		return true;
+		return true;
 	}
 
 	return false;
@@ -106,3 +105,5 @@ float CHole::getRadius(void) const
 {
 	return m_radius;
 }// 구멍의 반지름을 받아옴
+
+

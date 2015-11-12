@@ -21,7 +21,6 @@ CFloor::CFloor(float iwidth, float iheight, float idepth, D3DXCOLOR color)
 // ¹Ù´ÚÀÇ ¼Ò¸êÀÚ
 CFloor::~CFloor()
 {
-
 }
 
 bool CFloor::create(IDirect3DDevice9* pDevice)
@@ -38,7 +37,8 @@ bool CFloor::create(IDirect3DDevice9* pDevice)
 // ¹Ù´ÚÀ» È­¸é¿¡¼­ ¼Ò¸ê½ÃÅ´
 void CFloor::destroy()
 {
-	if (m_pBoundMesh != nullptr) {
+	if (m_pBoundMesh != nullptr)
+	{
 		m_pBoundMesh->Release();
 		m_pBoundMesh = nullptr;
 	}
@@ -48,10 +48,11 @@ void CFloor::destroy()
 void CFloor::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)
 {
 	if (pDevice == nullptr) return;
-	
+
 	pDevice->SetTransform(D3DTS_WORLD, &mWorld);
 	pDevice->MultiplyTransform(D3DTS_WORLD, &mLocal);
 	pDevice->SetMaterial(&m_mtrl);
 
 	m_pBoundMesh->DrawSubset(0);
 }
+

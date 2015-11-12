@@ -1,7 +1,7 @@
 // TODO : Implementation
 #include "CHandSphere.h"
 
-CHandSphere::CHandSphere(const char * ballImageFileName) : CSphere(BallType::HAND, ballImageFileName)
+CHandSphere::CHandSphere(const char* ballImageFileName) : CSphere(BallType::HAND, ballImageFileName)
 {
 	this->firstHitBallType = BallType::NONE;
 }
@@ -28,3 +28,4 @@ void CHandSphere::hitBy(CSphere& ball) noexcept
 		super::hitBy(ball);
 	}
 }
+

@@ -5,6 +5,7 @@
 class CEightSphere : public CSphere
 {
 public:
-	CEightSphere(const char * ballImageFileName);
+	CEightSphere(const char* ballImageFileName);
 };
 #endif
+

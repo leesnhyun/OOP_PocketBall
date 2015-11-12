@@ -5,6 +5,7 @@
 class CStripeSphere : public CSphere
 {
 public:
-	CStripeSphere(const char * ballImageFileName);
+	CStripeSphere(const char* ballImageFileName);
 };
 #endif
+

@@ -5,6 +5,7 @@
 class CSolidSphere : public CSphere
 {
 public:
-	CSolidSphere(const char * ballImageFileName);
+	CSolidSphere(const char* ballImageFileName);
 };
 #endif
+
