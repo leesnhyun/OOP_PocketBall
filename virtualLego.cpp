@@ -57,8 +57,7 @@ const float spherePos[16][2] = {
 	{ -2.7f, 0 }, 
 	
 	{ +1.5f, 0 },
-	{ 0.03f, 0},
-//	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO)), CSphere::COMMON_RADIUS + 0.01f }, 
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO)), CSphere::COMMON_RADIUS + 0.01f }, 
 	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO)), -(CSphere::COMMON_RADIUS + 0.01f) }, 
 	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 4), -(CSphere::COMMON_RADIUS * 4 + 0.04f) }, 
 	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 2), -(CSphere::COMMON_RADIUS * 2 + 0.02f) }, 
