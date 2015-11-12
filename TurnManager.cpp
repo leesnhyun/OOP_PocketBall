@@ -69,7 +69,7 @@ bool TurnManager::processTurn(const array<CSphere, 16>& fieldBalls)
 	}
 
 	// TODO : When lose.
-	if (status.getFoulStatus())
+	if (status.getFoulStatus() || status.getTurnPlayer()->getBallType() == BallType::NONE)
 	{
 		this->finishTurn();
 	}
@@ -79,7 +79,7 @@ bool TurnManager::processTurn(const array<CSphere, 16>& fieldBalls)
 		for (int i = 0; i < 16; i++)
 		{
 			if (g_sphere[i].getDisableTurn() == status.getCurrentTurnCount()
-				&& g_sphere[i].getBallType() == status.getTurnPlayer().getBallType())
+				&& g_sphere[i].getBallType() == status.getTurnPlayer()->getBallType())
 			{
 				isPutMyBall = true;
 			}

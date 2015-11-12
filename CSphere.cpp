@@ -2,6 +2,9 @@
 #include "CSphere.h"
 #include <cmath>
 #include "TurnManager.h"
+#include "Status.h"
+
+extern Status status;
 
 struct _VERTEX
 {
@@ -212,6 +215,7 @@ BallType CSphere::getBallType() const
 void CSphere::disable() noexcept
 {
 	//TODO : get turn count to record disableTurn
+	this->disableTurn = status.getCurrentTurnCount();
 }
 
 int CSphere::getDisableTurn() const noexcept

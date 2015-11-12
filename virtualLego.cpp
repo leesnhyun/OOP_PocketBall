@@ -123,7 +123,7 @@ CBorder g_border(d3d::TABLE_BORDER);
 double g_camera_pos[3] = {0.0, 5.0, -8.0};
 
 Player players[2] = { Player(1), Player(2) };
-vector<Player> playerVec = {players[0], players[1]};
+vector<Player*> playerVec = {&players[0], &players[1]};
 Status status(playerVec);
 TurnManager turnManager(status.getPlayerIdList());
 FoulManager foulManager;
@@ -304,11 +304,11 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		for (i = 0; i < 6; i++){
 			for (j = 0; j < 16; j++) {
 				if (!status.getFoulStatus()) {
-					if (g_hole[i].hasIntersected(g_sphere[j]) && status.getTurnPlayer().getBallType() == BallType::NONE) {
+					if (g_hole[i].hasIntersected(g_sphere[j]) && status.getTurnPlayer()->getBallType() == BallType::NONE) {
 						// TODO : Check
 						BallType nowBallType = g_sphere[j].getBallType();
-						status.getTurnPlayer().setBallType(nowBallType);
-						status.getNoTurnPlayer().setBallType((nowBallType == BallType::STRIPE) ? BallType::SOLID : BallType::STRIPE);
+						status.getTurnPlayer()->setBallType(nowBallType);
+						status.getNotTurnPlayer()->setBallType((nowBallType == BallType::STRIPE) ? BallType::SOLID : BallType::STRIPE);
 					}
 					g_hole[i].hitBy(g_sphere[j]);
 				}
@@ -341,7 +341,14 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 
 	if (turnManager.processTurn(g_sphere))
 	{
-		MessageBox(nullptr, "플레이어 바뀜 ", nullptr, 0);
+		if (status.getTurnChangeStatus())
+		{
+			MessageBox(nullptr, "플레이어 바뀜 ", nullptr, 0);
+		}
+		else
+		{
+			MessageBox(nullptr, "플레이어 안 바뀜 ", nullptr, 0);
+		}
 	}
 
 	return true;

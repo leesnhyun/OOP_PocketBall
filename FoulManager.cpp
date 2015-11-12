@@ -34,13 +34,13 @@ void FoulManager::isHandBallInHole()
 void FoulManager::isFirstHitNotMyBall()
 {
 	//TODO : add firsthitball balltype
-	if (status.getTurnPlayer().getBallType() != dynamic_cast<CHandSphere&>(g_sphere[0]).getFirstHitBallType()) status.setFoulStatus(true);
+	if (status.getTurnPlayer()->getBallType() != dynamic_cast<CHandSphere&>(g_sphere[0]).getFirstHitBallType()) status.setFoulStatus(true);
 }
 
 bool FoulManager::isEightBallBadToIn()
 {
 	if (g_sphere[8].getDisableTurn() == status.getCurrentTurnCount() &&
-		status.getTurnPlayer().getNumTakenBall() != 7)
+		status.getTurnPlayer()->getNumTakenBall() != 7)
 	{
 		return true;
 	}
