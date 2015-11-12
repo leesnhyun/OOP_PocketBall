@@ -50,8 +50,9 @@ void TurnManager::finishTurn()
 
 void TurnManager::processTriggerOff()
 {
-	status.setTurnProgressStatus(false);
 	status.nextTurnCount();
+	status.setTurnProgressStatus(false);
+	dynamic_cast<CHandSphere&>(*g_sphere[0]).setFirstHitBallType(BallType::NONE);
 }
 
 void TurnManager::processTriggerOn()
@@ -77,6 +78,8 @@ bool TurnManager::processTurn(const array<CSphere*, 16>& fieldBalls)
 	else
 	{
 		bool isPutMyBall = false;
+		int putBallCount = 0;
+
 		for (int i = 0; i < 16; i++)
 		{
 			if (g_sphere[i]->getDisableTurn() == status.getCurrentTurnCount()

@@ -94,7 +94,7 @@ bool CHole::hasIntersected(CSphere& ball) const
 // 구멍에 넣어야 하는 경우 공을 제거한다.
 void CHole::hitBy(CSphere& ball)
 {
-	if (this->hasIntersected(ball))
+	if (this->hasIntersected(ball) && !ball.isDisabled())
 	{
 		ball.setPosition(100000, -100.0f, 100000);
 		ball.setPower(0.0f, 0.0f);
