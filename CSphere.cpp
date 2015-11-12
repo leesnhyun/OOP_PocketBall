@@ -18,7 +18,7 @@ struct _VERTEX
 
 extern TurnManager turnManager;
 
-const float CSphere::COMMON_RADIUS = 0.16f;
+const float CSphere::COMMON_RADIUS = 0.14f;
 
 // 공의 생성자를 정의
 CSphere::CSphere(BallType ballType, const char* ballImageFileName)
