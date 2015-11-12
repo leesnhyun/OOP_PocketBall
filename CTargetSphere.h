@@ -5,6 +5,7 @@
 class CTargetSphere : public CSphere
 {
 public:
-	CTargetSphere(const char * ballImageFileName);
+	CTargetSphere(const char* ballImageFileName);
 };
 #endif
+

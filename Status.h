@@ -13,23 +13,21 @@ using std::exception;
 class PlayerNotFoundException : public exception
 {
 private:
-	char * exceptionMessageString;
+	char* exceptionMessageString;
 public:
-	PlayerNotFoundException(const char * exceptionMessage)
+	PlayerNotFoundException(const char* exceptionMessage)
 	{
 		strcpy(this->exceptionMessageString, exceptionMessage);
 	}
 
-	virtual const char * what() const noexcept
+	virtual const char* what() const noexcept
 	{
 		return exceptionMessageString;
-
 	}
 };
 
 class Status
 {
-
 private:
 	bool foulStatus;
 	bool turnProgressStatus;
@@ -56,7 +54,7 @@ public:
 	void setTurnChangeStatus(bool toSet) noexcept;
 	void setTurnPlayer(int playerID) throw (PlayerNotFoundException);
 	void nextTurnCount() noexcept;
-
 };
 
 #endif
+

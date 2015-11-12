@@ -8,9 +8,9 @@ extern Status status;
 
 struct _VERTEX
 {
-	D3DXVECTOR3 pos;     // vertex position
-	D3DXVECTOR3 norm;    // vertex normal
-	float tu;            // texture coordinates
+	D3DXVECTOR3 pos; // vertex position
+	D3DXVECTOR3 norm; // vertex normal
+	float tu; // texture coordinates
 	float tv;
 };
 
@@ -53,7 +53,7 @@ bool CSphere::create(IDirect3DDevice9* pDevice)
 	m_mtrl.Specular = d3d::WHITE;
 	m_mtrl.Emissive = d3d::BLACK;
 	m_mtrl.Power = 100.0f;
-	
+
 	// ÅØ½ºÃÄ¸¦ ºÎµå·´°Ô ¸¸µê.
 	pDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
 	pDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
@@ -85,11 +85,11 @@ void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)// °øÀ» È
 {
 	// TODO : RemoverbleÀÇ disable È®ÀÎ Ãß°¡
 	if (pDevice == nullptr) return;
-	
+
 	pDevice->SetTransform(D3DTS_WORLD, &mWorld);
 	pDevice->MultiplyTransform(D3DTS_WORLD, &mLocal);
 	pDevice->MultiplyTransform(D3DTS_WORLD, &matBallRoll);
-	
+
 	pDevice->SetTexture(0, Tex);
 	pDevice->SetMaterial(&m_mtrl);
 	m_pSphereMesh->DrawSubset(0);
@@ -174,26 +174,30 @@ void CSphere::ballUpdate(float timeDiff) // °øÀÇ Áß½É ÁÂÇ¥¸¦ ¼Óµµ¿¡ ¸ÂÃç¼­ ¸Å ½Ã
 		D3DXMatrixRotationAxis(&tmp, &c, force * SPIN_RATIO);
 		matBallRoll *= tmp;
 	}
-	else { this->setPower(0, 0); }
+	else
+	{
+		this->setPower(0, 0);
+	}
 
 	//this->setPower(this->getVelocity_X() * DECREASE_RATE, this->getVelocity_Z() * DECREASE_RATE);
-	double rate = 1 - (1 - DECREASE_RATE)*timeDiff * 400;
+	double rate = 1 - (1 - DECREASE_RATE) * timeDiff * 400;
 	if (rate < 0) rate = 0;
 
 	this->setPower(getVelocity_X() * rate, getVelocity_Z() * rate);// °øÀÌ ¿òÁ÷ÀÏ ¶§¸¶´Ù, ¼Óµµ¸¦ ³·Ãã
-
 }
 
 double CSphere::getVelocity_X() const
 {
 	return this->m_velocity_x;
 }
+
 // °øÀÇ xÃà ¼Óµµ¸¦ ¹ÝÈ¯ÇÔ
 
 double CSphere::getVelocity_Z() const
 {
 	return this->m_velocity_z;
 }
+
 // °øÀÇ zÃà ¼Óµµ¸¦ ¹ÝÈ¯ÇÔ
 
 void CSphere::setPower(double vx, double vz) // °øÀÇ ¼Óµµ¸¦ ¹Ù²Þ
@@ -268,7 +272,7 @@ LPD3DXMESH CSphere::_createMappedSphere(IDirect3DDevice9* pDev)
 	// since the D3DX function doesn't include them
 	LPD3DXMESH texMesh;
 	if (FAILED(mesh->CloneMeshFVF(D3DXMESH_SYSTEMMEM, FVF_VERTEX, pDev, &texMesh)))
-		// failed, return un-textured mesh
+	// failed, return un-textured mesh
 		return mesh;
 
 	// finished with the original mesh, release it
@@ -277,14 +281,14 @@ LPD3DXMESH CSphere::_createMappedSphere(IDirect3DDevice9* pDev)
 	// lock the vertex buffer
 	//LPVERTEX pVerts;
 	struct _VERTEX* pVerts;
-	if (SUCCEEDED(texMesh->LockVertexBuffer(0, reinterpret_cast<void **>(&pVerts)))) {
-
+	if (SUCCEEDED(texMesh->LockVertexBuffer(0, reinterpret_cast<void **>(&pVerts))))
+	{
 		// get vertex count
 		int numVerts = texMesh->GetNumVertices();
 
 		// loop through the vertices
-		for (int i = 0; i < numVerts; i++) {
-
+		for (int i = 0; i < numVerts; i++)
+		{
 			// calculate texture coordinates
 			pVerts->tu = asinf(pVerts->norm.x) / D3DX_PI + 0.5f;
 			pVerts->tv = asinf(pVerts->norm.y) / D3DX_PI + 0.5f;
@@ -300,3 +304,4 @@ LPD3DXMESH CSphere::_createMappedSphere(IDirect3DDevice9* pDev)
 	// return pointer to caller
 	return texMesh;
 }
+

@@ -23,9 +23,10 @@ Player* Status::getTurnPlayer() noexcept
 Player* Status::getNotTurnPlayer() noexcept
 {
 	Player* nowPlayer = this->pNowPlayer;
-	vector<Player*>::iterator foundIndex = find_if(this->playerList.begin(), this->playerList.end(), [nowPlayer](Player* pPlayer) {
-		return (pPlayer->getPlayerId() != nowPlayer->getPlayerId());
-	});
+	vector<Player*>::iterator foundIndex = find_if(this->playerList.begin(), this->playerList.end(), [nowPlayer](Player* pPlayer)
+	                                               {
+		                                               return (pPlayer->getPlayerId() != nowPlayer->getPlayerId());
+	                                               });
 
 	return *foundIndex;
 }
@@ -44,9 +45,10 @@ vector<int> Status::getPlayerIdList() const noexcept
 
 void Status::setTurnPlayer(int playerID)
 {
-	vector<Player*>::iterator foundIndex = find_if(this->playerList.begin(), this->playerList.end(), [playerID](Player* pPlayer) {
-		return (pPlayer->getPlayerId() == playerID);
-	});
+	vector<Player*>::iterator foundIndex = find_if(this->playerList.begin(), this->playerList.end(), [playerID](Player* pPlayer)
+	                                               {
+		                                               return (pPlayer->getPlayerId() == playerID);
+	                                               });
 
 	if (foundIndex == this->playerList.end())
 	{
@@ -115,3 +117,4 @@ void Status::nextTurnCount() noexcept
 {
 	this->currentTurnCount++;
 }
+

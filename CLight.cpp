@@ -43,7 +43,6 @@ CLight::CLight(float radius)
 // 광원의 소멸자
 CLight::~CLight()
 {
-
 }
 
 // 광원을 화면에 그려냄
@@ -94,3 +93,4 @@ D3DXVECTOR3 CLight::getPosition()
 {
 	return D3DXVECTOR3(m_lit.Position);
 }
+

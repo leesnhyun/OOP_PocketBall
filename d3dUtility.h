@@ -26,36 +26,38 @@ namespace d3d
 	// Init
 	//
 	bool InitD3D(
-		HINSTANCE hInstance,       // [in] Application instance.
-		int width, int height,     // [in] Backbuffer dimensions.
-		bool windowed,             // [in] Windowed (true)or full screen (false).
-		D3DDEVTYPE deviceType,     // [in] HAL or REF
+		HINSTANCE hInstance, // [in] Application instance.
+		int width, int height, // [in] Backbuffer dimensions.
+		bool windowed, // [in] Windowed (true)or full screen (false).
+		D3DDEVTYPE deviceType, // [in] HAL or REF
 		IDirect3DDevice9** device);// [out]The created device.
 
-	int EnterMsgLoop( 
+	int EnterMsgLoop(
 		bool (*ptr_display)(float timeDelta));
 
 	LRESULT CALLBACK WndProc(
 		HWND hwnd,
-		UINT msg, 
+		UINT msg,
 		WPARAM wParam,
 		LPARAM lParam);
 
 	//
 	// Cleanup
 	//
-	template<class T> void Release(T t)
+	template <class T>
+	void Release(T t)
 	{
-		if( t )
+		if (t)
 		{
 			t->Release();
 			t = 0;
 		}
 	}
-		
-	template<class T> void Delete(T t)
+
+	template <class T>
+	void Delete(T t)
 	{
-		if( t )
+		if (t)
 		{
 			delete t;
 			t = 0;
@@ -65,21 +67,21 @@ namespace d3d
 	//
 	// Colors
 	//
-	const D3DXCOLOR      WHITE( D3DCOLOR_XRGB(255, 255, 255) );
-	const D3DXCOLOR      BLACK( D3DCOLOR_XRGB(  0,   0,   0) );
-	const D3DXCOLOR        RED( D3DCOLOR_XRGB(255,   0,   0) );
-	const D3DXCOLOR      GREEN( D3DCOLOR_XRGB(  0, 255,   0) );
-	const D3DXCOLOR       BLUE( D3DCOLOR_XRGB(  0,   0, 255) );
-	const D3DXCOLOR     YELLOW( D3DCOLOR_XRGB(255, 255,   0) );
-	const D3DXCOLOR       CYAN( D3DCOLOR_XRGB(  0, 255, 255) );
-	const D3DXCOLOR    MAGENTA( D3DCOLOR_XRGB(255,   0, 255) );
-	const D3DXCOLOR	   DARKRED( D3DCOLOR_XRGB(215,	0,	0));
+	const D3DXCOLOR WHITE(D3DCOLOR_XRGB(255, 255, 255));
+	const D3DXCOLOR BLACK(D3DCOLOR_XRGB( 0, 0, 0));
+	const D3DXCOLOR RED(D3DCOLOR_XRGB(255, 0, 0));
+	const D3DXCOLOR GREEN(D3DCOLOR_XRGB( 0, 255, 0));
+	const D3DXCOLOR BLUE(D3DCOLOR_XRGB( 0, 0, 255));
+	const D3DXCOLOR YELLOW(D3DCOLOR_XRGB(255, 255, 0));
+	const D3DXCOLOR CYAN(D3DCOLOR_XRGB( 0, 255, 255));
+	const D3DXCOLOR MAGENTA(D3DCOLOR_XRGB(255, 0, 255));
+	const D3DXCOLOR DARKRED(D3DCOLOR_XRGB(215, 0, 0));
 
-	const D3DXCOLOR	   BLACK_BALL_COLOR( D3DCOLOR_XRGB(20, 14, 7) );
+	const D3DXCOLOR BLACK_BALL_COLOR(D3DCOLOR_XRGB(20, 14, 7));
 
-	const D3DXCOLOR	   TABLE_PANE(D3DCOLOR_XRGB(23, 160, 67));
-	const D3DXCOLOR	   TABLE_WALL(D3DCOLOR_XRGB(29, 155, 72));
-	const D3DXCOLOR	   TABLE_BORDER(D3DCOLOR_XRGB(63, 64, 52));
+	const D3DXCOLOR TABLE_PANE(D3DCOLOR_XRGB(23, 160, 67));
+	const D3DXCOLOR TABLE_WALL(D3DCOLOR_XRGB(29, 155, 72));
+	const D3DXCOLOR TABLE_BORDER(D3DCOLOR_XRGB(63, 64, 52));
 
 
 	//
@@ -96,10 +98,10 @@ namespace d3d
 
 	D3DMATERIAL9 InitMtrl(D3DXCOLOR a, D3DXCOLOR d, D3DXCOLOR s, D3DXCOLOR e, float p);
 
-	const D3DMATERIAL9 WHITE_MTRL  = InitMtrl(WHITE, WHITE, WHITE, BLACK, 2.0f);
-	const D3DMATERIAL9 RED_MTRL    = InitMtrl(RED, RED, RED, BLACK, 2.0f);
-	const D3DMATERIAL9 GREEN_MTRL  = InitMtrl(GREEN, GREEN, GREEN, BLACK, 2.0f);
-	const D3DMATERIAL9 BLUE_MTRL   = InitMtrl(BLUE, BLUE, BLUE, BLACK, 2.0f);
+	const D3DMATERIAL9 WHITE_MTRL = InitMtrl(WHITE, WHITE, WHITE, BLACK, 2.0f);
+	const D3DMATERIAL9 RED_MTRL = InitMtrl(RED, RED, RED, BLACK, 2.0f);
+	const D3DMATERIAL9 GREEN_MTRL = InitMtrl(GREEN, GREEN, GREEN, BLACK, 2.0f);
+	const D3DMATERIAL9 BLUE_MTRL = InitMtrl(BLUE, BLUE, BLUE, BLACK, 2.0f);
 	const D3DMATERIAL9 YELLOW_MTRL = InitMtrl(YELLOW, YELLOW, YELLOW, BLACK, 2.0f);
 	const D3DMATERIAL9 WOOD_MTRL = InitMtrl(TABLE_BORDER, TABLE_BORDER, TABLE_BORDER, BLACK, 2.0f);
 
@@ -122,7 +124,7 @@ namespace d3d
 		BoundingSphere();
 
 		D3DXVECTOR3 _center;
-		float       _radius;
+		float _radius;
 	};
 
 	struct Ray
@@ -136,7 +138,9 @@ namespace d3d
 	//
 
 	const float FLT_INF = FLT_MAX;
-	const float EPSILON  = 0.001f;
+	const float EPSILON = 0.001f;
 }
 
 #endif // __d3dUtilityH__
+
+

@@ -52,7 +52,7 @@ void FoulManager::isFirstHitNotMyBall()
 		&& status.getTurnPlayer()->getBallType() != nowBallType)
 	{
 		if (status.getTurnPlayer()->getNumTakenBall() == 7
-			&& status.getTurnPlayer()->getBallType() == BallType::EIGHT)
+			&& nowBallType == BallType::EIGHT)
 		{
 			return;//자신의 모든 목표 공을 넣고, 8번 공을 친 경우는 파울이 아니다.
 		}
@@ -91,3 +91,4 @@ bool FoulManager::isLose()
 {
 	return (isEightBallBadToIn() || isEightBallWithFoul());
 }
+

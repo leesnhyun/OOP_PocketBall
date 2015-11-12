@@ -2,8 +2,8 @@
 #include "CBorder.h"
 
 // 테두리의 생성자
-CBorder::CBorder(D3DXCOLOR color){
-
+CBorder::CBorder(D3DXCOLOR color)
+{
 	D3DXMatrixIdentity(&mLocal);
 	ZeroMemory(&m_mtrl, sizeof(m_mtrl));
 	mesh = nullptr;
@@ -20,20 +20,21 @@ CBorder::~CBorder()
 {
 	d3d::Release<ID3DXMesh*>(mesh);
 
-	for (int i = 0; i < Textures.size(); i++){
+	for (int i = 0; i < Textures.size(); i++)
+	{
 		d3d::Release<IDirect3DTexture9*>(Textures[i]);
 	}
 }
 
-bool CBorder::create(IDirect3DDevice9* pDevice){
-
+bool CBorder::create(IDirect3DDevice9* pDevice)
+{
 	if (pDevice == nullptr) return false;
 
 	// 메쉬를 생성하기 위해 adj버퍼와 material버퍼를 만듦.
 	HRESULT hr = 0;
 	ID3DXBuffer* adjBuffer = 0;
 	ID3DXBuffer* mtrlBuffer = 0;
-	DWORD        numMtrls = 0;
+	DWORD numMtrls = 0;
 
 	// t.x 파일을 불러와 메쉬를 만듭니다.
 	hr = D3DXLoadMeshFromX(
@@ -41,7 +42,8 @@ bool CBorder::create(IDirect3DDevice9* pDevice){
 		&adjBuffer, &mtrlBuffer, 0, &numMtrls, &mesh);
 
 	// 예외처리
-	if (FAILED(hr)){
+	if (FAILED(hr))
+	{
 		::MessageBox(0, "X file load fail :: Please Read README.txt", 0, 0);
 		return false;
 	}
@@ -71,7 +73,7 @@ bool CBorder::create(IDirect3DDevice9* pDevice){
 			{
 				// i번째 subset으로 저장
 				IDirect3DTexture9* tex = 0;
-				D3DXCreateTextureFromFile(pDevice, mtrls[i].pTextureFilename,&tex);
+				D3DXCreateTextureFromFile(pDevice, mtrls[i].pTextureFilename, &tex);
 
 				// 로딩된 텍스쳐 저장
 				Textures.push_back(tex);
@@ -81,7 +83,6 @@ bool CBorder::create(IDirect3DDevice9* pDevice){
 				// no texture for the ith subset
 				Textures.push_back(0);
 			}
-
 		}
 	}
 	d3d::Release<ID3DXBuffer*>(mtrlBuffer); // material 버퍼 쓰기 완료
@@ -110,7 +111,8 @@ bool CBorder::create(IDirect3DDevice9* pDevice){
 // 벽을 화면에서 소멸시킴
 void CBorder::destroy()
 {
-	if (mesh != nullptr) {
+	if (mesh != nullptr)
+	{
 		mesh->Release();
 		mesh = nullptr;
 	}
@@ -126,7 +128,7 @@ void CBorder::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)
 	for (int i = 0; i < Mtrls.size(); i++)
 	{
 		pDevice->SetMaterial(&d3d::WOOD_MTRL);
-		pDevice->SetTexture(0, Textures[i]);		// 팀플에서는 텍스쳐까지 그리지 않습니다.
+		pDevice->SetTexture(0, Textures[i]); // 팀플에서는 텍스쳐까지 그리지 않습니다.
 		mesh->DrawSubset(i);
 	}
 }
@@ -142,3 +144,4 @@ void CBorder::setPosition(float x, float y, float z)
 	D3DXMatrixTranslation(&m, x, y, z);
 	setLocalTransform(m);
 }
+

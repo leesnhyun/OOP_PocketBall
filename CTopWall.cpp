@@ -2,15 +2,14 @@
 #include "CTopWall.h"
 
 CTopWall::CTopWall(float iwidth, float iheight, float idepth, D3DXCOLOR color)
-: CWall(iwidth, iheight, idepth, color)
+	: CWall(iwidth, iheight, idepth, color)
 {
-
 }
 
 bool CTopWall::hasIntersected(CSphere& ball) const noexcept
 {
 	if (ball.getPosition().x > this->center_x - (this->m_width / 2) &&
-	ball.getPosition().x < this->center_x + (this->m_width / 2))
+		ball.getPosition().x < this->center_x + (this->m_width / 2))
 	{
 		if (ball.getPosition().z + ball.getRadius() > this->center_z - (this->m_depth / 2))
 		{
@@ -29,3 +28,4 @@ void CTopWall::hitBy(CSphere& ball) noexcept
 		ball.setPower(ball.getVelocity_X() * (1 - LOSS_RATIO), -ball.getVelocity_Z() * (1 - LOSS_RATIO));
 	}
 }
+

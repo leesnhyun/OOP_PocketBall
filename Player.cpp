@@ -32,3 +32,4 @@ void Player::setBallType(BallType ballType)
 {
 	this->playerBallType = ballType;
 }
+
