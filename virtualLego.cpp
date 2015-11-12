@@ -56,23 +56,30 @@ const float spherePos[16][2] = {
 	//white ball
 	{ -2.7f, 0 }, 
 	
-	{ +1.5f, 0 },
-	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO)), CSphere::COMMON_RADIUS + 0.01f }, 
-	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO)), -(CSphere::COMMON_RADIUS + 0.01f) }, 
-	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 4), -(CSphere::COMMON_RADIUS * 4 + 0.04f) }, 
+	//color ball
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 3), (CSphere::COMMON_RADIUS * 3 + 0.03f) },
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 4), (CSphere::COMMON_RADIUS * 2 + 0.02f) },
+
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO)), -(CSphere::COMMON_RADIUS + 0.01f) },
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 4), -(CSphere::COMMON_RADIUS * 4 + 0.04f) },
 	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 2), -(CSphere::COMMON_RADIUS * 2 + 0.02f) }, 
 	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 2), (CSphere::COMMON_RADIUS * 2 + 0.02f) },
 	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 3), -(CSphere::COMMON_RADIUS + 0.01f) }, 
-	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 3), (CSphere::COMMON_RADIUS + 0.01f) },
+
+	//black ball
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 2), 0 },
+
+	//striple ball
 	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 3), -(CSphere::COMMON_RADIUS * 3 + 0.03f) }, 
-	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 3), (CSphere::COMMON_RADIUS * 3 + 0.03f) },
+
+	{ +1.5f, 0 },
 	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 4), -(CSphere::COMMON_RADIUS * 2 + 0.02f) }, 
-	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 4), (CSphere::COMMON_RADIUS * 2 + 0.02f) }, 
+
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO)), CSphere::COMMON_RADIUS + 0.01f },
+
 	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 4), 0 }, 
-	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 4), 
-	(CSphere::COMMON_RADIUS * 4 + 0.04f) },
-	//balck ball
-	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 2), 0 } };
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 4), (CSphere::COMMON_RADIUS * 4 + 0.04f) },
+	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 3), (CSphere::COMMON_RADIUS + 0.01f) }};
 
 // 6개의 구멍의 위치를 초기화 함.
 // const float holePos[6][2] = { {-4.23f,-2.73f}, {0,-2.73f}, {4.23f,-2.73f}, {-4.23f,2.73f}, {0,2.73f}, {4.23f,2.73f}};
