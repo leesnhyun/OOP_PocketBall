@@ -56,8 +56,9 @@ const float spherePos[16][2] = {
 	//white ball
 	{ -2.7f, 0 }, 
 	
-	{ +1.5f, 0 }, 
-	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO)), CSphere::COMMON_RADIUS + 0.01f }, 
+	{ +1.5f, 0 },
+	{ 0.03f, 0},
+//	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO)), CSphere::COMMON_RADIUS + 0.01f }, 
 	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO)), -(CSphere::COMMON_RADIUS + 0.01f) }, 
 	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 4), -(CSphere::COMMON_RADIUS * 4 + 0.04f) }, 
 	{ (1.5f + (CSphere::COMMON_RADIUS * BALL_SET_RATIO) * 2), -(CSphere::COMMON_RADIUS * 2 + 0.02f) }, 
@@ -357,6 +358,11 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 		{
 			MessageBox(nullptr, "게임이 끝남", nullptr, 0);
 			status.setWinnerPlayer(status.getNotTurnPlayer()->getPlayerId());
+		}
+
+		if (status.getGameEndStatus())
+		{
+			MessageBox(nullptr, "끄읏", nullptr, 0);
 		}
 	}
 
