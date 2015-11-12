@@ -137,11 +137,7 @@ TurnManager turnManager(status.getPlayerIdList());
 FoulManager foulManager;
 DisplayStatusManager displayStatusManager(Width, Height, players);
 
-CD3DFont* Font = 0;
-DWORD FrameCnt = 0;
-float TimeElapsed = 0;
-float FPS = 0;
-char FPSString[9];
+HWND window;
 
 // -----------------------------------------------------------------------------
 // Functions
@@ -339,22 +335,22 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 
 	foulManager.checkFoul();
 
-	if (turnManager.processTurn(g_sphere))
-	{
-		// TODO :: ??
-	}
-	else
-	{
+	if (!turnManager.processTurn(g_sphere)){
+
 		if (foulManager.isLose())
 		{
-			MessageBox(nullptr, "게임이 끝남", nullptr, 0);
+			//MessageBox(nullptr, "게임이 끝남", nullptr, 0);
 			status.setWinnerPlayer(status.getNotTurnPlayer()->getPlayerId());
 		}
 
 		if (status.getGameEndStatus())
 		{
-			MessageBox(nullptr, "끄읏", nullptr, 0);
+			string msg = "Player " + std::to_string(status.getWinnerPlayer()) + " 승리!";
+			MessageBox(nullptr, msg.c_str(), nullptr, 0);
+			::DestroyWindow(window);
+			return true;
 		}
+
 	}
 
 	return true;
@@ -363,6 +359,7 @@ bool Display(float timeDelta)// 한 프레임에 해당되는 화면을 보여�
 // 마우스 또는 키보드 입력 이벤트 처리 함수
 LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
+	window = hwnd;
 	static bool wire = false;
 	//static bool isReset = true;
 	static bool cameraTopView = true;
