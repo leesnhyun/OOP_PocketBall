@@ -83,7 +83,7 @@ bool FoulManager::isEightBallBadToIn()
 bool FoulManager::isEightBallWithFoul()
 {
 	if (g_sphere[8]->getDisableTurn() != -1 &&
-		status.getFoulStatus())
+		(status.getFoulStatus() && status.getTurnPlayer()->getNumTakenBall() != 7))
 	{
 		return true;
 	}
@@ -101,4 +101,3 @@ bool FoulManager::isLose()
 {
 	return (isEightBallBadToIn() || isEightBallWithFoul());
 }
-

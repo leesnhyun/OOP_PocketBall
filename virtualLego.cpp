@@ -154,7 +154,7 @@ void destroyAllLegoBlock(void)
 bool Setup()
 {
 	int i;
-
+	
 	D3DXMatrixIdentity(&g_mWorld);
 	D3DXMatrixIdentity(&g_mView);
 	D3DXMatrixIdentity(&g_mProj);
