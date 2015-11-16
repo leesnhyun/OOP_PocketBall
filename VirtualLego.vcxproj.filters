@@ -78,9 +78,6 @@
     <ClCompile Include="CTopWall.cpp">
       <Filter>Source Files\CObject</Filter>
     </ClCompile>
-    <ClCompile Include="CWall.cpp">
-      <Filter>Source Files\CObject</Filter>
-    </ClCompile>
     <ClCompile Include="CTargetSphere.cpp">
       <Filter>Source Files\CObject</Filter>
     </ClCompile>
@@ -98,6 +95,9 @@
     </ClCompile>
     <ClCompile Include="DisplayStatusManager.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CWall.cpp">
+      <Filter>Source Files\CObject</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

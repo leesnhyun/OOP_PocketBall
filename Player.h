@@ -28,8 +28,8 @@ public:
 	unsigned int getNumTakenBall() const; // 획득한 공의 개수를 반환함
 	unsigned int getPlayerId() const; // 플레이어의 ID를 가져옴.
 
-	BallType getBallType() const;
-	void setBallType(BallType ballType);
+	BallType getBallType() const; // 목표 공의 종류를 반환
+	void setBallType(BallType ballType); // 목표 공의 종류를 설정
 };
 
 #endif

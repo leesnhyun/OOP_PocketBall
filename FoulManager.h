@@ -16,10 +16,10 @@ class FoulManager
 public:
 	FoulManager();
 
-	void reset();
+	void reset(); // 파울 상태를 초기화
 
 	void checkFoul();// 파울이면 프리볼을 선언
-	bool isLose();//패배이면 패배라고 선언
+	bool isLose(); // 패배이면 패배라고 선언
 };
 
 #endif

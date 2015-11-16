@@ -132,16 +132,3 @@ void CBorder::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)
 		mesh->DrawSubset(i);
 	}
 }
-
-
-// 테두리의 위치를 바꿈
-void CBorder::setPosition(float x, float y, float z)
-{
-	D3DXMATRIX m;
-	this->center_x = x;
-	this->center_z = z;
-
-	D3DXMatrixTranslation(&m, x, y, z);
-	setLocalTransform(m);
-}
-

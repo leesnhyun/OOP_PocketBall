@@ -32,7 +32,7 @@ public:
 
 	virtual bool hasIntersected(CSphere& ball) const noexcept = 0;						// 벽에 공이 충돌 했는지 확인
 	virtual void hitBy(CSphere& ball) noexcept = 0;
-	void adjustPosition(CSphere& ball);
+	void adjustPosition(CSphere& ball);													// 벽과 충돌한 공의 위치를 조정함
 };
 
 #endif

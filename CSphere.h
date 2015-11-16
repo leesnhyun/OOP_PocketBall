@@ -45,14 +45,14 @@ public:
 	double getVelocity_Z() const; // 공의 z축 속도를 반환함
 	void setPower(double vx, double vz); // 공의 속도를 바꿈
 	float getRadius() const; // 공의 반지름을 받아옴
-	BallType getBallType() const;
-	void disable() noexcept;
-	void enable() noexcept;
-	int getDisableTurn() const noexcept;
-	bool isDisabled() const noexcept;
-	void adjustPosition(CSphere& ball);
-	double getPreCenter_x() const;
-	double getPreCenter_z() const;
+	BallType getBallType() const; // 공의 종류를 반환
+	void disable() noexcept; // 공을 비활성화 함
+	void enable() noexcept; // 공을 활성화 함
+	int getDisableTurn() const noexcept; // 공이 비활성화 된 턴을 반환
+	bool isDisabled() const noexcept; // 공이 비활성화 되었는지 반환
+	void adjustPosition(CSphere& ball); // 충돌 후, 공의 위치를 조정함
+	double getPreCenter_x() const; // 공의 이전 x 위치를 받아옴
+	double getPreCenter_z() const; // 공의 이전 z 위치를 받아옴
 
 
 private:

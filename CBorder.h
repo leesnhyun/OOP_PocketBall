@@ -23,8 +23,7 @@ public:
 	~CBorder(); // 테두리의 소멸자
 
 	bool create(IDirect3DDevice9* pDevice); // 테두리를 화면에 생성함
-	void draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld); // 테두리를 화면에 그려냄	
-	void setPosition(float x, float y, float z); // 테두리의 위치를 바꿈
+	void draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld); // 테두리를 화면에 그려냄
 	void destroy(); // 테두리를 화면에서 소멸시킴
 };
 
